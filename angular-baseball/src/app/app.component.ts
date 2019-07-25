@@ -20,6 +20,8 @@ export class AppComponent {
   totalBalls = 0;
   totalStrikes = 0;
 
+  pitchOutput = "";
+
   rand(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -50,9 +52,9 @@ export class AppComponent {
           // Missed
           this.pitchResult += 'Swung on and missed for a strike.<br/>';
           this.pitchResult += 'Got it by him!<br/>';
-          this.totalSwings++;
-          this.totalStrikes++;
           this.totalMisses++;
+
+          this.totalStrikes++;
         }
 
       }
@@ -60,6 +62,7 @@ export class AppComponent {
         // Pitch taken
         this.pitchResult += 'Taken for a strike.<br/>';
         this.totalTaken++;
+
         this.totalStrikes++;
       }
     }
@@ -84,8 +87,9 @@ export class AppComponent {
           // Missed
           this.pitchResult += 'Swung on and missed for a strike.<br/>';
           this.pitchResult += 'Shoulda let that one go!<br/>';
-          this.totalStrikes++;
           this.totalMisses++;
+
+          this.totalStrikes++;
         }
 
       }
@@ -94,6 +98,7 @@ export class AppComponent {
         this.pitchResult += 'Taken for a ball.<br/>';
         this.pitchResult += 'Good eye!<br/>';
         this.totalTaken++;
+
         this.totalBalls++;
       }
     }
