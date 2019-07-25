@@ -12,25 +12,19 @@
   <p [innerHTML]="pitchOutput"></p>
 </div>
 <div style="text-align:center;">
-  <table>
+  <table style="width:80%;padding:10px;margin:auto;">
       <thead>
         <tr>
           <th>Pitches</th>
-          <th>Swings</th>
-          <th>Misses</th>
-          <th>Taken</th>
-          <th>Balls</th>
-          <th>Strikes</th>
+          <th>Swings (Contact / Misses) / Taken</th>
+          <th>Balls / Strikes / In-Play</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>{{totalPitches}}</strong></td>
-          <td>{{totalSwings}}</td>
-          <td>{{totalMisses}}</td>
-          <td>{{totalTaken}}</td>
-          <td>{{totalBalls}}</td>
-          <td>{{totalStrikes}}</td>
+          <td>{{totalSwings}} ({{totalContact}} / {{totalMisses}}) / {{totalTaken}}</td>
+          <td>{{totalBalls}} / {{totalStrikes}} / {{totalPitches - (totalBalls+totalStrikes)}}</td>
         </tr>
       </tbody>
     </table>
