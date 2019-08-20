@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="5,5 395,5 395,200 200,395 5,200" stroke="black" fill="red" stroke-width="5" />
+</svg>

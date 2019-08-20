@@ -1,46 +1,87 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center;">
-  <h1>{{ title }}</h1>
-  <!--<img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">-->
-  <svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="5,5 395,5 395,200 200,395 5,200"
-      stroke="black" fill="red" stroke-width="5" />
-  </svg>
-</div>
-<div style="text-align:center;">
-  <button (click)="pitch()">Pitch</button><br />
-  <p [innerHTML]="pitchOutput"></p>
-</div>
-<div style="text-align:center;">
-  <table style="width:80%;padding:10px;margin:auto;">
+<div class="app">
+  <div style="text-align:center;">
+    <h1>{{ title }}</h1>
+
+    <div>
+      <button (click)="pitch()">Pitch</button> <button (click)="pitches(100)">100 Pitches</button> <button (click)="resetgame()">New Game</button>
+    </div>
+    <div class="plate">
+      <svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="5,5 395,5 395,200 200,395 5,200" stroke="black" fill="white" stroke-width="5" />
+      </svg>
+      <p class="result" [innerHTML]="pitchOutput"></p>
+    </div>
+
+    <table class="scoreboard">
       <thead>
         <tr>
-          <th>Pitches</th>
-          <th>Swings (Contact / Misses) / Taken</th>
-          <th>Balls / Strikes / In-Play</th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+          <th>6</th>
+          <th>7</th>
+          <th>8</th>
+          <th>9</th>
+          <th>R</th>
+          <th>H</th>
+          <th>E</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>{{totalPitches}}</strong></td>
-          <td>{{totalSwings}} ({{totalContact}} / {{totalMisses}}) / {{totalTaken}}</td>
-          <td>{{totalBalls}} / {{totalStrikes}} / {{totalPitches - (totalBalls+totalStrikes)}}</td>
+          <td>{{game.innings[1]?.top?.runs}}</td>
+          <td>{{game.innings[2]?.top?.runs}}</td>
+          <td>{{game.innings[3]?.top?.runs}}</td>
+          <td>{{game.innings[4]?.top?.runs}}</td>
+          <td>{{game.innings[5]?.top?.runs}}</td>
+          <td>{{game.innings[6]?.top?.runs}}</td>
+          <td>{{game.innings[7]?.top?.runs}}</td>
+          <td>{{game.innings[8]?.top?.runs}}</td>
+          <td>{{game.innings[9]?.top?.runs}}</td>
+          <td>{{game.teams.away.runs}}</td>
+          <td>{{game.teams.away.hits}}</td>
+          <td>{{game.teams.away.errors}}</td>
+        </tr>
+        <tr>
+          <td>{{game.innings[1]?.bot?.runs}}</td>
+          <td>{{game.innings[2]?.bot?.runs}}</td>
+          <td>{{game.innings[3]?.bot?.runs}}</td>
+          <td>{{game.innings[4]?.bot?.runs}}</td>
+          <td>{{game.innings[5]?.bot?.runs}}</td>
+          <td>{{game.innings[6]?.bot?.runs}}</td>
+          <td>{{game.innings[7]?.bot?.runs}}</td>
+          <td>{{game.innings[8]?.bot?.runs}}</td>
+          <td>{{game.innings[9]?.bot?.runs}}</td>
+          <td>{{game.teams.home.runs}}</td>
+          <td>{{game.teams.home.hits}}</td>
+          <td>{{game.teams.home.errors}}</td>
         </tr>
       </tbody>
     </table>
+
+  </div>
+
+  <div>
+
+    <div style="float:left;">
+      <h4>The Count</h4>
+      <p>Balls: <strong>{{pa.balls}}</strong></p>
+      <p>Strikes: <strong>{{pa.strikes}}</strong></p>
+    </div>
+    <div style="float:right;">
+      <h4>The Game</h4>
+      <p>Pitches: <strong>{{game.pitches}}</strong></p>
+      <p>Walks: <strong>{{game.BB}}</strong></p>
+      <p>Strikeouts: <strong>{{game.K}}</strong></p>
+      <p>In Play: <strong>{{game.inplay}}</strong></p>
+      <p>Hits: <strong>{{game.hits}}</strong></p>
+      <p>Outs: <strong>{{game.outs}}</strong></p>
+    </div>
+
+  </div>
+
 </div>
-<!--
-<h2>Here are some links to help you start:</h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
--->
+
 <router-outlet></router-outlet>
