@@ -1,29 +1,25 @@
 <div class="app">
   <div style="text-align:center;">
-    <h1>{{ title }}</h1>
+    <h1 *ngIf="title">{{ title }}</h1>
 
     <div>
       <button (click)="pitch()">Pitch</button> <button (click)="pitches(100)">100 Pitches</button> <button (click)="resetgame()">New Game</button>
     </div>
     <div class="plate">
       <svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="5,5 395,5 395,200 200,395 5,200" stroke="black" fill="white" stroke-width="5" />
+        <svg:polygon points="5,5 395,5 395,200 200,395 5,200" stroke="black" fill="white" stroke-width="5" />
+        <svg:foreignObject x="10" y="10" width="390" height="200">
+          <xhtml:p *ngIf="game.pitches" class="result" xmlns="http://www.w3.org/1999/xhtml" [innerHTML]="pitchOutput"></xhtml:p>
+        </svg:foreignObject>
       </svg>
-      <p class="result" [innerHTML]="pitchOutput"></p>
+      <!--<p *ngIf="game.pitches" class="result" [innerHTML]="pitchOutput"></p>-->
     </div>
 
     <table class="scoreboard">
       <thead>
         <tr>
-          <th>1</th>
-          <th>2</th>
-          <th>3</th>
-          <th>4</th>
-          <th>5</th>
-          <th>6</th>
-          <th>7</th>
-          <th>8</th>
-          <th>9</th>
+          <!--<th *ngFor="let inningHeads of game.innings; let inningHead = index">{{inningHead}}</th>-->
+          <th *ngFor="let inningHeads of game.innings | slice:1"><ol><li></li></ol></th>
           <th>R</th>
           <th>H</th>
           <th>E</th>
@@ -31,29 +27,13 @@
       </thead>
       <tbody>
         <tr>
-          <td>{{game.innings[1]?.top?.runs}}</td>
-          <td>{{game.innings[2]?.top?.runs}}</td>
-          <td>{{game.innings[3]?.top?.runs}}</td>
-          <td>{{game.innings[4]?.top?.runs}}</td>
-          <td>{{game.innings[5]?.top?.runs}}</td>
-          <td>{{game.innings[6]?.top?.runs}}</td>
-          <td>{{game.innings[7]?.top?.runs}}</td>
-          <td>{{game.innings[8]?.top?.runs}}</td>
-          <td>{{game.innings[9]?.top?.runs}}</td>
+          <td *ngFor="let inningTops of game.innings | slice:1">{{inningTops?.top?.runs}}</td>
           <td>{{game.teams.away.runs}}</td>
           <td>{{game.teams.away.hits}}</td>
           <td>{{game.teams.away.errors}}</td>
         </tr>
         <tr>
-          <td>{{game.innings[1]?.bot?.runs}}</td>
-          <td>{{game.innings[2]?.bot?.runs}}</td>
-          <td>{{game.innings[3]?.bot?.runs}}</td>
-          <td>{{game.innings[4]?.bot?.runs}}</td>
-          <td>{{game.innings[5]?.bot?.runs}}</td>
-          <td>{{game.innings[6]?.bot?.runs}}</td>
-          <td>{{game.innings[7]?.bot?.runs}}</td>
-          <td>{{game.innings[8]?.bot?.runs}}</td>
-          <td>{{game.innings[9]?.bot?.runs}}</td>
+          <td *ngFor="let inningBots of game.innings | slice:1">{{inningBots?.bot?.runs}}</td>
           <td>{{game.teams.home.runs}}</td>
           <td>{{game.teams.home.hits}}</td>
           <td>{{game.teams.home.errors}}</td>
@@ -63,7 +43,7 @@
 
   </div>
 
-  <div>
+  <div *ngIf="game.pitches">
 
     <div style="float:left;">
       <h4>The Count</h4>
@@ -72,12 +52,12 @@
     </div>
     <div style="float:right;">
       <h4>The Game</h4>
-      <p>Pitches: <strong>{{game.pitches}}</strong></p>
-      <p>Walks: <strong>{{game.BB}}</strong></p>
-      <p>Strikeouts: <strong>{{game.K}}</strong></p>
-      <p>In Play: <strong>{{game.inplay}}</strong></p>
-      <p>Hits: <strong>{{game.hits}}</strong></p>
-      <p>Outs: <strong>{{game.outs}}</strong></p>
+      <p *ngIf="game.pitches">Pitches: <strong>{{game.pitches}}</strong></p>
+      <p *ngIf="game.BB">Walks: <strong>{{game.BB}}</strong></p>
+      <p *ngIf="game.K">Strikeouts: <strong>{{game.K}}</strong></p>
+      <p *ngIf="game.inplay">In Play: <strong>{{game.inplay}}</strong></p>
+      <p *ngIf="game.hits">Hits: <strong>{{game.hits}}</strong></p>
+      <p *ngIf="game.outs">Outs: <strong>{{game.outs}}</strong></p>
     </div>
 
   </div>

@@ -4,7 +4,8 @@ h1 {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 250%;
 }
-h2, h3 {
+h2,
+h3 {
   color: white;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: lighter;
@@ -14,7 +15,9 @@ h2, h3 {
   background-color: burlywood;
   z-index: 0;
 }
-.app, input[type="text"], button {
+.app,
+input[type="text"],
+button {
   color: #333;
   font-family: Cambria, Georgia;
 }
@@ -28,6 +31,7 @@ h2, h3 {
   z-index: 1;
 }
 
+/*
 .result {
   position: absolute;
   z-index: 2;
@@ -35,6 +39,7 @@ h2, h3 {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+*/
 
 .scoreboard {
   width: 80%;
@@ -42,6 +47,9 @@ h2, h3 {
   margin: auto;
   background-color: darkgreen;
   color: white;
+
+  counter-reset: my-counter;
+  //counter-increment: my-counter;
 }
 
 .scoreboard td {
@@ -50,4 +58,35 @@ h2, h3 {
 
 .scoreboard tr {
   height: 1.6em;
+}
+
+.scoreboard ol {
+  //max-width: 350px;
+  //counter-reset: my-counter;
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.scoreboard ol li {
+  margin: 0;
+  counter-increment: my-counter;
+  position: relative;
+}
+.scoreboard ol li::before {
+  content: counter(my-counter);
+  //color: #fcd000;
+  //font-size: 1.5rem;
+  //font-weight: bold;
+  //position: absolute;
+  //--size: 32px;
+  //left: calc(-1 * var(--size) - 10px);
+  //line-height: var(--size);
+  //width: var(--size);
+  //height: var(--size);
+  //top: 0;
+  //transform: rotate(-10deg);
+  //background: black;
+  //border-radius: 50%;
+  text-align: center;
+  //box-shadow: 1px 1px 0 #999;
 }
