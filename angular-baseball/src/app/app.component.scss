@@ -16,8 +16,7 @@ h3 {
   z-index: 0;
 }
 .app,
-input[type="text"],
-button {
+input[type="text"]{
   color: #333;
   font-family: Cambria, Georgia;
 }
@@ -53,7 +52,7 @@ button {
 }
 
 .scoreboard td {
-  border: 1px solid black;
+  border: 1px solid white;
 }
 
 .scoreboard tr {

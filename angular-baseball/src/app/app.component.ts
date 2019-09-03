@@ -1,5 +1,5 @@
-import { Component, OnChanges, OnInit/*, DoCheck,*/ } from '@angular/core';
-import { AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy } from '@angular/core';
+import { Component, OnChanges, OnInit, OnDestroy } from '@angular/core';
+// import { DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked,  } from '@angular/core';
 // Implementing DoCheck and OnChanges in a class is not recommended
 
 @Component({
@@ -8,9 +8,11 @@ import { AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked,
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements
-  OnChanges, OnInit, /*DoCheck,*/ AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
+  OnChanges, OnInit, OnDestroy/*, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked*/ {
   // Implementing DoCheck and OnChanges in a class is not recommended
   title = 'Angular Baseball';
+
+  showbuttons = false;
 
   pitchResult = '';
 
@@ -52,32 +54,38 @@ export class AppComponent implements
     }
   };
 
+  toporbot = 'top';
+
   messages = {
     pitch: {
       0: 'Here comes the pitch...',
       1: 'The pitcher kicks and deals...'
     },
     hit: {
-      0: '<strong>Lands for a base hit.</strong>'
+      0: 'Looks like a hit...',
+      1: 'Got some good wood on that one...',
+      2: 'Nice little piece of hitting there...',
+    },
+    switchsides: {
+      0: '<strong>That\'ll do it for the <span style="text-transform: capitalize;">' +
+        this.toporbot + '</span> of inning ' + this.game.inning + '</strong>'
     }
   };
 
-  toporbot = 'top';
-
   // game.innings[game.inning].top.runs = 0;
 
+  pitchOutput = '';
+
   MLB2018hits = 41019;
+  MLB20181B = 26323; // this.MLB2018hits - this.MLB20182B - this.MLB20183B - this.MLB2018HR;
   MLB20182B = 8264;
-  MLB20183B = 847;
   MLB2018HR = 5585;
-  MLB20181B = this.MLB2018hits - this.MLB20182B - this.MLB20183B - this.MLB2018HR;
+  MLB20183B = 847;
 
   hitpercent1B = (this.MLB20181B / this.MLB2018hits) * 100;
   hitpercent2B = (this.MLB20182B / this.MLB2018hits) * 100;
   hitpercent3B = (this.MLB20183B / this.MLB2018hits) * 100;
   hitpercentHR = (this.MLB2018HR / this.MLB2018hits) * 100;
-
-  pitchOutput = '';
 
   rand(min: number, max: number) {
     min = Math.ceil(min);
@@ -101,11 +109,17 @@ export class AppComponent implements
   }
 
   switchsides() {
+    this.message('switchsides');
+
     if (this.toporbot === 'top') {
       this.toporbot = 'bot';
     } else {
       this.toporbot = 'top';
     }
+
+    this.game.innings[this.game.inning][this.toporbot].runs = 0;
+
+    this.game.innings[this.game.inning][this.toporbot].outs = 0;
   }
 
   recordstrike(strikekind: string) {
@@ -142,6 +156,8 @@ export class AppComponent implements
 
   recordout() {
     this.game.outs++;
+    this.game.innings[this.game.inning][this.toporbot].outs++;
+
     if ((this.game.outs === (3 * 2 * 9))) {
       this.pitchResult += '<br /><br /><strong>And that\'s the game!</strong>';
     } else {
@@ -149,6 +165,8 @@ export class AppComponent implements
         // alert("End of half inning!");
 
         this.game.innings[this.game.inning][this.toporbot].runs = 0;
+
+        this.game.innings[this.game.inning][this.toporbot].outs = 0;
 
         if ((this.game.outs % 6) === 0) {
           // alert("End of inning!");
@@ -181,19 +199,22 @@ export class AppComponent implements
 
     const roll = this.rand(0, 100);
 
-    if (roll <= this.hitpercentHR) {
-      this.pitchResult += 'Going back... <strong>It\'s a Home Run!!!</strong><br /><br />';
-    }
-    if (roll <= this.hitpercent3B) {
+    // alert(roll);
+
+    if (roll <= this.hitpercent3B) { // rarest
       this.pitchResult += 'What speed! <strong>It\'s a triple!</strong><br /><br />';
-    }
-    if (roll <= this.hitpercent2B) {
-        this.pitchResult += 'Gonna try for two.. <strong>In with a double.</strong><br /><br />';
-    }
-    if (roll <= this.hitpercent1B) {
+    } else if (roll <= this.hitpercentHR) { // second rarest
+      this.pitchResult += 'Going back... <strong>It\'s a Home Run!!!</strong><br /><br />';
+    } else if (roll <= this.hitpercent2B) { // second most common
+      this.pitchResult += 'Gonna try for two.. <strong>In with a double.</strong><br /><br />';
+    } else { // most common
       this.pitchResult += 'A clean hit. <strong>On first with a single.</strong><br /><br />';
     }
-
+    /*
+    } else if (roll <= this.hitpercent1B) { // most common
+      this.pitchResult += 'A clean hit. <strong>On first with a single.</strong><br /><br />';
+    }
+    */
   }
 
   inplay() {
@@ -215,20 +236,20 @@ export class AppComponent implements
     this.resetpa();
   }
 
-  swing(zone) {
+  swing(zone: boolean) {
     let contact: number;
     let messageHit: string;
     let messageMiss: string;
 
     if (zone === false) {
       contact = 66; // Contact? [O-Contact% - average 66%]
-      messageHit = '<strong>Slapped in play!</strong><br/><br/>';
-      messageMiss = 'Shoulda let that one go!<br/><br/>';
+      messageHit = '...reached out, and slapped in play!<br/><br/>';
+      messageMiss = 'Ooh... Shoulda let that one go!<br/><br/>';
     }
     if (zone === true) {
       contact = 87; // Contact? [Z-Contact% - average 87%]
-      messageHit = '<strong>It\'s in play!</strong><br/><br/>';
-      messageMiss = 'Got it by him!<br/><br/>';
+      messageHit = '...it\'s in play!<br/><br/>';
+      messageMiss = 'Wow! Got it by the batter.<br/><br/>';
     }
 
     this.pitchResult += 'Swung on...<br/>';
@@ -242,7 +263,7 @@ export class AppComponent implements
       this.inplay();
     } else {
       // Missed
-      this.pitchResult += 'Swung on and missed for a strike.<br/>';
+      this.pitchResult += '...and missed for a strike.<br/>';
       this.pitchResult += messageMiss;
 
       this.recordstrike('swinging');
@@ -250,20 +271,17 @@ export class AppComponent implements
   }
 
   take(zone: boolean) {
-    let message: string;
-
+    this.pitchResult += 'Taken for a ';
     if (zone === false) {
-      message = 'Taken for a ball. Good eye!<br/>';
+      this.pitchResult += 'ball. Good eye!<br/>';
 
       this.recordball();
     }
     if (zone === true) {
-      message = 'Taken for a strike.<br/>';
+      this.pitchResult += 'strike.<br/>';
 
       this.recordstrike('looking');
     }
-
-    this.pitchResult += message;
   }
 
   resetpa() {
@@ -295,6 +313,7 @@ export class AppComponent implements
     this.game.innings[this.game.inning] = {};
     this.game.innings[this.game.inning].top = {};
     this.game.innings[this.game.inning].bot = {};
+    this.game.innings[this.game.inning][this.toporbot].outs = 0;
   }
 
   startgame() {
@@ -313,7 +332,7 @@ export class AppComponent implements
   pitch() {
     if (this.game.outs < (3 * 2 * 9)) {
       if (this.game.pitches === 0) {
-        this.startgame();
+        this.startinning();
       }
       this.game.pitches++;
       this.pitchResult = this.message('pitch');
@@ -353,7 +372,7 @@ export class AppComponent implements
       this.pitchOutput = this.pitchResult;
 
       /* reset */
-      this.pitchResult = this.message('pitch');
+      // this.pitchResult = this.message('pitch');
     }
   }
 
@@ -377,6 +396,10 @@ export class AppComponent implements
     // the data-bound properties and sets the directive/component's input properties.
 
     // Called once, after the first ngOnChanges().
+
+    this.showbuttons = true;
+
+    this.startgame();
   }
 /*
   ngDoCheck() {
@@ -387,7 +410,7 @@ export class AppComponent implements
 
     // Implementing DoCheck and OnChanges in a class is not recommended
   }
-*/
+
   ngAfterContentInit() {
     // Respond after Angular projects external content into the component's view / the view that a directive is in.
 
@@ -411,7 +434,7 @@ export class AppComponent implements
 
     // Called after the ngAfterViewInit() and every subsequent ngAfterContentChecked().
   }
-
+*/
   ngOnDestroy() {
     // Cleanup just before Angular destroys the directive/component.
     // Unsubscribe Observables and detach event handlers to avoid memory leaks.
