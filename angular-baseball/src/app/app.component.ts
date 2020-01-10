@@ -1,20 +1,35 @@
 import { Component, OnChanges, OnInit, OnDestroy } from '@angular/core';
 // import { DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked,  } from '@angular/core';
 // Implementing DoCheck and OnChanges in a class is not recommended
+import { VarService } from './var.service';
+
+import { GameService } from './game.service';
+
+import { IGame } from './game/game';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  providers: [
+    VarService,
+    GameService,
+  ]
 })
 export class AppComponent implements
   OnChanges, OnInit, OnDestroy/*, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked*/ {
   // Implementing DoCheck and OnChanges in a class is not recommended
-  title = 'Angular Baseball';
+
+  constructor(
+    private varService: VarService,
+    private gameService: GameService,
+  ) {}
+
+  game: IGame[] = [this.gameService.game];
 
   showbuttons = false;
 
-  pitchResult = '';
+  pitchResult: '';
 
   pitchOutcome = 0;
 
@@ -26,33 +41,7 @@ export class AppComponent implements
     out: false
   };
 
-  game = {
-    pitches: 0,
-    swings: 0,
-    misses: 0,
-    taken: 0,
-    balls: 0,
-    strikes: 0,
-    BB: 0,
-    K: 0,
-    inplay: 0,
-    hits: 0,
-    outs: 0,
-    inning: 1,
-    innings: [],
-    teams: {
-      away: {
-        runs: 0,
-        hits: 0,
-        errors: 0
-      },
-      home: {
-        runs: 0,
-        hits: 0,
-        errors: 0
-      }
-    }
-  };
+
 
   toporbot = 'top';
 
@@ -68,7 +57,7 @@ export class AppComponent implements
     },
     switchsides: {
       0: '<strong>That\'ll do it for the <span style="text-transform: capitalize;">' +
-        this.toporbot + '</span> of inning ' + this.game.inning + '</strong>'
+        this.toporbot + '</span> of inning ' + this.gameService.game.inning + '</strong>'
     }
   };
 
@@ -105,7 +94,7 @@ export class AppComponent implements
   }
 
   wherearewe() {
-    // alert(this.toporbot + ' ' + this.game.inning);
+    // alert(this.toporbot + ' ' + this.gameService.game.inning);
   }
 
   switchsides() {
@@ -117,60 +106,60 @@ export class AppComponent implements
       this.toporbot = 'top';
     }
 
-    this.game.innings[this.game.inning][this.toporbot].runs = 0;
+    this.gameService.game.innings[this.gameService.game.inning][this.toporbot].runs = 0;
 
-    this.game.innings[this.game.inning][this.toporbot].outs = 0;
+    this.gameService.game.innings[this.gameService.game.inning][this.toporbot].outs = 0;
   }
 
   recordstrike(strikekind: string) {
-    this.game.strikes++;
+    this.gameService.game.strikes++;
 
     this.pa.strikes++;
 
     if (strikekind === 'looking') {
-      this.game.taken++;
+      this.gameService.game.taken++;
     }
     if (strikekind === 'swinging') {
-      this.game.misses++;
+      this.gameService.game.misses++;
     }
 
     if (this.pa.strikes === 3) {
       this.resetpa();
       this.pitchResult += '<strong>Steee-rike three! Struck out ' + strikekind + '.</strong><br/><br/>';
-      this.game.K++;
+      this.gameService.game.K++;
       this.recordout();
     }
   }
 
   recordball() {
-    this.game.balls++;
+    this.gameService.game.balls++;
 
     this.pa.balls++;
 
     if (this.pa.balls === 4) {
       this.resetpa();
       this.pitchResult += '<strong>Ball four! That\'s a walk.</strong><br/><br/>';
-      this.game.BB++;
+      this.gameService.game.BB++;
     }
   }
 
   recordout() {
-    this.game.outs++;
-    this.game.innings[this.game.inning][this.toporbot].outs++;
+    this.gameService.game.outs++;
+    this.gameService.game.innings[this.gameService.game.inning][this.toporbot].outs++;
 
-    if ((this.game.outs === (3 * 2 * 9))) {
+    if ((this.gameService.game.outs === (3 * 2 * 9))) {
       this.pitchResult += '<br /><br /><strong>And that\'s the game!</strong>';
     } else {
-      if ((this.game.outs % 3) === 0) {
+      if ((this.gameService.game.outs % 3) === 0) {
         // alert("End of half inning!");
 
-        this.game.innings[this.game.inning][this.toporbot].runs = 0;
+        this.gameService.game.innings[this.gameService.game.inning][this.toporbot].runs = 0;
 
-        this.game.innings[this.game.inning][this.toporbot].outs = 0;
+        this.gameService.game.innings[this.gameService.game.inning][this.toporbot].outs = 0;
 
-        if ((this.game.outs % 6) === 0) {
+        if ((this.gameService.game.outs % 6) === 0) {
           // alert("End of inning!");
-          this.game.inning++;
+          this.gameService.game.inning++;
           this.startinning();
         }
 
@@ -191,9 +180,9 @@ export class AppComponent implements
   }
 
   recordhit() {
-    this.game.hits++;
+    this.gameService.game.hits++;
 
-    this.game.teams[this.teambatting()].hits++;
+    this.gameService.game.teams[this.teambatting()].hits++;
 
     this.pitchResult += this.message('hit');
 
@@ -219,7 +208,7 @@ export class AppComponent implements
 
   inplay() {
     this.pa.inplay = true;
-    this.game.inplay++;
+    this.gameService.game.inplay++;
 
     if (this.rand(1, 100) <= 30) { // League-average BABIP = .300
       this.pa.hit = true;
@@ -253,7 +242,7 @@ export class AppComponent implements
     }
 
     this.pitchResult += 'Swung on...<br/>';
-    this.game.swings++;
+    this.gameService.game.swings++;
 
     this.pitchOutcome = this.rand(1, 100);
     if (this.pitchOutcome <= contact) {
@@ -291,29 +280,29 @@ export class AppComponent implements
   }
 
   resetgame() {
-    this.game.pitches = 0,
-    this.game.swings = 0,
-    this.game.misses = 0,
-    this.game.taken = 0,
-    this.game.balls = 0,
-    this.game.strikes = 0,
-    this.game.BB = 0;
-    this.game.K = 0;
-    this.game.inplay = 0;
-    this.game.hits = 0;
-    this.game.outs = 0;
-    this.game.inning = 1;
-    this.game.inning = 1;
+    this.gameService.game.pitches = 0,
+    this.gameService.game.swings = 0,
+    this.gameService.game.misses = 0,
+    this.gameService.game.taken = 0,
+    this.gameService.game.balls = 0,
+    this.gameService.game.strikes = 0,
+    this.gameService.game.BB = 0;
+    this.gameService.game.K = 0;
+    this.gameService.game.inplay = 0;
+    this.gameService.game.hits = 0;
+    this.gameService.game.outs = 0;
+    this.gameService.game.inning = 1;
+    this.gameService.game.inning = 1;
 
     this.pitchResult = '';
     this.pitchOutput = '';
   }
 
   startinning() {
-    this.game.innings[this.game.inning] = {};
-    this.game.innings[this.game.inning].top = {};
-    this.game.innings[this.game.inning].bot = {};
-    this.game.innings[this.game.inning][this.toporbot].outs = 0;
+    this.gameService.game.innings[this.gameService.game.inning] = {};
+    this.gameService.game.innings[this.gameService.game.inning].top = {};
+    this.gameService.game.innings[this.gameService.game.inning].bot = {};
+    this.gameService.game.innings[this.gameService.game.inning][this.toporbot].outs = 0;
   }
 
   startgame() {
@@ -330,11 +319,11 @@ export class AppComponent implements
   }
 
   pitch() {
-    if (this.game.outs < (3 * 2 * 9)) {
-      if (this.game.pitches === 0) {
+    if (this.gameService.game.outs < (3 * 2 * 9)) {
+      if (this.gameService.game.pitches === 0) {
         this.startinning();
       }
-      this.game.pitches++;
+      this.gameService.game.pitches++;
       this.pitchResult = this.message('pitch');
 
       let zone: boolean;
