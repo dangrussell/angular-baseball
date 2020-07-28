@@ -8,16 +8,26 @@ import { GameService } from './game.service';
 import { IGame } from './game/game';
 
 /* Uses 2018 MLB totals */
-const MLBhits = 41019;
+const MLBHITS = 41019;
 const MLBHR = 5585;
 const MLB3B = 847;
 const MLB2B = 8264;
-const MLB1B = MLBhits - MLB2B - MLB3B - MLBHR; // 26323
+const MLB1B = MLBHITS - MLB2B - MLB3B - MLBHR; // 26323
 
-const hitpercent1B = (MLB1B / MLBhits) * 100;
-const hitpercent2B = (MLB2B / MLBhits) * 100;
-const hitpercent3B = (MLB3B / MLBhits) * 100;
-const hitpercentHR = (MLBHR / MLBhits) * 100;
+const ODDS1B = (MLB1B / MLBHITS) * 100;
+const ODDS2B = (MLB2B / MLBHITS) * 100;
+const ODDS3B = (MLB3B / MLBHITS) * 100;
+const ODDSHR = (MLBHR / MLBHITS) * 100;
+
+const BABIP = 30; // League-average BABIP = .300
+
+const ZONE = 45; // Zone% - average 45%
+
+const ZSWING = 65; // Z-Swing% - average 65%
+const OSWING = 30; // O-Swing% - average 30%
+
+const OCONTACT = 66; // O-Contact% - average 66%
+const ZCONTACT = 87; // Z-Contact% - average 87%
 
 @Component({
   selector: 'app-root',
@@ -428,17 +438,15 @@ export class AppComponent implements
 
     const roll = this.rand(0, 100);
 
-    // alert(roll);
-
-    if (roll <= hitpercent3B) { // rarest
+    if (roll <= ODDS3B) { // rarest
       this.gameService.game.teams[this.teambatting()].hits.triples++;
       this.advanceRunners('3B');
       this.pitchResult += 'What speed! <strong>It\'s a triple!</strong><br /><br />';
-    } else if (roll <= hitpercentHR) { // second rarest
+    } else if (roll <= ODDSHR) { // second rarest
       this.gameService.game.teams[this.teambatting()].hits.homeruns++;
       this.advanceRunners('HR');
       this.pitchResult += 'Going back... <strong>It\'s a Home Run!!!</strong><br /><br />';
-    } else if (roll <= hitpercent2B) { // second most common
+    } else if (roll <= ODDS2B) { // second most common
       this.gameService.game.teams[this.teambatting()].hits.doubles++;
       this.advanceRunners('2B');
       this.pitchResult += 'Gonna try for two.. <strong>In with a double.</strong><br /><br />';
@@ -447,11 +455,6 @@ export class AppComponent implements
       this.advanceRunners('1B');
       this.pitchResult += 'A clean hit. <strong>On first with a single.</strong><br /><br />';
     }
-    /*
-    } else if (roll <= hitpercent1B) { // most common
-      this.pitchResult += 'A clean hit. <strong>On first with a single.</strong><br /><br />';
-    }
-    */
   }
 
   recordruns(runs) {
@@ -462,7 +465,7 @@ export class AppComponent implements
     this.pa.inplay = true;
     this.gameService.game.inplay++;
 
-    if (this.rand(1, 100) <= 30) { // League-average BABIP = .300
+    if (this.rand(1, 100) <= BABIP) {
       this.pa.hit = true;
 
       this.recordhit();
@@ -483,12 +486,12 @@ export class AppComponent implements
     let messageMiss: string;
 
     if (zone === false) {
-      contact = 66; // Contact? [O-Contact% - average 66%]
+      contact = OCONTACT;
       messageHit = '...reached out, and slapped in play!<br/><br/>';
       messageMiss = 'Ooh... Shoulda let that one go!<br/><br/>';
     }
     if (zone === true) {
-      contact = 87; // Contact? [Z-Contact% - average 87%]
+      contact = ZCONTACT;
       messageHit = '...it\'s in play!<br/><br/>';
       messageMiss = 'Wow! Got it by the batter.<br/><br/>';
     }
@@ -559,7 +562,9 @@ export class AppComponent implements
   }
 
   startinning() {
-    this.gameService.game.innings[this.gameService.game.inning] = {};
+    if (!this.gameService.game.innings[this.gameService.game.inning]) {
+      this.gameService.game.innings[this.gameService.game.inning] = {};
+    }
     this.gameService.game.innings[this.gameService.game.inning].top = {};
     this.gameService.game.innings[this.gameService.game.inning].bot = {};
     this.gameService.game.innings[this.gameService.game.inning][this.toporbot].outs = 0;
@@ -567,6 +572,9 @@ export class AppComponent implements
 
   startgame() {
     this.wherearewe();
+    for (let i = 9; i <= 9; i++) {
+      this.gameService.game.innings[i] = {};
+    }
     this.startinning();
   }
 
@@ -578,15 +586,14 @@ export class AppComponent implements
 
         let zone: boolean;
 
-        // Inside strike zone? [Zone% - average 45%]
+        // Inside strike zone?
         this.pitchOutcome = this.rand(1, 100);
-        if (this.pitchOutcome <= 45) {
+        if (this.pitchOutcome <= ZONE) {
           // Inside the zone
           zone = true;
 
-          // Swing? [Z-Swing% - average 65%]
           this.pitchOutcome = this.rand(1, 100);
-          if (this.pitchOutcome <= 65) {
+          if (this.pitchOutcome <= ZSWING) {
             // Pitch swung on
             this.swing(zone);
           } else {
@@ -597,11 +604,10 @@ export class AppComponent implements
           // Outside the zone
           zone = false;
 
-          // Swing? [O-Swing% - average 30%]
           this.pitchOutcome = this.rand(1, 100);
-          if (this.pitchOutcome <= 30) {
+          if (this.pitchOutcome <= OSWING) {
             // Pitch swung on
-            this.swing(zone); // Contact? [O-Contact% - average 66%]
+            this.swing(zone);
           } else {
             // Pitch taken
             this.take(zone);
