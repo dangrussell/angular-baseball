@@ -5,12 +5,25 @@
 
     <div *ngIf="showbuttons">
       <button class="btn btn-dark mr-2" (click)="pitch()">Pitch</button>
-      <button class="btn btn-dark mr-2" (click)="pitches(100)">100 Pitches</button>
+      <button class="btn btn-dark mr-2" (click)="pitch(100)">100 Pitches</button>
       <button class="btn btn-dark" onclick="location.reload();">New Game</button>
     </div>
+
     <div class="plate">
       <svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <svg:polygon points="5,5 395,5 395,200 200,395 5,200" stroke="black" fill="white" stroke-width="5" />
+        <svg:polygon points="5,5 395,5 395,200 200,395 5,200" stroke="black" fill="white" stroke-width="5" /><!-- plate -->
+
+        <svg:polygon points="200,385 180,365 200,345 220,365" stroke="brown" fill="green" stroke-width="3" /><!-- infield diamond -->
+
+        <svg:polygon *ngIf="this.bases.first == false" points="215,370 210,365 215,360 220,365" stroke="black" fill="white" stroke-width="1" /><!-- 1B, open -->
+        <svg:polygon *ngIf="this.bases.first == true" points="215,370 210,365 215,360 220,365" stroke="black" fill="yellow" stroke-width="1" /><!-- 1B, occupied -->
+
+        <svg:polygon *ngIf="this.bases.second == false" points="200,355 195,350 200,345 205,350" stroke="black" fill="white" stroke-width="1" /><!-- 2B, open -->
+        <svg:polygon *ngIf="this.bases.second == true" points="200,355 195,350 200,345 205,350" stroke="black" fill="yellow" stroke-width="1" /><!-- 2B, occupied -->
+
+        <svg:polygon *ngIf="this.bases.third == false" points="185,370 180,365 185,360 190,365" stroke="black" fill="white" stroke-width="1" /><!-- 3B, open -->
+        <svg:polygon *ngIf="this.bases.third == true" points="185,370 180,365 185,360 190,365" stroke="black" fill="yellow" stroke-width="1" /><!-- 3B, occupied -->
+
         <svg:foreignObject x="10" y="20" width="390" height="200">
           <xhtml:p *ngIf="gameService.game.pitches" class="result" xmlns="http://www.w3.org/1999/xhtml" [innerHTML]="pitchOutput"></xhtml:p>
         </svg:foreignObject>
@@ -39,23 +52,24 @@
         <tr>
           <td *ngFor="let inningTops of gameService.game.innings | slice:1">{{inningTops?.top?.runs}}</td>
           <td class="font-weight-bold">{{gameService.game.teams.away.runs}}</td>
-          <td class="font-weight-bold">{{gameService.game.teams.away.hits}}</td>
+          <td class="font-weight-bold">{{gameService.teamHits(gameService.game.teams.away)}}</td>
           <td class="font-weight-bold">{{gameService.game.teams.away.errors}}</td>
         </tr>
         <tr>
           <td *ngFor="let inningBots of gameService.game.innings | slice:1">{{inningBots?.bot?.runs}}</td>
           <td class="font-weight-bold">{{gameService.game.teams.home.runs}}</td>
-          <td class="font-weight-bold">{{gameService.game.teams.home.hits}}</td>
+          <td class="font-weight-bold">{{gameService.teamHits(gameService.game.teams.home)}}</td>
           <td class="font-weight-bold">{{gameService.game.teams.home.errors}}</td>
         </tr>
       </tbody>
     </table>
 
   </div>
+
 <!--
   <div *ngIf="gameService.game.pitches" class="row">
 
-    <div class="col">
+      <div class="col">
       <h4>The Count</h4>
       <p>Balls: <strong>{{pa.balls}}</strong></p>
       <p>Strikes: <strong>{{pa.strikes}}</strong></p>
@@ -72,6 +86,7 @@
 
   </div>
 -->
+
 </div>
 
 <router-outlet></router-outlet>

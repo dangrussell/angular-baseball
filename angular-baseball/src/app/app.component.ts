@@ -7,6 +7,18 @@ import { GameService } from './game.service';
 
 import { IGame } from './game/game';
 
+/* Uses 2018 MLB totals */
+const MLBhits = 41019;
+const MLBHR = 5585;
+const MLB3B = 847;
+const MLB2B = 8264;
+const MLB1B = MLBhits - MLB2B - MLB3B - MLBHR; // 26323
+
+const hitpercent1B = (MLB1B / MLBhits) * 100;
+const hitpercent2B = (MLB2B / MLBhits) * 100;
+const hitpercent3B = (MLB3B / MLBhits) * 100;
+const hitpercentHR = (MLBHR / MLBhits) * 100;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -41,7 +53,11 @@ export class AppComponent implements
     out: false
   };
 
-
+  bases = {
+    first: false,
+    second: false,
+    third: false
+  };
 
   toporbot = 'top';
 
@@ -65,17 +81,6 @@ export class AppComponent implements
 
   pitchOutput = '';
 
-  MLB2018hits = 41019;
-  MLB20181B = 26323; // this.MLB2018hits - this.MLB20182B - this.MLB20183B - this.MLB2018HR;
-  MLB20182B = 8264;
-  MLB2018HR = 5585;
-  MLB20183B = 847;
-
-  hitpercent1B = (this.MLB20181B / this.MLB2018hits) * 100;
-  hitpercent2B = (this.MLB20182B / this.MLB2018hits) * 100;
-  hitpercent3B = (this.MLB20183B / this.MLB2018hits) * 100;
-  hitpercentHR = (this.MLB2018HR / this.MLB2018hits) * 100;
-
   rand(min: number, max: number) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -94,10 +99,12 @@ export class AppComponent implements
   }
 
   wherearewe() {
-    // alert(this.toporbot + ' ' + this.gameService.game.inning);
+    console.log(this.toporbot + ' ' + this.gameService.game.inning);
   }
 
   switchsides() {
+    this.resetbases();
+
     this.message('switchsides');
 
     if (this.toporbot === 'top') {
@@ -140,6 +147,235 @@ export class AppComponent implements
       this.resetpa();
       this.pitchResult += '<strong>Ball four! That\'s a walk.</strong><br/><br/>';
       this.gameService.game.BB++;
+
+      this.advanceRunners('BB');
+    }
+  }
+
+  advanceRunners(outcome: string) {
+    if (this.bases.first && this.bases.second && this.bases.third) { // bases loaded
+      if (outcome === 'BB') {
+        this.bases.first = true;
+        this.bases.second = true;
+        this.bases.third = true;
+        this.recordruns(1);
+      }
+      if (outcome === '1B') {
+        this.bases.first = true;
+        this.bases.second = true;
+        this.bases.third = false;
+        this.recordruns(2);
+      }
+      if (outcome === '2B') {
+        this.bases.first = false;
+        this.bases.second = true;
+        this.bases.third = true;
+        this.recordruns(2);
+      }
+      if (outcome === '3B') {
+        this.bases.first = false;
+        this.bases.second = false;
+        this.bases.third = true;
+        this.recordruns(3);
+      }
+      if (outcome === 'HR') {
+        this.resetbases();
+        this.recordruns(4);
+      }
+      return;
+    }
+    if (this.bases.first && this.bases.second && !this.bases.third) { // 2 on, first & second
+      if (outcome === 'BB') {
+        this.bases.first = true;
+        this.bases.second = true;
+        this.bases.third = true;
+      }
+      if (outcome === '1B') {
+        this.bases.first = true;
+        this.bases.second = true;
+        this.bases.third = false;
+        this.recordruns(1);
+      }
+      if (outcome === '2B') {
+        this.bases.first = false;
+        this.bases.second = true;
+        this.bases.third = true;
+        this.recordruns(1);
+      }
+      if (outcome === '3B') {
+        this.bases.first = false;
+        this.bases.second = false;
+        this.bases.third = true;
+        this.recordruns(2);
+      }
+      if (outcome === 'HR') {
+        this.resetbases();
+        this.recordruns(3);
+      }
+      return;
+    }
+    if (this.bases.first && !this.bases.second && this.bases.third) { // 2 on, corners
+      if (outcome === 'BB') {
+        this.bases.first = true;
+        this.bases.second = true;
+        this.bases.third = true;
+      }
+      if (outcome === '1B') {
+        this.bases.first = true;
+        this.bases.second = true;
+        this.bases.third = false;
+        this.recordruns(1);
+      }
+      if (outcome === '2B') {
+        this.bases.first = false;
+        this.bases.second = true;
+        this.bases.third = true;
+        this.recordruns(1);
+      }
+      if (outcome === '3B') {
+        this.bases.first = false;
+        this.bases.second = false;
+        this.bases.third = true;
+        this.recordruns(2);
+      }
+      if (outcome === 'HR') {
+        this.resetbases();
+        this.recordruns(3);
+      }
+      return;
+    }
+    if (!this.bases.first && this.bases.second && this.bases.third) { // 2 on, second & third
+      if (outcome === 'BB') {
+        this.bases.first = true;
+        this.bases.second = true;
+        this.bases.third = true;
+      }
+      if (outcome === '1B') {
+        this.bases.first = true;
+        this.bases.second = false;
+        this.bases.third = false;
+        this.recordruns(2);
+      }
+      if (outcome === '2B') {
+        this.bases.first = false;
+        this.bases.second = true;
+        this.bases.third = false;
+        this.recordruns(2);
+      }
+      if (outcome === '3B') {
+        this.bases.first = false;
+        this.bases.second = false;
+        this.bases.third = true;
+        this.recordruns(2);
+      }
+      if (outcome === 'HR') {
+        this.resetbases();
+        this.recordruns(3);
+      }
+      return;
+    }
+    if (this.bases.first && !this.bases.second && !this.bases.third) { // 1 on, first
+      if (outcome === 'BB') {
+        this.bases.first = true;
+        this.bases.second = true;
+      }
+      if (outcome === '1B') {
+        this.bases.first = true;
+        this.bases.second = true;
+        this.bases.third = false;
+      }
+      if (outcome === '2B') {
+        this.bases.first = false;
+        this.bases.second = true;
+        this.bases.third = true;
+      }
+      if (outcome === '3B') {
+        this.bases.first = false;
+        this.bases.second = false;
+        this.bases.third = true;
+        this.recordruns(1);
+      }
+      if (outcome === 'HR') {
+        this.resetbases();
+        this.recordruns(2);
+      }
+      return;
+    }
+    if (!this.bases.first && this.bases.second && !this.bases.third) { // 1 on, second
+      if (outcome === 'BB') {
+        this.bases.first = true;
+        this.bases.second = true;
+      }
+      if (outcome === '1B') {
+        this.bases.first = true;
+        this.bases.second = false;
+        this.bases.third = false;
+        this.recordruns(1);
+      }
+      if (outcome === '2B') {
+        this.bases.first = false;
+        this.bases.second = true;
+        this.bases.third = false;
+        this.recordruns(1);
+      }
+      if (outcome === '3B') {
+        this.bases.first = false;
+        this.bases.second = false;
+        this.bases.third = true;
+        this.recordruns(1);
+      }
+      if (outcome === 'HR') {
+        this.resetbases();
+        this.recordruns(2);
+      }
+      return;
+    }
+    if (!this.bases.first && !this.bases.second && this.bases.third) { // 1 on, third
+      if (outcome === 'BB') {
+        this.bases.first = true;
+        this.bases.third = true;
+      }
+      if (outcome === '1B') {
+        this.bases.first = true;
+        this.bases.second = false;
+        this.bases.third = false;
+        this.recordruns(1);
+      }
+      if (outcome === '2B') {
+        this.bases.first = false;
+        this.bases.second = true;
+        this.bases.third = false;
+        this.recordruns(1);
+      }
+      if (outcome === '3B') {
+        this.bases.first = false;
+        this.bases.second = false;
+        this.bases.third = true;
+        this.recordruns(1);
+      }
+      if (outcome === 'HR') {
+        this.resetbases();
+        this.recordruns(2);
+      }
+      return;
+    }
+    if (!this.bases.first && !this.bases.second && !this.bases.third) { // no one on base
+      if (outcome === 'BB') {
+        this.bases.first = true;
+      }
+      if (outcome === '1B') {
+        this.bases.first = true;
+      }
+      if (outcome === '2B') {
+        this.bases.second = true;
+      }
+      if (outcome === '3B') {
+        this.bases.third = true;
+      }
+      if (outcome === 'HR') {
+        this.recordruns(1);
+      }
+      return;
     }
   }
 
@@ -147,18 +383,24 @@ export class AppComponent implements
     this.gameService.game.outs++;
     this.gameService.game.innings[this.gameService.game.inning][this.toporbot].outs++;
 
-    if ((this.gameService.game.outs === (3 * 2 * 9))) {
+    if ((this.gameService.game.outs >= (3 * 2 * 9)) && (this.gameService.game.teams.away.runs !== this.gameService.game.teams.home.runs)) {
       this.pitchResult += '<br /><br /><strong>And that\'s the game!</strong>';
+      let winner = 'home';
+      if (this.gameService.game.teams.away.runs > this.gameService.game.teams.home.runs) {
+        winner = 'away';
+      }
+      this.pitchResult += '<br /><br /><strong>The ' + winner + ' team wins!</strong>';
+      this.gameService.game.final = true;
     } else {
       if ((this.gameService.game.outs % 3) === 0) {
-        // alert("End of half inning!");
+        console.log('End of half inning!');
 
         this.gameService.game.innings[this.gameService.game.inning][this.toporbot].runs = 0;
 
         this.gameService.game.innings[this.gameService.game.inning][this.toporbot].outs = 0;
 
         if ((this.gameService.game.outs % 6) === 0) {
-          // alert("End of inning!");
+          console.log('End of inning!');
           this.gameService.game.inning++;
           this.startinning();
         }
@@ -182,28 +424,38 @@ export class AppComponent implements
   recordhit() {
     this.gameService.game.hits++;
 
-    this.gameService.game.teams[this.teambatting()].hits++;
-
     this.pitchResult += this.message('hit');
 
     const roll = this.rand(0, 100);
 
     // alert(roll);
 
-    if (roll <= this.hitpercent3B) { // rarest
+    if (roll <= hitpercent3B) { // rarest
+      this.gameService.game.teams[this.teambatting()].hits.triples++;
+      this.advanceRunners('3B');
       this.pitchResult += 'What speed! <strong>It\'s a triple!</strong><br /><br />';
-    } else if (roll <= this.hitpercentHR) { // second rarest
+    } else if (roll <= hitpercentHR) { // second rarest
+      this.gameService.game.teams[this.teambatting()].hits.homeruns++;
+      this.advanceRunners('HR');
       this.pitchResult += 'Going back... <strong>It\'s a Home Run!!!</strong><br /><br />';
-    } else if (roll <= this.hitpercent2B) { // second most common
+    } else if (roll <= hitpercent2B) { // second most common
+      this.gameService.game.teams[this.teambatting()].hits.doubles++;
+      this.advanceRunners('2B');
       this.pitchResult += 'Gonna try for two.. <strong>In with a double.</strong><br /><br />';
     } else { // most common
+      this.gameService.game.teams[this.teambatting()].hits.singles++;
+      this.advanceRunners('1B');
       this.pitchResult += 'A clean hit. <strong>On first with a single.</strong><br /><br />';
     }
     /*
-    } else if (roll <= this.hitpercent1B) { // most common
+    } else if (roll <= hitpercent1B) { // most common
       this.pitchResult += 'A clean hit. <strong>On first with a single.</strong><br /><br />';
     }
     */
+  }
+
+  recordruns(runs) {
+    this.gameService.game.teams[this.teambatting()].runs = this.gameService.game.teams[this.teambatting()].runs + runs;
   }
 
   inplay() {
@@ -279,6 +531,12 @@ export class AppComponent implements
     this.pa.inplay = false;
   }
 
+  resetbases() {
+    this.bases.first = false;
+    this.bases.second = false;
+    this.bases.third = false;
+  }
+
   resetgame() {
     this.gameService.game.pitches = 0,
     this.gameService.game.swings = 0,
@@ -292,10 +550,12 @@ export class AppComponent implements
     this.gameService.game.hits = 0;
     this.gameService.game.outs = 0;
     this.gameService.game.inning = 1;
-    this.gameService.game.inning = 1;
 
     this.pitchResult = '';
     this.pitchOutput = '';
+
+    this.resetpa();
+    this.resetbases();
   }
 
   startinning() {
@@ -306,68 +566,53 @@ export class AppComponent implements
   }
 
   startgame() {
-    //
     this.wherearewe();
-
-    /*
-    alert(this.hitpercent1B);
-    alert(this.hitpercent2B);
-    alert(this.hitpercent3B);
-    alert(this.hitpercentHR);
-    */
     this.startinning();
   }
 
-  pitch() {
-    if (this.gameService.game.outs < (3 * 2 * 9)) {
-      if (this.gameService.game.pitches === 0) {
-        this.startinning();
-      }
-      this.gameService.game.pitches++;
-      this.pitchResult = this.message('pitch');
-
-      let zone: boolean;
-
-      // Inside strike zone? [Zone% - average 45%]
-      this.pitchOutcome = this.rand(1, 100);
-      if (this.pitchOutcome <= 45) {
-        // Inside the zone
-        zone = true;
-
-        // Swing? [Z-Swing% - average 65%]
-        this.pitchOutcome = this.rand(1, 100);
-        if (this.pitchOutcome <= 65) {
-          // Pitch swung on
-          this.swing(zone);
-        } else {
-          // Pitch taken
-          this.take(zone);
-        }
-      } else {
-        // Outside the zone
-        zone = false;
-
-        // Swing? [O-Swing% - average 30%]
-        this.pitchOutcome = this.rand(1, 100);
-        if (this.pitchOutcome <= 30) {
-          // Pitch swung on
-          this.swing(zone); // Contact? [O-Contact% - average 66%]
-        } else {
-          // Pitch taken
-          this.take(zone);
-        }
-      }
-
-      this.pitchOutput = this.pitchResult;
-
-      /* reset */
-      // this.pitchResult = this.message('pitch');
-    }
-  }
-
-  pitches(pitches: number) {
+  pitch(pitches: number = 1) {
     for (let i = 1; i <= pitches; i++) {
-      this.pitch();
+      if (this.gameService.game.final === false) {
+        this.gameService.game.pitches++;
+        this.pitchResult = this.message('pitch');
+
+        let zone: boolean;
+
+        // Inside strike zone? [Zone% - average 45%]
+        this.pitchOutcome = this.rand(1, 100);
+        if (this.pitchOutcome <= 45) {
+          // Inside the zone
+          zone = true;
+
+          // Swing? [Z-Swing% - average 65%]
+          this.pitchOutcome = this.rand(1, 100);
+          if (this.pitchOutcome <= 65) {
+            // Pitch swung on
+            this.swing(zone);
+          } else {
+            // Pitch taken
+            this.take(zone);
+          }
+        } else {
+          // Outside the zone
+          zone = false;
+
+          // Swing? [O-Swing% - average 30%]
+          this.pitchOutcome = this.rand(1, 100);
+          if (this.pitchOutcome <= 30) {
+            // Pitch swung on
+            this.swing(zone); // Contact? [O-Contact% - average 66%]
+          } else {
+            // Pitch taken
+            this.take(zone);
+          }
+        }
+
+        this.pitchOutput = this.pitchResult;
+
+        /* reset */
+        // this.pitchResult = this.message('pitch');
+      }
     }
   }
 

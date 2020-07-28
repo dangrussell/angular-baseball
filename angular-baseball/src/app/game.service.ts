@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ export class GameService {
   constructor() { }
 
   game = {
+    final: false,
     pitches: 0,
     swings: 0,
     misses: 0,
@@ -24,15 +26,29 @@ export class GameService {
     teams: {
       away: {
         runs: 0,
-        hits: 0,
-        errors: 0
+        hits: {
+          singles: 0,
+          doubles: 0,
+          triples: 0,
+          homeruns: 0
+        },
+        errors: 0,
       },
       home: {
         runs: 0,
-        hits: 0,
+        hits: {
+          singles: 0,
+          doubles: 0,
+          triples: 0,
+          homeruns: 0
+        },
         errors: 0
       }
     }
   };
+
+  teamHits(team) {
+    return team.hits.singles + team.hits.doubles + team.hits.triples + team.hits.homeruns;
+  }
 
 }
