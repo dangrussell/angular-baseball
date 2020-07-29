@@ -5,8 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class GameService {
 
-  constructor() { }
-
   positions = {
     1: {
       name: 'pitcher',
@@ -197,7 +195,9 @@ export class GameService {
     },
   };
 
-  teamHits(team) {
+  constructor() { }
+
+  teamHits(team: any): number {
     return team.hits.singles + team.hits.doubles + team.hits.triples + team.hits.homeruns;
   }
 

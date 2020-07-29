@@ -1,10 +1,7 @@
-import { Component, OnChanges, OnInit, OnDestroy } from '@angular/core';
-// import { DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked,  } from '@angular/core';
-// Implementing DoCheck and OnChanges in a class is not recommended
+import { Component, OnInit } from '@angular/core';
+
 import { VarService } from './var.service';
-
 import { GameService } from './game.service';
-
 import { IGame } from './game/game';
 
 /* Uses 2018 MLB totals */
@@ -38,14 +35,7 @@ const ZCONTACT = 87; // Z-Contact% - average 87%
     GameService,
   ]
 })
-export class AppComponent implements
-  OnChanges, OnInit, OnDestroy/*, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked*/ {
-  // Implementing DoCheck and OnChanges in a class is not recommended
-
-  constructor(
-    private varService: VarService,
-    private gameService: GameService,
-  ) {}
+export class AppComponent implements OnInit {
 
   title = 'angular-baseball';
 
@@ -93,28 +83,33 @@ export class AppComponent implements
 
   pitchOutput = '';
 
-  rand(min: number, max: number) {
+  constructor(
+    private varService: VarService,
+    private gameService: GameService,
+  ) {}
+
+  rand(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  randObj(obj) {
+  randObj(obj: any): any {
     const keys = Object.keys(obj);
     return obj[keys[Math.floor(Math.random() * keys.length)]];
   }
 
-  message(messagekind: string) {
+  message(messagekind: string): string {
     let message = this.randObj(this.messages[messagekind]);
     message += '<br /><br />';
     return message;
   }
 
-  wherearewe() {
+  wherearewe(): void {
     console.log(this.toporbot + ' ' + this.gameService.game.inning);
   }
 
-  switchsides() {
+  switchsides(): void {
     this.resetbases();
 
     this.message('switchsides');
@@ -130,7 +125,7 @@ export class AppComponent implements
     this.gameService.game.innings[this.gameService.game.inning][this.toporbot].outs = 0;
   }
 
-  recordstrike(strikekind: string) {
+  recordstrike(strikekind: string): void {
     this.gameService.game.strikes++;
 
     this.pa.strikes++;
@@ -150,7 +145,7 @@ export class AppComponent implements
     }
   }
 
-  recordball() {
+  recordball(): void {
     this.gameService.game.balls++;
 
     this.pa.balls++;
@@ -164,7 +159,7 @@ export class AppComponent implements
     }
   }
 
-  advanceRunners(outcome: string) {
+  advanceRunners(outcome: string): void {
     if (this.bases.first && this.bases.second && this.bases.third) { // bases loaded
       if (outcome === 'BB') {
         this.bases.first = true;
@@ -391,7 +386,7 @@ export class AppComponent implements
     }
   }
 
-  recordout() {
+  recordout(): void {
     this.gameService.game.outs++;
     this.gameService.game.innings[this.gameService.game.inning][this.toporbot].outs++;
 
@@ -425,7 +420,7 @@ export class AppComponent implements
 
   }
 
-  teambatting() {
+  teambatting(): string {
     if (this.toporbot === 'top') {
       return 'away';
     } else {
@@ -433,7 +428,7 @@ export class AppComponent implements
     }
   }
 
-  recordhit() {
+  recordhit(): void {
     this.gameService.game.hits++;
 
     this.pitchResult += this.message('hit');
@@ -459,11 +454,11 @@ export class AppComponent implements
     }
   }
 
-  recordruns(runs) {
+  recordruns(runs: number): void {
     this.gameService.game.teams[this.teambatting()].runs = this.gameService.game.teams[this.teambatting()].runs + runs;
   }
 
-  inplay() {
+  inplay(): void {
     this.pa.inplay = true;
     this.gameService.game.inplay++;
 
@@ -482,7 +477,7 @@ export class AppComponent implements
     this.resetpa();
   }
 
-  swing(zone: boolean) {
+  swing(zone: boolean): void {
     let contact: number;
     let messageHit: string;
     let messageMiss: string;
@@ -516,7 +511,7 @@ export class AppComponent implements
     }
   }
 
-  take(zone: boolean) {
+  take(zone: boolean): void {
     this.pitchResult += 'Taken for a ';
     if (zone === false) {
       this.pitchResult += 'ball. Good eye!<br/>';
@@ -530,25 +525,25 @@ export class AppComponent implements
     }
   }
 
-  resetpa() {
+  resetpa(): void {
     this.pa.balls = 0;
     this.pa.strikes = 0;
     this.pa.inplay = false;
   }
 
-  resetbases() {
+  resetbases(): void {
     this.bases.first = false;
     this.bases.second = false;
     this.bases.third = false;
   }
 
-  resetgame() {
-    this.gameService.game.pitches = 0,
-    this.gameService.game.swings = 0,
-    this.gameService.game.misses = 0,
-    this.gameService.game.taken = 0,
-    this.gameService.game.balls = 0,
-    this.gameService.game.strikes = 0,
+  resetgame(): void {
+    this.gameService.game.pitches = 0;
+    this.gameService.game.swings = 0;
+    this.gameService.game.misses = 0;
+    this.gameService.game.taken = 0;
+    this.gameService.game.balls = 0;
+    this.gameService.game.strikes = 0;
     this.gameService.game.BB = 0;
     this.gameService.game.K = 0;
     this.gameService.game.inplay = 0;
@@ -563,16 +558,17 @@ export class AppComponent implements
     this.resetbases();
   }
 
-  startinning() {
-    if (!this.gameService.game.innings[this.gameService.game.inning]) {
-      this.gameService.game.innings[this.gameService.game.inning] = {};
+  startinning(): void {
+    let inning = this.gameService.game.inning;
+    if (!this.gameService.game.innings[inning]) {
+      this.gameService.game.innings[inning] = {};
     }
-    this.gameService.game.innings[this.gameService.game.inning].top = {};
-    this.gameService.game.innings[this.gameService.game.inning].bot = {};
-    this.gameService.game.innings[this.gameService.game.inning][this.toporbot].outs = 0;
+    this.gameService.game.innings[inning].top = {};
+    this.gameService.game.innings[inning].bot = {};
+    this.gameService.game.innings[inning][this.toporbot].outs = 0;
   }
 
-  startgame() {
+  startgame(): void {
     this.wherearewe();
     for (let i = 9; i <= 9; i++) {
       this.gameService.game.innings[i] = {};
@@ -580,7 +576,7 @@ export class AppComponent implements
     this.startinning();
   }
 
-  pitch(pitches: number = 1) {
+  pitch(pitches = 1): void {
     for (let i = 1; i <= pitches; i++) {
       if (this.gameService.game.final === false) {
         this.gameService.game.pitches++;
@@ -624,16 +620,7 @@ export class AppComponent implements
     }
   }
 
-  ngOnChanges() {
-    // Respond when Angular (re)sets data-bound input properties.
-    // The method receives a SimpleChanges object of current and previous property values.
-
-    // Called before ngOnInit() and whenever one or more data-bound input properties change.
-
-    // Implementing DoCheck and OnChanges in a class is not recommended
-  }
-
-  ngOnInit() {
+  ngOnInit(): void {
     // Initialize the directive/component after Angular first displays
     // the data-bound properties and sets the directive/component's input properties.
 
@@ -642,45 +629,5 @@ export class AppComponent implements
     this.showbuttons = true;
 
     this.startgame();
-  }
-/*
-  ngDoCheck() {
-
-    // Detect and act upon changes that Angular can't or won't detect on its own.
-
-    // Called during every change detection run, immediately after ngOnChanges() and ngOnInit().
-
-    // Implementing DoCheck and OnChanges in a class is not recommended
-  }
-
-  ngAfterContentInit() {
-    // Respond after Angular projects external content into the component's view / the view that a directive is in.
-
-    // Called once after the first ngDoCheck().
-  }
-
-  ngAfterContentChecked() {
-    // Respond after Angular checks the content projected into the directive/component.
-
-    // Called after the ngAfterContentInit() and every subsequent ngDoCheck().
-  }
-
-  ngAfterViewInit() {
-    // Respond after Angular initializes the component's views and child views / the view that a directive is in.
-
-    // Called once after the first ngAfterContentChecked().
-  }
-
-  ngAfterViewChecked() {
-    // Respond after Angular checks the component's views and child views / the view that a directive is in.
-
-    // Called after the ngAfterViewInit() and every subsequent ngAfterContentChecked().
-  }
-*/
-  ngOnDestroy() {
-    // Cleanup just before Angular destroys the directive/component.
-    // Unsubscribe Observables and detach event handlers to avoid memory leaks.
-
-    // Called just before Angular destroys the directive/component.
   }
 }
