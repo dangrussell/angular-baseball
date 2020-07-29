@@ -12,9 +12,9 @@ const MLBHITS = 41019;
 const MLBHR = 5585;
 const MLB3B = 847;
 const MLB2B = 8264;
-const MLB1B = MLBHITS - MLB2B - MLB3B - MLBHR; // 26323
+// const MLB1B = MLBHITS - MLB2B - MLB3B - MLBHR; // 26323
 
-const ODDS1B = (MLB1B / MLBHITS) * 100;
+// const ODDS1B = (MLB1B / MLBHITS) * 100;
 const ODDS2B = (MLB2B / MLBHITS) * 100;
 const ODDS3B = (MLB3B / MLBHITS) * 100;
 const ODDSHR = (MLBHR / MLBHITS) * 100;
@@ -46,6 +46,8 @@ export class AppComponent implements
     private varService: VarService,
     private gameService: GameService,
   ) {}
+
+  title = 'angular-baseball';
 
   game: IGame[] = [this.gameService.game];
 
