@@ -11,6 +11,7 @@ addons:
       - google-chrome
     packages:
       - google-chrome-stable
+  chrome: stable
 
 cache:
   directories:
