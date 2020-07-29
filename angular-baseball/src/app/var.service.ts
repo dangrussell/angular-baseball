@@ -5,9 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class VarService {
 
-  constructor() { }
-
   title = 'Angular Baseball';
   titleHTML = '<em><strong>ANGULAR</strong>Baseball</em>';
+
+  constructor() { }
 
 }
