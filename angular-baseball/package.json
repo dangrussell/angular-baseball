@@ -19,10 +19,10 @@
     "@angular/platform-browser": "^10.0.6",
     "@angular/platform-browser-dynamic": "^10.0.6",
     "@angular/router": "^10.0.6",
-    "bootstrap": "^4.4.1",
+    "bootstrap": "^4.5.0",
     "braces": "^3.0.2",
-    "jquery": "^3.4.1",
-    "popper.js": "^1.16.0",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
