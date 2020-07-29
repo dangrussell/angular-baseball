@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
 
   showbuttons = false;
 
-  pitchResult: '';
+  pitchResult = '';
 
   pitchOutcome = 0;
 
@@ -84,8 +84,8 @@ export class AppComponent implements OnInit {
   pitchOutput = '';
 
   constructor(
-    private varService: VarService,
-    private gameService: GameService,
+    public varService: VarService,
+    public gameService: GameService,
   ) {}
 
   rand(min: number, max: number): number {
