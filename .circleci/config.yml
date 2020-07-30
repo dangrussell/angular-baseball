@@ -7,8 +7,12 @@ jobs:
     steps:
         - checkout
         - run:
-            name: 'List the dir'
+            name: 'List'
             command: |
                 ls -al
                 cd angular-baseball
                 ls -al
+        - run:
+            name: 'Install'
+            command: |
+                npm install
