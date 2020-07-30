@@ -6,7 +6,7 @@ jobs:
         - image: 'circleci/node:latest'
     steps:
         - checkout
-        #- run: cd angular-baseball
+        - run: cd angular-baseball
         - restore_cache:
             key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
         - run: npm install
