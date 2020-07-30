@@ -5,16 +5,23 @@ jobs:
     docker:
         - image: 'circleci/node:latest'
     steps:
+        - run: ls
         - checkout
+        - run: ls
         - run: cd angular-baseball
+        - run: ls
         - restore_cache:
             key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
+        - run: ls
         - run: npm install
+        - run: ls
         - save_cache:
             key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
             paths:
             - "node_modules"
+        - run: ls
         - run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+        - run: ls
         - run: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
 
 # Orchestrate our job run sequence
