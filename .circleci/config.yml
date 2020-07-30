@@ -1,7 +1,7 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/angular-baseball
+    working_directory: ~/angular-baseball/angular-baseball
     docker:
       - image: 'circleci/node:latest'
     steps:
