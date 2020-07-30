@@ -7,12 +7,6 @@ jobs:
     steps:
       - checkout
       - run: npm install
-  test:
-    working_directory: ~/angular-baseball/angular-baseball
-    docker:
-      - image: 'circleci/node:latest'
-    steps:
-      - checkout
       - run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
       - run: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
 
@@ -21,6 +15,3 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - test:
-          requires:
-            - build
