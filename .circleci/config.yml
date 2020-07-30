@@ -4,6 +4,8 @@ jobs:
     #working_directory: ~/angular-baseball
     docker:
         - image: 'circleci/node:latest'
+    environment:
+        CHROME_BIN: '/usr/bin/google-chrome karma start --single-run'
     steps:
         - checkout
         - run:
