@@ -11,8 +11,14 @@ jobs:
             name: 'List the dir'
             command: |
                 ls -al
-        #- run: cd angular-baseball
-        #- run: ls
+       - run:
+            name: 'Change the dir'
+            command: |
+                cd angular-baseball
+        - run:
+            name: 'List the dir'
+            command: |
+                ls -al
         #- restore_cache:
         #    key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
         #- run: ls
