@@ -1,0 +1,49 @@
+{
+  "data": [
+    {
+      "kind": "pitch",
+      "text": [
+        "Here comes the pitch...",
+        "The pitcher kicks and deals..."
+      ]
+    },
+    {
+      "kind": "hit",
+      "text": [
+        "Looks like a hit...",
+        "Got some good wood on that one...",
+        "Nice little piece of hitting there..."
+      ]
+    },
+    {
+      "kind": "switchsides",
+      "text": [
+        "<strong>That'll do it for this half of inning.</strong>"
+      ]
+    },
+    {
+      "kind": "3B",
+      "text": [
+        "What speed! <strong>It's a triple!</strong>"
+      ]
+    },
+    {
+      "kind": "HR",
+      "text": [
+        "Going back... <strong>It's a Home Run!!!</strong>"
+      ]
+    },
+    {
+      "kind": "2B",
+      "text": [
+        "Gonna try for two.. <strong>In with a double.</strong>"
+      ]
+    },
+    {
+      "kind": "1B",
+      "text": [
+        "A clean hit. <strong>On first with a single.</strong>"
+      ]
+    }
+  ]
+}
