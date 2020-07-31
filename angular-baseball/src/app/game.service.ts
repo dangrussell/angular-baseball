@@ -1,50 +1,17 @@
 import { Injectable } from '@angular/core';
 
+import { Game, Inning, HalfInning } from './game/game';
+
+import { VarService } from './var.service';
+import { TeamService } from './team.service';
+import { MessageService } from './message.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
 
-  positions = {
-    1: {
-      name: 'pitcher',
-      abbreviation: 'P',
-    },
-    2: {
-      name: 'catcher',
-      abbreviation: 'C',
-    },
-    3: {
-      name: 'first baseman',
-      abbreviation: '1B',
-    },
-    4: {
-      name: 'second baseman',
-      abbreviation: '2B',
-    },
-    5: {
-      name: 'third baseman',
-      abbreviation: '3B',
-    },
-    6: {
-      name: 'shortstop',
-      abbreviation: 'SS',
-    },
-    7: {
-      name: 'left fielder',
-      abbreviation: 'LF',
-    },
-    8: {
-      name: 'center fielder',
-      abbreviation: 'CF',
-    },
-    9: {
-      name: 'right fielder',
-      abbreviation: 'RF',
-    },
-  };
-
-  game = {
+  game: Game = {
     final: false,
     pitches: 0,
     swings: 0,
@@ -57,148 +24,132 @@ export class GameService {
     inplay: 0,
     hits: 0,
     outs: 0,
-    inning: 1,
+    inning_current: 1,
     innings: [],
-    teams: {
-      away: {
-        runs: 0,
-        hits: {
-          singles: 0,
-          doubles: 0,
-          triples: 0,
-          homeruns: 0,
-        },
-        errors: 0,
-        players: {
-          0: {
-            name: 'Cap Framer',
-            position: 2,
-            hits: 0,
-            AB: 0,
-          },
-          1: {
-            name: 'Lefty Baggs',
-            position: 3,
-            hits: 0,
-            AB: 0,
-          },
-          2: {
-            name: 'Ramón Manos',
-            position: 4,
-            hits: 0,
-            AB: 0,
-          },
-          3: {
-            name: 'Trip Rounding',
-            position: 5,
-            hits: 0,
-            AB: 0,
-          },
-          4: {
-            name: 'I.C. Rodríguez',
-            position: 6,
-            hits: 0,
-            AB: 0,
-          },
-          5: {
-            name: 'Mickey Flenderson',
-            position: 7,
-            hits: 0,
-            AB: 0,
-          },
-          6: {
-            name: 'Niels Giffey, Jr.',
-            position: 8,
-            hits: 0,
-            AB: 0,
-          },
-          7: {
-            name: 'Barry Strasberg',
-            position: 9,
-            hits: 0,
-            AB: 0,
-          },
-          8: {
-            name: 'Dewey Doctor',
-            position: 1,
-            hits: 0,
-            AB: 0,
-          },
-        },
-      },
-      home: {
-        runs: 0,
-        hits: {
-          singles: 0,
-          doubles: 0,
-          triples: 0,
-          homeruns: 0,
-        },
-        errors: 0,
-        players: {
-          0: {
-            name: 'Mitt Paddington',
-            position: 2,
-            hits: 0,
-            AB: 0,
-          },
-          1: {
-            name: 'Stretch Scooply',
-            position: 3,
-            hits: 0,
-            AB: 0,
-          },
-          2: {
-            name: 'Ecky Davidstein',
-            position: 4,
-            hits: 0,
-            AB: 0,
-          },
-          3: {
-            name: 'Rivers Corning',
-            position: 5,
-            hits: 0,
-            AB: 0,
-          },
-          4: {
-            name: 'Rip Calvin',
-            position: 6,
-            hits: 0,
-            AB: 0,
-          },
-          5: {
-            name: 'Wally Munster',
-            position: 7,
-            hits: 0,
-            AB: 0,
-          },
-          6: {
-            name: 'Leap Parker',
-            position: 8,
-            hits: 0,
-            AB: 0,
-          },
-          7: {
-            name: 'Yoshi Konami',
-            position: 9,
-            hits: 0,
-            AB: 0,
-          },
-          8: {
-            name: 'José Pelota',
-            position: 1,
-            hits: 0,
-            AB: 0,
-          },
-        },
-      },
-    },
+    teams: [],
   };
 
-  constructor() { }
+  ih: HalfInning = {
+    toporbot: 'top',
+    runs: 0,
+    outs: 0
+  };
 
-  teamHits(team: any): number {
-    return team.hits.singles + team.hits.doubles + team.hits.triples + team.hits.homeruns;
+  constructor(
+    public varService: VarService,
+    public teamService: TeamService,
+    public messageService: MessageService,
+  ) { }
+
+  wherearewe(): void {
+    console.log(this.inningHalf(), this.inning());
+  }
+
+  inning(): number {
+    return this.game.inning_current;
+  }
+
+  inningHalf(): string {
+    return this.ih.toporbot;
+  }
+
+  switchsides(): void {
+    this.varService.resetbases();
+
+    this.messageService.message('switchsides');
+
+    const i = this.inning();
+    const ih = this.inningHalf();
+
+    if (ih === 'top') {
+      this.ih.toporbot = 'bot';
+    } else {
+      this.ih.toporbot = 'top';
+    }
+
+    this.game.innings[i][ih].runs = 0;
+
+    this.game.innings[i][ih].outs = 0;
+  }
+
+  startinning(): void {
+    const i = this.inning();
+    if (!this.game.innings.find(el => el.num === i)) {
+      this.game.innings.push(
+        {
+          num: i,
+          top: {
+              toporbot: 'top',
+              outs: 0,
+              runs: 0,
+            },
+          bot: {
+              toporbot: 'bot',
+              outs: 0,
+              runs: 0,
+            }
+        }
+      );
+    }
+  }
+
+  recordout(): void {
+    this.game.outs++;
+    const i = this.inning();
+    const ih = this.inningHalf();
+    this.game.innings[i][ih].outs++;
+
+    if ((this.game.outs >= (3 * 2 * 9)) && (this.teamService.teamAway.runs !== this.teamService.teamHome.runs)) {
+      /*
+      this.pitchResult += '<br /><br /><strong>And that\'s the game!</strong>';
+      let winner = 'home';
+      if (this.teamService.teamAway.runs > this.teamService.teamHome.runs) {
+        winner = 'away';
+      }
+      this.pitchResult += '<br /><br /><strong>The ' + winner + ' team wins!</strong>';
+      */
+      this.game.final = true;
+    } else {
+      if ((this.game.outs % 3) === 0) {
+        console.log('End of half inning!');
+
+        this.game.innings[i][ih].runs = 0;
+
+        this.game.innings[i][ih].outs = 0;
+
+        if ((this.game.outs % 6) === 0) {
+          console.log('End of inning!');
+          this.game.inning_current++;
+          this.startinning();
+        }
+
+        this.switchsides();
+
+        this.wherearewe();
+      }
+    }
+
+  }
+
+  startgame(): void {
+    this.wherearewe();
+    for (let i = 0; i <= this.varService.INNINGS; i++) {
+      const inning: Inning = {
+        num: i,
+        top: {
+          toporbot: 'top',
+          runs: 0,
+          outs: 0,
+        },
+        bot: {
+          toporbot: 'bot',
+          runs: 0,
+          outs: 0,
+        },
+      };
+      this.game.innings.push(inning);
+    }
+    this.startinning();
   }
 
 }

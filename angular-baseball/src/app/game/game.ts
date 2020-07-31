@@ -1,4 +1,17 @@
-export interface IGame {
+import { Team } from './../team/team';
+
+export interface HalfInning {
+  toporbot: string;
+  outs: number;
+  runs: number;
+}
+export interface Inning {
+  num: number;
+  top: HalfInning;
+  bot: HalfInning;
+}
+export interface Game {
+  final: boolean;
   pitches: number;
   swings: number;
   misses: number;
@@ -10,58 +23,7 @@ export interface IGame {
   inplay: number;
   hits: number;
   outs: number;
-  inning: number;
-  innings: Array<number>;
-  teams: any;
+  inning_current: number;
+  innings: Inning[];
+  teams: Team[];
 }
-
-export class Game implements IGame {
-  constructor(
-    public pitches: number,
-    public swings: number,
-    public misses: number,
-    public taken: number,
-    public balls: number,
-    public strikes: number,
-    public BB: number,
-    public K: number,
-    public inplay: number,
-    public hits: number,
-    public outs: number,
-    public inning: number,
-    public innings: Array<number>,
-    public teams: any,
-  ) {}
-
-  someGameMethod() {}
-}
-
-/*
-game = {
-  pitches: 0,
-  swings: 0,
-  misses: 0,
-  taken: 0,
-  balls: 0,
-  strikes: 0,
-  BB: 0,
-  K: 0,
-  inplay: 0,
-  hits: 0,
-  outs: 0,
-  inning: 1,
-  innings: [],
-  teams: {
-    away: {
-      runs: 0,
-      hits: 0,
-      errors: 0
-    },
-    home: {
-      runs: 0,
-      hits: 0,
-      errors: 0
-    }
-  }
-};
-*/
