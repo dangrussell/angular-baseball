@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  recordstrike(strikekind: string): void {
+  recordStrike(strikekind: string): void {
     this.gameService.game.strikes++;
 
     this.varService.pa.strikes++;
@@ -59,11 +59,11 @@ export class AppComponent implements OnInit {
       this.varService.resetpa();
       this.pitchResult += '<strong>Steee-rike three! Struck out ' + strikekind + '.</strong><br/><br/>';
       this.gameService.game.K++;
-      this.gameService.recordout();
+      this.gameService.recordOut();
     }
   }
 
-  recordball(): void {
+  recordBall(): void {
     this.gameService.game.balls++;
 
     this.varService.pa.balls++;
@@ -83,29 +83,29 @@ export class AppComponent implements OnInit {
         this.varService.bases.first = true;
         this.varService.bases.second = true;
         this.varService.bases.third = true;
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       if (outcome === '1B') {
         this.varService.bases.first = true;
         this.varService.bases.second = true;
         this.varService.bases.third = false;
-        this.recordruns(2);
+        this.recordRuns(2);
       }
       if (outcome === '2B') {
         this.varService.bases.first = false;
         this.varService.bases.second = true;
         this.varService.bases.third = true;
-        this.recordruns(2);
+        this.recordRuns(2);
       }
       if (outcome === '3B') {
         this.varService.bases.first = false;
         this.varService.bases.second = false;
         this.varService.bases.third = true;
-        this.recordruns(3);
+        this.recordRuns(3);
       }
       if (outcome === 'HR') {
         this.varService.resetbases();
-        this.recordruns(4);
+        this.recordRuns(4);
       }
       return;
     }
@@ -119,23 +119,23 @@ export class AppComponent implements OnInit {
         this.varService.bases.first = true;
         this.varService.bases.second = true;
         this.varService.bases.third = false;
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       if (outcome === '2B') {
         this.varService.bases.first = false;
         this.varService.bases.second = true;
         this.varService.bases.third = true;
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       if (outcome === '3B') {
         this.varService.bases.first = false;
         this.varService.bases.second = false;
         this.varService.bases.third = true;
-        this.recordruns(2);
+        this.recordRuns(2);
       }
       if (outcome === 'HR') {
         this.varService.resetbases();
-        this.recordruns(3);
+        this.recordRuns(3);
       }
       return;
     }
@@ -149,23 +149,23 @@ export class AppComponent implements OnInit {
         this.varService.bases.first = true;
         this.varService.bases.second = true;
         this.varService.bases.third = false;
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       if (outcome === '2B') {
         this.varService.bases.first = false;
         this.varService.bases.second = true;
         this.varService.bases.third = true;
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       if (outcome === '3B') {
         this.varService.bases.first = false;
         this.varService.bases.second = false;
         this.varService.bases.third = true;
-        this.recordruns(2);
+        this.recordRuns(2);
       }
       if (outcome === 'HR') {
         this.varService.resetbases();
-        this.recordruns(3);
+        this.recordRuns(3);
       }
       return;
     }
@@ -179,23 +179,23 @@ export class AppComponent implements OnInit {
         this.varService.bases.first = true;
         this.varService.bases.second = false;
         this.varService.bases.third = false;
-        this.recordruns(2);
+        this.recordRuns(2);
       }
       if (outcome === '2B') {
         this.varService.bases.first = false;
         this.varService.bases.second = true;
         this.varService.bases.third = false;
-        this.recordruns(2);
+        this.recordRuns(2);
       }
       if (outcome === '3B') {
         this.varService.bases.first = false;
         this.varService.bases.second = false;
         this.varService.bases.third = true;
-        this.recordruns(2);
+        this.recordRuns(2);
       }
       if (outcome === 'HR') {
         this.varService.resetbases();
-        this.recordruns(3);
+        this.recordRuns(3);
       }
       return;
     }
@@ -218,11 +218,11 @@ export class AppComponent implements OnInit {
         this.varService.bases.first = false;
         this.varService.bases.second = false;
         this.varService.bases.third = true;
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       if (outcome === 'HR') {
         this.varService.resetbases();
-        this.recordruns(2);
+        this.recordRuns(2);
       }
       return;
     }
@@ -235,23 +235,23 @@ export class AppComponent implements OnInit {
         this.varService.bases.first = true;
         this.varService.bases.second = false;
         this.varService.bases.third = false;
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       if (outcome === '2B') {
         this.varService.bases.first = false;
         this.varService.bases.second = true;
         this.varService.bases.third = false;
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       if (outcome === '3B') {
         this.varService.bases.first = false;
         this.varService.bases.second = false;
         this.varService.bases.third = true;
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       if (outcome === 'HR') {
         this.varService.resetbases();
-        this.recordruns(2);
+        this.recordRuns(2);
       }
       return;
     }
@@ -264,23 +264,23 @@ export class AppComponent implements OnInit {
         this.varService.bases.first = true;
         this.varService.bases.second = false;
         this.varService.bases.third = false;
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       if (outcome === '2B') {
         this.varService.bases.first = false;
         this.varService.bases.second = true;
         this.varService.bases.third = false;
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       if (outcome === '3B') {
         this.varService.bases.first = false;
         this.varService.bases.second = false;
         this.varService.bases.third = true;
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       if (outcome === 'HR') {
         this.varService.resetbases();
-        this.recordruns(2);
+        this.recordRuns(2);
       }
       return;
     }
@@ -298,15 +298,13 @@ export class AppComponent implements OnInit {
         this.varService.bases.third = true;
       }
       if (outcome === 'HR') {
-        this.recordruns(1);
+        this.recordRuns(1);
       }
       return;
     }
   }
 
-
-
-  recordhit(): void {
+  recordHit(): void {
     this.gameService.game.hits++;
 
     this.pitchResult += this.messageService.message('hit');
@@ -332,26 +330,26 @@ export class AppComponent implements OnInit {
     }
   }
 
-  recordruns(runs: number): void {
+  recordRuns(runs: number): void {
     const ih = this.gameService.inningHalf();
-    this.gameService.game.innings.find(el => el.num === this.gameService.inning())[ih].runs++;
+    this.gameService.inningCurrent()[ih].runs++;
     this.teamService.teambatting(ih).runs = this.teamService.teambatting(ih).runs + runs;
   }
 
-  inplay(): void {
+  inPlay(): void {
     this.varService.pa.inplay = true;
     this.gameService.game.inplay++;
 
     if (this.rand(1, 100) <= this.varService.BABIP) {
       this.varService.pa.hit = true;
 
-      this.recordhit();
+      this.recordHit();
     } else {
       this.varService.pa.out = true;
 
       this.pitchResult += '<strong>Handled by the defense for an out.</strong><br/><br/>';
 
-      this.gameService.recordout();
+      this.gameService.recordOut();
     }
 
     this.varService.resetpa();
@@ -381,13 +379,13 @@ export class AppComponent implements OnInit {
       // Contact!
       this.pitchResult += messageHit;
 
-      this.inplay();
+      this.inPlay();
     } else {
       // Missed
       this.pitchResult += '...and missed for a strike.<br/>';
       this.pitchResult += messageMiss;
 
-      this.recordstrike('swinging');
+      this.recordStrike('swinging');
     }
   }
 
@@ -396,12 +394,12 @@ export class AppComponent implements OnInit {
     if (zone === false) {
       this.pitchResult += 'ball. Good eye!<br/>';
 
-      this.recordball();
+      this.recordBall();
     }
     if (zone === true) {
       this.pitchResult += 'strike.<br/>';
 
-      this.recordstrike('looking');
+      this.recordStrike('looking');
     }
   }
 
@@ -417,7 +415,7 @@ export class AppComponent implements OnInit {
     this.gameService.game.inplay = 0;
     this.gameService.game.hits = 0;
     this.gameService.game.outs = 0;
-    this.gameService.game.inning_current = 1;
+    this.gameService.game.inning_current = null;
 
     this.pitchResult = '';
     this.pitchOutput = '';
@@ -425,8 +423,6 @@ export class AppComponent implements OnInit {
     this.varService.resetpa();
     this.varService.resetbases();
   }
-
-
 
   pitch(pitches = 1): void {
     for (let i = 1; i <= pitches; i++) {
@@ -478,6 +474,6 @@ export class AppComponent implements OnInit {
     this.gameService.game.teams.push(this.teamService.teamAway);
     this.gameService.game.teams.push(this.teamService.teamHome);
 
-    this.gameService.startgame();
+    this.gameService.startGame();
   }
 }

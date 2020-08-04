@@ -1,0 +1,18 @@
+<div class="col lineup-card lineup-card-{{teamService.teamHomeAway(team.home)}} justify-content-center"
+  id="lineup-{{teamService.teamHomeAway(team.home)}}">
+  <table>
+    <thead>
+      <tr>
+        <th colspan="4">{{team.name}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let player of team.players">
+        <td class="lineup-card-td">{{player.battingorder}}</td>
+        <td class="lineup-card-td">{{varService.positions[player.position].abbreviation}}</td>
+        <td class="lineup-card-td">{{player.name}}</td>
+        <td class="lineup-card-td">{{player.hits}}-{{player.AB}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -16,7 +16,7 @@
       ]
     },
     {
-      "kind": "switchsides",
+      "kind": "switchSides",
       "text": [
         "<strong>That'll do it for this half of inning.</strong>"
       ]

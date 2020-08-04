@@ -6,19 +6,7 @@
     <div class="container">
       <div class="row">
 
-        <div class="col lineup-card lineup-card-away justify-content-center">
-          <table>
-            <tr>
-              <th colspan="4">AWAY</th>
-            </tr>
-            <tr *ngFor="let player of teamService.teamAway.players | keyvalue; let i=index" id="lineup-away-player-{{i}}">
-              <td>{{i+1}}</td>
-              <td>{{varService.positions[player.value.position].abbreviation}}</td>
-              <td>{{player.value.name}}</td>
-              <td>{{player.value.hits}}-{{player.value.AB}}</td>
-            </tr>
-          </table>
-        </div>
+        <app-lineup [team]="teamService.teamAway"></app-lineup>
 
         <div class="col plate">
           <div class="text-center" *ngIf="showbuttons">
@@ -34,19 +22,19 @@
             <svg:polygon points="200,385 180,365 200,345 220,365" stroke="brown" fill="green" stroke-width="3" />
             <!-- infield diamond -->
 
-            <svg:polygon *ngIf="this.varService.bases.first == false" points="215,370 210,365 215,360 220,365" stroke="black"
+            <svg:polygon *ngIf="varService.bases.first == false" points="215,370 210,365 215,360 220,365" stroke="black"
               fill="white" stroke-width="1" /><!-- 1B, open -->
-            <svg:polygon *ngIf="this.varService.bases.first == true" points="215,370 210,365 215,360 220,365" stroke="black"
+            <svg:polygon *ngIf="varService.bases.first == true" points="215,370 210,365 215,360 220,365" stroke="black"
               fill="yellow" stroke-width="1" /><!-- 1B, occupied -->
 
-            <svg:polygon *ngIf="this.varService.bases.second == false" points="200,355 195,350 200,345 205,350" stroke="black"
+            <svg:polygon *ngIf="varService.bases.second == false" points="200,355 195,350 200,345 205,350" stroke="black"
               fill="white" stroke-width="1" /><!-- 2B, open -->
-            <svg:polygon *ngIf="this.varService.bases.second == true" points="200,355 195,350 200,345 205,350" stroke="black"
+            <svg:polygon *ngIf="varService.bases.second == true" points="200,355 195,350 200,345 205,350" stroke="black"
               fill="yellow" stroke-width="1" /><!-- 2B, occupied -->
 
-            <svg:polygon *ngIf="this.varService.bases.third == false" points="185,370 180,365 185,360 190,365" stroke="black"
+            <svg:polygon *ngIf="varService.bases.third == false" points="185,370 180,365 185,360 190,365" stroke="black"
               fill="white" stroke-width="1" /><!-- 3B, open -->
-            <svg:polygon *ngIf="this.varService.bases.third == true" points="185,370 180,365 185,360 190,365" stroke="black"
+            <svg:polygon *ngIf="varService.bases.third == true" points="185,370 180,365 185,360 190,365" stroke="black"
               fill="yellow" stroke-width="1" /><!-- 3B, occupied -->
 
             <svg:foreignObject x="10" y="20" width="390" height="200">
@@ -55,58 +43,23 @@
             </svg:foreignObject>
             <svg:foreignObject x="167" y="260" width="60" height="80">
               <xhtml:p>
-                B: {{this.varService.pa.balls}}
+                B: {{varService.pa.balls}}
                 <xhtml:br />
-                S: {{this.varService.pa.strikes}}
+                S: {{varService.pa.strikes}}
                 <xhtml:br />
-                O: {{gameService.game.innings[gameService.inning()][gameService.inningHalf()].outs}}
+                O: {{gameService.game.inning_half_current.outs}}
               </xhtml:p>
             </svg:foreignObject>
           </svg>
           <!--<p *ngIf="gameService.game.pitches" class="result" [innerHTML]="pitchOutput"></p>-->
         </div>
 
-        <div class="col lineup-card lineup-card-home">
-          <table>
-            <tr>
-              <th colspan="4">HOME</th>
-            </tr>
-            <tr *ngFor="let player of teamService.teamHome.players | keyvalue; let i=index" id="lineup-home-player-{{i}}">
-              <td>{{i+1}}</td>
-              <td>{{varService.positions[player.value.position].abbreviation}}</td>
-              <td>{{player.value.name}}</td>
-              <td>{{player.value.hits}}-{{player.value.AB}}</td>
-            </tr>
-          </table>
-        </div>
+        <app-lineup [team]="teamService.teamHome"></app-lineup>
 
       </div>
     </div>
 
-    <table class="table scoreboard">
-      <thead>
-        <tr>
-          <th *ngFor="let inningHeads of gameService.game.innings | slice:1">{{inningHeads.num}}</th>
-          <th>R</th>
-          <th>H</th>
-          <th>E</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td *ngFor="let inningTops of gameService.game.innings | slice:1">{{inningTops?.top?.runs}}</td>
-          <td class="font-weight-bold">{{teamService.teamAway.runs}}</td>
-          <td class="font-weight-bold">{{teamService.teamHits(teamService.teamAway)}}</td>
-          <td class="font-weight-bold">{{teamService.teamAway.errors}}</td>
-        </tr>
-        <tr>
-          <td *ngFor="let inningBots of gameService.game.innings | slice:1">{{inningBots?.bot?.runs}}</td>
-          <td class="font-weight-bold">{{teamService.teamHome.runs}}</td>
-          <td class="font-weight-bold">{{teamService.teamHits(teamService.teamHome)}}</td>
-          <td class="font-weight-bold">{{teamService.teamHome.errors}}</td>
-        </tr>
-      </tbody>
-    </table>
+    <app-scoreboard [game]="gameService.game"></app-scoreboard>
 
   </div>
 
@@ -115,8 +68,8 @@
 
       <div class="col">
       <h4>The Count</h4>
-      <p>Balls: <strong>{{this.varService.pa.balls}}</strong></p>
-      <p>Strikes: <strong>{{this.varService.pa.strikes}}</strong></p>
+      <p>Balls: <strong>{{varService.pa.balls}}</strong></p>
+      <p>Strikes: <strong>{{varService.pa.strikes}}</strong></p>
     </div>
     <div class="col">
       <h4>The Game</h4>

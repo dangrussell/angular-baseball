@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Game, Inning, HalfInning } from './game/game';
+import { Game, Inning, InningHalf } from './game/game';
 
 import { VarService } from './var.service';
 import { TeamService } from './team.service';
@@ -24,12 +24,11 @@ export class GameService {
     inplay: 0,
     hits: 0,
     outs: 0,
-    inning_current: 1,
     innings: [],
     teams: [],
   };
 
-  ih: HalfInning = {
+  ih: InningHalf = {
     toporbot: 'top',
     runs: 0,
     outs: 0
@@ -41,65 +40,82 @@ export class GameService {
     public messageService: MessageService,
   ) { }
 
-  wherearewe(): void {
+  whereAreWe(): void {
     console.log(this.inningHalf(), this.inning());
+    console.log(this.game.inning_half_current.outs, 'outs');
   }
 
-  inning(): number {
+  inningCurrent(): Inning {
     return this.game.inning_current;
   }
 
-  inningHalf(): string {
-    return this.ih.toporbot;
+  inningHalfCurrent(): InningHalf {
+    return this.game.inning_half_current;
   }
 
-  switchsides(): void {
+  inning(inning: Inning = this.inningCurrent()): number {
+    return inning.num;
+  }
+
+  inningHalf(inningHalf: InningHalf = this.inningHalfCurrent()): string {
+    return inningHalf.toporbot;
+  }
+
+  inningTotal(): number {
+    return this.game.innings.length;
+  }
+
+  addInning(i: number): void {
+    const inning: Inning = {
+      num: i,
+      top: {
+        toporbot: 'top',
+        runs: 0,
+        outs: 0,
+      },
+      bot: {
+        toporbot: 'bot',
+        runs: 0,
+        outs: 0,
+      },
+    };
+    this.game.innings.push(inning);
+    console.log('Added inning', i);
+  }
+
+  nextInning(): void {
+    console.log('End of inning!');
+
+    const ni = this.inning() + 1;
+
+    if (!this.game.innings.find(el => el.num === ni)) {
+      this.addInning(ni);
+    }
+
+    this.game.inning_current = this.game.innings.find(el => el.num === ni);
+  }
+
+  nextInningHalf(): void {
+    console.log('End of half inning!');
     this.varService.resetbases();
 
-    this.messageService.message('switchsides');
+    this.messageService.message('switchSides');
 
-    const i = this.inning();
-    const ih = this.inningHalf();
-
-    if (ih === 'top') {
-      this.ih.toporbot = 'bot';
+    if (this.game.inning_half_current.toporbot === 'top') {
+      this.game.inning_half_current = this.game.inning_current.bot;
     } else {
-      this.ih.toporbot = 'top';
-    }
-
-    this.game.innings[i][ih].runs = 0;
-
-    this.game.innings[i][ih].outs = 0;
-  }
-
-  startinning(): void {
-    const i = this.inning();
-    if (!this.game.innings.find(el => el.num === i)) {
-      this.game.innings.push(
-        {
-          num: i,
-          top: {
-              toporbot: 'top',
-              outs: 0,
-              runs: 0,
-            },
-          bot: {
-              toporbot: 'bot',
-              outs: 0,
-              runs: 0,
-            }
-        }
-      );
+      this.nextInning();
+      this.game.inning_half_current = this.game.inning_current.top;
     }
   }
 
-  recordout(): void {
+  recordOut(): void {
     this.game.outs++;
-    const i = this.inning();
-    const ih = this.inningHalf();
-    this.game.innings[i][ih].outs++;
+    // const ih = this.inningHalf();
 
-    if ((this.game.outs >= (3 * 2 * 9)) && (this.teamService.teamAway.runs !== this.teamService.teamHome.runs)) {
+    this.game.inning_half_current.outs++;
+
+    if ((this.game.outs >= (3 * 2 * this.varService.INNINGS)) && (this.teamService.teamAway.runs !== this.teamService.teamHome.runs)) {
       /*
       this.pitchResult += '<br /><br /><strong>And that\'s the game!</strong>';
       let winner = 'home';
@@ -110,46 +126,27 @@ export class GameService {
       */
       this.game.final = true;
     } else {
-      if ((this.game.outs % 3) === 0) {
-        console.log('End of half inning!');
-
-        this.game.innings[i][ih].runs = 0;
-
-        this.game.innings[i][ih].outs = 0;
-
-        if ((this.game.outs % 6) === 0) {
-          console.log('End of inning!');
-          this.game.inning_current++;
-          this.startinning();
-        }
-
-        this.switchsides();
-
-        this.wherearewe();
+      if (this.game.inning_half_current.outs === 3) {
+        this.nextInningHalf();
       }
     }
 
+    this.whereAreWe();
+
   }
 
-  startgame(): void {
-    this.wherearewe();
-    for (let i = 0; i <= this.varService.INNINGS; i++) {
-      const inning: Inning = {
-        num: i,
-        top: {
-          toporbot: 'top',
-          runs: 0,
-          outs: 0,
-        },
-        bot: {
-          toporbot: 'bot',
-          runs: 0,
-          outs: 0,
-        },
-      };
-      this.game.innings.push(inning);
+  startGame(): void {
+    for (let i = 1; i <= this.varService.INNINGS; i++) {
+      this.addInning(i);
+      console.log(this.game.innings);
     }
-    this.startinning();
+
+    const startInning = this.game.innings.find(el => el.num === 1);
+
+    this.game.inning_current = startInning;
+    this.game.inning_half_current = startInning.top;
+
+    this.whereAreWe();
   }
 
 }

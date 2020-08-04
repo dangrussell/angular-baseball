@@ -3,4 +3,5 @@ export interface Player {
   position: number;
   hits: number;
   AB: number;
+  battingorder: number;
 }

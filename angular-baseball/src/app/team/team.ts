@@ -11,4 +11,5 @@ export interface Team {
   errors: number;
   players: Player[];
   home: boolean;
+  name: string;
 }
