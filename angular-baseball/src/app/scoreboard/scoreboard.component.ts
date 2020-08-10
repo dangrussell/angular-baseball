@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { GameService } from '../game.service';
 import { TeamService } from '../team.service';
 import { Game } from '../game/game';
+import { Team } from '../team/team';
 
 @Component({
   selector: 'app-scoreboard',
@@ -15,14 +16,20 @@ import { Game } from '../game/game';
 export class ScoreboardComponent implements OnInit {
 
   @Input() game: Game;
-  @Input() teams: [];
+
+  teamAway: Team;
+  teamHome: Team;
 
   constructor(
     public gameService: GameService,
     public teamService: TeamService,
-    ) { }
+  ) { }
 
   ngOnInit(): void {
+    if (this.game.teams.length === 2) {
+      this.teamAway = this.game.teams.find(el => el.home === false);
+      this.teamHome = this.game.teams.find(el => el.home === true);
+    }
   }
 
 }

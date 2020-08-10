@@ -6,13 +6,13 @@
     <div class="container">
       <div class="row">
 
-        <app-lineup [team]="teamService.teamAway"></app-lineup>
+        <app-lineup *ngIf="gameService.game.teams.length === 2" [team]="teamService.teamAway"></app-lineup>
 
         <div class="col plate">
           <div class="text-center" *ngIf="showbuttons">
-            <button class="btn btn-dark mr-2" (click)="pitch()">Pitch</button>
-            <button class="btn btn-dark mr-2" (click)="pitch(100)">100 Pitches</button>
-            <button class="btn btn-dark" onclick="location.reload();">New Game</button>
+            <button class="btn btn-dark mr-2" (click)="pitch()" [disabled]="gameService.game.final">Pitch</button>
+            <button class="btn btn-dark mr-2" (click)="pitch(100)" [disabled]="gameService.game.final">100 Pitches</button>
+            <button class="btn btn-dark" (click)="resetGame();">New Game</button>
           </div>
 
           <svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -37,7 +37,7 @@
             <svg:polygon *ngIf="varService.bases.third == true" points="185,370 180,365 185,360 190,365" stroke="black"
               fill="yellow" stroke-width="1" /><!-- 3B, occupied -->
 
-            <svg:foreignObject x="10" y="20" width="390" height="200">
+            <svg:foreignObject x="8" y="8" width="385" height="190">
               <xhtml:p *ngIf="gameService.game.pitches" class="result" xmlns="http://www.w3.org/1999/xhtml"
                 [innerHTML]="pitchOutput"></xhtml:p>
             </svg:foreignObject>
@@ -54,12 +54,12 @@
           <!--<p *ngIf="gameService.game.pitches" class="result" [innerHTML]="pitchOutput"></p>-->
         </div>
 
-        <app-lineup [team]="teamService.teamHome"></app-lineup>
+        <app-lineup *ngIf="gameService.game.teams.length === 2" [team]="teamService.teamHome"></app-lineup>
 
       </div>
     </div>
 
-    <app-scoreboard [game]="gameService.game"></app-scoreboard>
+    <app-scoreboard *ngIf="gameService.game.teams.length === 2" [game]="gameService.game"></app-scoreboard>
 
   </div>
 

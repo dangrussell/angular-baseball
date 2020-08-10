@@ -4,7 +4,8 @@
       "kind": "pitch",
       "text": [
         "Here comes the pitch...",
-        "The pitcher kicks and deals..."
+        "The pitcher kicks and deals...",
+        "Here's the pitch..."
       ]
     },
     {
@@ -16,33 +17,129 @@
       ]
     },
     {
+      "kind": "out",
+      "text": [
+        "<strong>Handled by the defense for an out.</strong>",
+        "<strong>They put away the batter for an out.</strong>"
+      ]
+    },
+    {
+      "kind": "swing-miss-ball",
+      "text": [
+        "Swung on and missed for a strike. Ooh... Shoulda let that one go!",
+        "Takes a hack at a pitch out of the zone. Strike."
+      ]
+    },
+    {
+      "kind": "swing-miss-strike",
+      "text": [
+        "Swung on and missed for a strike. Wow! Got it by the batter.",
+        "Big swing and a miss. Strike."
+      ]
+    },
+    {
+      "kind": "swing-hit-ball",
+      "text": [
+        "Swung on... reaches out, and slapped in play!",
+        "Might've been a ball there... knocked in play."
+      ]
+    },
+    {
+      "kind": "swing-hit-strike",
+      "text": [
+        "Swung on... it's in play!",
+        "Gets a piece of it..."
+      ]
+    },
+    {
+      "kind": "taken-ball",
+      "text": [
+        "Taken for a ball. Good eye!",
+        "Lets it go for a ball."
+      ]
+    },
+    {
+      "kind": "taken-strike",
+      "text": [
+        "Taken for a strike.",
+        "Strike. Didn't like that one.",
+        "Taking all the way on that one. Strike."
+      ]
+    },
+    {
       "kind": "switchSides",
       "text": [
-        "<strong>That'll do it for this half of inning.</strong>"
+        "<strong>That'll do it for this half inning.</strong>",
+        "<strong>And the side is retired.</strong>"
       ]
     },
     {
       "kind": "3B",
       "text": [
-        "What speed! <strong>It's a triple!</strong>"
+        "What speed! <strong>It's a triple!</strong>",
+        "<strong>A triple!</strong> Great awareness on the basepaths."
       ]
     },
     {
       "kind": "HR",
       "text": [
-        "Going back... <strong>It's a Home Run!!!</strong>"
+        "Going back... <strong>It's a Home Run!!!</strong>",
+        "See ya! <strong>That's a Home Run!!!</strong>",
+        "<strong>A Home Run!!!</strong> Bye-bye baseball!"
       ]
     },
     {
       "kind": "2B",
       "text": [
-        "Gonna try for two.. <strong>In with a double.</strong>"
+        "Gonna try for two... <strong>In with a double.</strong>",
+        "<strong>Stops at second with a stand-up double.</strong>"
       ]
     },
     {
       "kind": "1B",
       "text": [
-        "A clean hit. <strong>On first with a single.</strong>"
+        "A clean hit. <strong>On first with a single.</strong>",
+        "Gets the job done! <strong>A seeing-eye single.</strong>"
+      ]
+    },
+    {
+      "kind": "BB",
+      "text": [
+        "Ball four! <strong>That's a walk.</strong>",
+        "Trots to first with a free pass. <strong>Base on balls.</strong>"
+      ]
+    },
+    {
+      "kind": "K-swinging",
+      "text": [
+        "<strong>Steee-rike three! Struck out swinging.</strong>"
+      ]
+    },
+    {
+      "kind": "K-looking",
+      "text": [
+        "<strong>Steee-rike three! Struck out looking.</strong>"
+      ]
+    },
+    {
+      "kind": "game-over",
+      "text": [
+        "<strong>And that's the game!</strong>",
+        "<strong>And that'll do it!</strong>"
+      ]
+    },
+    {
+      "kind": "winner-home",
+      "text": [
+        "<strong>The home team wins!</strong>",
+        "<strong>A win for the home team!</strong>"
+      ]
+    },
+    {
+      "kind": "winner-away",
+      "text": [
+        "<strong>The away team wins!</strong>",
+        "<strong>The visiting team wins!</strong>"
       ]
     }
   ]

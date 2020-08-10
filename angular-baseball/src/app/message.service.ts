@@ -1,3 +1,4 @@
+import { Inning, InningHalf } from './game/game';
 import { Message } from './message/message';
 import { Injectable } from '@angular/core';
 
@@ -10,6 +11,8 @@ export class MessageService {
 
   messages: Message[] = messageData.data;
 
+  pitchResult = '';
+
   constructor() { }
 
   // let messages = messageData;
@@ -18,11 +21,24 @@ export class MessageService {
     return messageText[Math.floor(Math.random() * messageText.length)];
   }
 
-  message(messagekind: string): string {
+  message(messagekind: string, brs = 2): void {
     const messageItem: Message = this.messages.find(el => el.kind === messagekind);
     let message = this.randMessage(messageItem.text);
-    message += '<br /><br />';
-    return message;
+    for (let br = 1; br <= brs; br++) {
+      message += '<br />';
+    }
+    this.pitchResult += message;
+  }
+
+  switchSides(ih: InningHalf, i: Inning, o: string, messagekind = 'switchSides'): void{
+    const messageItem: Message = this.messages.find(el => el.kind === messagekind);
+    let message = this.randMessage(messageItem.text);
+    let ihtext = ih.toporbot;
+    if (ih.toporbot === 'bot'){
+      ihtext = 'bottom';
+    }
+    message += '<br />We head to the ' + ihtext + ' of the ' + i.num.toString() + o + '.';
+    this.pitchResult += message;
   }
 
 }

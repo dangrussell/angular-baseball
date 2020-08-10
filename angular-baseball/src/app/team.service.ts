@@ -184,4 +184,12 @@ export class TeamService {
       return 'away';
     }
   }
+
+  getTeamHomeAway(homeAway: string): Team {
+    if (homeAway === 'home') {
+      return this.teamHome;
+    } else {
+      return this.teamAway;
+    }
+  }
 }

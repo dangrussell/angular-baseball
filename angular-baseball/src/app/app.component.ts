@@ -22,8 +22,6 @@ export class AppComponent implements OnInit {
 
   showbuttons = false;
 
-  pitchResult = '';
-
   pitchOutcome = 0;
 
   // game.innings[game.inning].top.runs = 0;
@@ -43,24 +41,40 @@ export class AppComponent implements OnInit {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  recordStrike(strikekind: string): void {
+  recordStrike(strikekind: string, zone?: boolean): void {
     this.gameService.game.strikes++;
 
     this.varService.pa.strikes++;
 
     if (strikekind === 'looking') {
       this.gameService.game.taken++;
+      this.messageService.message('taken-strike');
     }
     if (strikekind === 'swinging') {
       this.gameService.game.misses++;
+      if (zone === false) {
+        this.messageService.message('swing-miss-ball');
+      }
+      if (zone === true) {
+        this.messageService.message('swing-miss-strike');
+      }
     }
 
     if (this.varService.pa.strikes === 3) {
-      this.varService.resetpa();
-      this.pitchResult += '<strong>Steee-rike three! Struck out ' + strikekind + '.</strong><br/><br/>';
-      this.gameService.game.K++;
-      this.gameService.recordOut();
+      this.recordK(strikekind);
     }
+  }
+
+  recordK(strikekind: string): void {
+    if (strikekind === 'looking') {
+      this.messageService.message('K-looking');
+    }
+    if (strikekind === 'swinging') {
+      this.messageService.message('K-swinging');
+    }
+    this.varService.resetpa();
+    this.gameService.game.K++;
+    this.gameService.recordOut();
   }
 
   recordBall(): void {
@@ -70,7 +84,7 @@ export class AppComponent implements OnInit {
 
     if (this.varService.pa.balls === 4) {
       this.varService.resetpa();
-      this.pitchResult += '<strong>Ball four! That\'s a walk.</strong><br/><br/>';
+      this.messageService.message('BB');
       this.gameService.game.BB++;
 
       this.advanceRunners('BB');
@@ -307,32 +321,33 @@ export class AppComponent implements OnInit {
   recordHit(): void {
     this.gameService.game.hits++;
 
-    this.pitchResult += this.messageService.message('hit');
+    this.messageService.message('hit');
 
     const roll = this.rand(0, 100);
 
     if (roll <= this.varService.ODDS3B) { // rarest
       this.teamService.teambatting(this.gameService.inningHalf()).hits.triples++;
       this.advanceRunners('3B');
-      this.pitchResult += this.messageService.message('3B');
+      this.messageService.message('3B');
     } else if (roll <= this.varService.ODDSHR) { // second rarest
       this.teamService.teambatting(this.gameService.inningHalf()).hits.homeruns++;
       this.advanceRunners('HR');
-      this.pitchResult += this.messageService.message('HR');
+      this.messageService.message('HR');
     } else if (roll <= this.varService.ODDS2B) { // second most common
       this.teamService.teambatting(this.gameService.inningHalf()).hits.doubles++;
       this.advanceRunners('2B');
-      this.pitchResult += this.messageService.message('2B');
+      this.messageService.message('2B');
     } else { // most common
       this.teamService.teambatting(this.gameService.inningHalf()).hits.singles++;
       this.advanceRunners('1B');
-      this.pitchResult += this.messageService.message('1B');
+      this.messageService.message('1B');
     }
   }
 
   recordRuns(runs: number): void {
+    this.gameService.inningHalfCurrent().runs = this.gameService.inningHalfCurrent().runs + runs;
+
     const ih = this.gameService.inningHalf();
-    this.gameService.inningCurrent()[ih].runs++;
     this.teamService.teambatting(ih).runs = this.teamService.teambatting(ih).runs + runs;
   }
 
@@ -347,7 +362,7 @@ export class AppComponent implements OnInit {
     } else {
       this.varService.pa.out = true;
 
-      this.pitchResult += '<strong>Handled by the defense for an out.</strong><br/><br/>';
+      this.messageService.message('out');
 
       this.gameService.recordOut();
     }
@@ -357,53 +372,46 @@ export class AppComponent implements OnInit {
 
   swing(zone: boolean): void {
     let contact: number;
-    let messageHit: string;
-    let messageMiss: string;
 
     if (zone === false) {
       contact = this.varService.OCONTACT;
-      messageHit = '...reached out, and slapped in play!<br/><br/>';
-      messageMiss = 'Ooh... Shoulda let that one go!<br/><br/>';
     }
     if (zone === true) {
       contact = this.varService.ZCONTACT;
-      messageHit = '...it\'s in play!<br/><br/>';
-      messageMiss = 'Wow! Got it by the batter.<br/><br/>';
     }
 
-    this.pitchResult += 'Swung on...<br/>';
+    // this.messageService.message('swing');
     this.gameService.game.swings++;
 
     this.pitchOutcome = this.rand(1, 100);
     if (this.pitchOutcome <= contact) {
       // Contact!
-      this.pitchResult += messageHit;
+      if (zone === false) {
+        this.messageService.message('swing-hit-ball');
+      }
+      if (zone === true) {
+        this.messageService.message('swing-hit-strike');
+      }
 
       this.inPlay();
     } else {
       // Missed
-      this.pitchResult += '...and missed for a strike.<br/>';
-      this.pitchResult += messageMiss;
-
-      this.recordStrike('swinging');
+      this.recordStrike('swinging', zone);
     }
   }
 
   take(zone: boolean): void {
-    this.pitchResult += 'Taken for a ';
     if (zone === false) {
-      this.pitchResult += 'ball. Good eye!<br/>';
-
+      this.messageService.message('taken-ball');
       this.recordBall();
     }
     if (zone === true) {
-      this.pitchResult += 'strike.<br/>';
 
       this.recordStrike('looking');
     }
   }
 
-  resetgame(): void {
+  resetGame(): void {
     this.gameService.game.pitches = 0;
     this.gameService.game.swings = 0;
     this.gameService.game.misses = 0;
@@ -417,18 +425,22 @@ export class AppComponent implements OnInit {
     this.gameService.game.outs = 0;
     this.gameService.game.inning_current = null;
 
-    this.pitchResult = '';
+    this.messageService.pitchResult = '';
     this.pitchOutput = '';
 
     this.varService.resetpa();
     this.varService.resetbases();
+
+    this.gameService.startGame();
   }
 
   pitch(pitches = 1): void {
     for (let i = 1; i <= pitches; i++) {
       if (this.gameService.game.final === false) {
+        this.messageService.pitchResult = ''; // clear pitch result
+
         this.gameService.game.pitches++;
-        this.pitchResult = this.messageService.message('pitch');
+        this.messageService.message('pitch');
 
         let zone: boolean;
 
@@ -460,19 +472,16 @@ export class AppComponent implements OnInit {
           }
         }
 
-        this.pitchOutput = this.pitchResult;
+        this.pitchOutput = this.messageService.pitchResult;
 
         /* reset */
-        // this.pitchResult = this.messageService.message('pitch');
+        // this.messageService.pitchResult = this.messageService.message('pitch');
       }
     }
   }
 
   ngOnInit(): void {
     this.showbuttons = true;
-
-    this.gameService.game.teams.push(this.teamService.teamAway);
-    this.gameService.game.teams.push(this.teamService.teamHome);
 
     this.gameService.startGame();
   }

@@ -18,18 +18,18 @@
   </thead>
   <tbody>
     <tr>
-      <th col="row">{{teamService.teamAway.name}}</th>
+      <th col="row">{{teamAway.name}}</th>
       <td *ngFor="let i of game.innings">{{i?.top?.runs}}</td>
-      <th scope="row" class="font-weight-bold">{{teamService.teamAway.runs}}</th>
-      <th scope="row" class="font-weight-bold">{{teamService.teamHits(teamService.teamAway)}}</th>
-      <th scope="row" class="font-weight-bold">{{teamService.teamAway.errors}}</th>
+      <th scope="row" class="font-weight-bold">{{teamAway.runs}}</th>
+      <th scope="row" class="font-weight-bold">{{teamService.teamHits(teamAway)}}</th>
+      <th scope="row" class="font-weight-bold">{{teamAway.errors}}</th>
     </tr>
     <tr>
-      <th col="row">{{teamService.teamHome.name}}</th>
+      <th col="row">{{teamHome.name}}</th>
       <td *ngFor="let i of game.innings">{{i?.bot?.runs}}</td>
-      <th scope="row" class="font-weight-bold">{{teamService.teamHome.runs}}</th>
-      <th scope="row" class="font-weight-bold">{{teamService.teamHits(teamService.teamHome)}}</th>
-      <th scope="row" class="font-weight-bold">{{teamService.teamHome.errors}}</th>
+      <th scope="row" class="font-weight-bold">{{teamHome.runs}}</th>
+      <th scope="row" class="font-weight-bold">{{teamService.teamHits(teamHome)}}</th>
+      <th scope="row" class="font-weight-bold">{{teamHome.errors}}</th>
     </tr>
   </tbody>
 </table>

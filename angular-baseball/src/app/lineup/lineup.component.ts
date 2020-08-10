@@ -16,12 +16,17 @@ export class LineupComponent implements OnInit {
 
   @Input() team: Team;
 
+  homeAwayText: string;
+
   constructor(
     public varService: VarService,
     public teamService: TeamService,
   ) { }
 
   ngOnInit(): void {
+    if (this.team) {
+      this.homeAwayText = this.teamService.teamHomeAway(this.team.home);
+    }
   }
 
 }

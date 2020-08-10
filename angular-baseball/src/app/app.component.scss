@@ -26,17 +26,14 @@ input[type="text"]{
 }
 
 .plate {
-  //position: relative;
   z-index: 1;
   min-width: 420px;
 }
 
-/*
 .result {
-  position: absolute;
   z-index: 2;
-  top: 3em;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  overflow-y: auto;
+  max-width: 385px;
+  max-height: 190px;
+  margin-bottom: 0;
 }
-*/

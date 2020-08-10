@@ -80,7 +80,7 @@ export class GameService {
       },
     };
     this.game.innings.push(inning);
-    console.log('Added inning', i);
+    // console.log('Added inning', i);
   }
 
   nextInning(): void {
@@ -99,14 +99,16 @@ export class GameService {
     console.log('End of half inning!');
     this.varService.resetbases();
 
-    this.messageService.message('switchSides');
-
     if (this.game.inning_half_current.toporbot === 'top') {
       this.game.inning_half_current = this.game.inning_current.bot;
     } else {
       this.nextInning();
       this.game.inning_half_current = this.game.inning_current.top;
     }
+
+    const ordinal = this.varService.ordinal(this.game.inning_current.num);
+
+    this.messageService.switchSides(this.game.inning_half_current, this.game.inning_current, ordinal);
   }
 
   recordOut(): void {
@@ -116,14 +118,14 @@ export class GameService {
     this.game.inning_half_current.outs++;
 
     if ((this.game.outs >= (3 * 2 * this.varService.INNINGS)) && (this.teamService.teamAway.runs !== this.teamService.teamHome.runs)) {
-      /*
-      this.pitchResult += '<br /><br /><strong>And that\'s the game!</strong>';
-      let winner = 'home';
+
+      this.messageService.message('game-over', 1);
+
       if (this.teamService.teamAway.runs > this.teamService.teamHome.runs) {
-        winner = 'away';
+        this.messageService.message('winner-away', 0);
+      } else {
+        this.messageService.message('winner-home', 0);
       }
-      this.pitchResult += '<br /><br /><strong>The ' + winner + ' team wins!</strong>';
-      */
       this.game.final = true;
     } else {
       if (this.game.inning_half_current.outs === 3) {
@@ -136,15 +138,20 @@ export class GameService {
   }
 
   startGame(): void {
+    this.game.teams.push(this.teamService.teamAway);
+    this.game.teams.push(this.teamService.teamHome);
+
     for (let i = 1; i <= this.varService.INNINGS; i++) {
       this.addInning(i);
-      console.log(this.game.innings);
+      // console.log(this.game.innings);
     }
 
     const startInning = this.game.innings.find(el => el.num === 1);
 
     this.game.inning_current = startInning;
     this.game.inning_half_current = startInning.top;
+
+    // console.log(this.game.teams);
 
     this.whereAreWe();
   }
