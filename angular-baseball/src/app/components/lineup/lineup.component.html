@@ -3,11 +3,11 @@
   <table>
     <thead>
       <tr>
-        <th colspan="4">{{team.name}}</th>
+        <th colspan="4">{{teamName}}</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let player of team.players">
+      <tr *ngFor="let player of teamPlayers">
         <td class="lineup-card-td">{{player.battingorder}}</td>
         <td class="lineup-card-td">{{varService.positions[player.position].abbreviation}}</td>
         <td class="lineup-card-td">{{player.name}}</td>

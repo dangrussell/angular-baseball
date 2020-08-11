@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Team } from './team/team';
+import { Team } from '../team/team';
 
 @Injectable({
   providedIn: 'root'
@@ -81,7 +81,7 @@ export class TeamService {
         battingorder: 9,
       },
     ],
-    home: false,
+    isHome: false,
     name: 'Shelby Villains',
   };
 
@@ -159,9 +159,14 @@ export class TeamService {
         battingorder: 9,
       },
     ],
-    home: true,
+    isHome: true,
     name: 'Hartford Homers',
   };
+
+  teams: Team[] = [
+    this.teamAway,
+    this.teamHome
+  ];
 
   constructor() { }
 
@@ -177,8 +182,8 @@ export class TeamService {
     }
   }
 
-  teamHomeAway(home: boolean): string {
-    if (home === true) {
+  teamHomeAwayText(isHome: boolean): string {
+    if (isHome === true) {
       return 'home';
     } else {
       return 'away';

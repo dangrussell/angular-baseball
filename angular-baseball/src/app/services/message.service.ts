@@ -1,8 +1,9 @@
-import { Inning, InningHalf } from './game/game';
-import { Message } from './message/message';
 import { Injectable } from '@angular/core';
 
-import * as messageData from './message/messages.json';
+import { Message } from './../message/message';
+import { InningHalfInterface, InningInterface } from './../game/game';
+
+import * as messageData from './../message/messages.json';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,7 @@ export class MessageService {
     this.pitchResult += message;
   }
 
-  switchSides(ih: InningHalf, i: Inning, o: string, messagekind = 'switchSides'): void{
+  switchSides(ih: InningHalfInterface, i: InningInterface, o: string, messagekind = 'switchSides'): void{
     const messageItem: Message = this.messages.find(el => el.kind === messagekind);
     let message = this.randMessage(messageItem.text);
     let ihtext = ih.toporbot;

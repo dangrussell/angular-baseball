@@ -1,16 +1,16 @@
 import { Team } from './../team/team';
 
-export interface InningHalf {
+export interface InningHalfInterface {
   toporbot: string;
   outs: number;
   runs: number;
 }
-export interface Inning {
+export interface InningInterface {
   num: number;
-  top: InningHalf;
-  bot: InningHalf;
+  top: InningHalfInterface;
+  bot: InningHalfInterface;
 }
-export interface Game {
+export interface GameInterface {
   final: boolean;
   pitches: number;
   swings: number;
@@ -23,8 +23,8 @@ export interface Game {
   inplay: number;
   hits: number;
   outs: number;
-  inning_current?: Inning;
-  inning_half_current?: InningHalf;
-  innings: Inning[];
+  inningCurrent: InningInterface;
+  inningHalfCurrent: InningHalfInterface;
+  innings: InningInterface[];
   teams: Team[];
 }

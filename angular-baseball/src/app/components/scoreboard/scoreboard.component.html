@@ -8,8 +8,8 @@
     <tr>
       <th></th>
       <th scope="col" *ngFor="let i of game.innings">
-        <em *ngIf="game.inning_current === i">{{i.num}}</em>
-        <span *ngIf="game.inning_current !== i">{{i.num}}</span>
+        <em *ngIf="game.inningCurrent === i">{{i.num}}</em>
+        <span *ngIf="game.inningCurrent !== i">{{i.num}}</span>
       </th>
       <th id="scoreboard-runs">R</th>
       <th id="scoreboard-hits">H</th>

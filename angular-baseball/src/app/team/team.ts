@@ -10,6 +10,6 @@ export interface Team {
   };
   errors: number;
   players: Player[];
-  home: boolean;
+  isHome: boolean;
   name: string;
 }

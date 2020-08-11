@@ -71,47 +71,27 @@ export class VarService {
     },
   };
 
-  pa = {
-    balls: 0,
-    strikes: 0,
-    inplay: false,
-    hit: false,
-    out: false
-  };
-
-  bases = {
-    first: false,
-    second: false,
-    third: false
-  };
-
   constructor() { }
 
-  resetbases(): void {
-    this.bases.first = false;
-    this.bases.second = false;
-    this.bases.third = false;
-  }
-
-  resetpa(): void {
-    this.pa.balls = 0;
-    this.pa.strikes = 0;
-    this.pa.inplay = false;
+  rand(min: number, max: number): number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   ordinal(i: number): string {
     const j = i % 10;
     const k = i % 100;
     if (j === 1 && k !== 11) {
-        return 'st';
+      return 'st';
     }
     if (j === 2 && k !== 12) {
-        return 'nd';
+      return 'nd';
     }
     if (j === 3 && k !== 13) {
-        return 'rd';
+      return 'rd';
     }
     return 'th';
-}
+  }
 
 }

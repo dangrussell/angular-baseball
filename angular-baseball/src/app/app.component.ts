@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { VarService } from './var.service';
-import { GameService } from './game.service';
-import { TeamService } from './team.service';
-import { MessageService } from './message.service';
+import { VarService } from './services/var.service';
+import { Game, GameService } from './services/game.service';
+import { TeamService } from './services/team.service';
+import { MessageService } from './services/message.service';
 
 @Component({
   selector: 'app-root',
@@ -28,30 +28,30 @@ export class AppComponent implements OnInit {
 
   pitchOutput = '';
 
+  game: Game;
+
   constructor(
     public varService: VarService,
     public gameService: GameService,
     public teamService: TeamService,
     public messageService: MessageService,
-  ) {}
-
-  rand(min: number, max: number): number {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  ) {
+    this.game = this.gameService.game;
   }
 
-  recordStrike(strikekind: string, zone?: boolean): void {
-    this.gameService.game.strikes++;
 
-    this.varService.pa.strikes++;
+
+  recordStrike(strikekind: string, zone?: boolean): void {
+    this.game.strikes++;
+
+    this.game.situation.pa.strike();
 
     if (strikekind === 'looking') {
-      this.gameService.game.taken++;
+      this.game.taken++;
       this.messageService.message('taken-strike');
     }
     if (strikekind === 'swinging') {
-      this.gameService.game.misses++;
+      this.game.misses++;
       if (zone === false) {
         this.messageService.message('swing-miss-ball');
       }
@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
       }
     }
 
-    if (this.varService.pa.strikes === 3) {
+    if (this.game.situation.pa.strikes === 3) {
       this.recordK(strikekind);
     }
   }
@@ -72,244 +72,244 @@ export class AppComponent implements OnInit {
     if (strikekind === 'swinging') {
       this.messageService.message('K-swinging');
     }
-    this.varService.resetpa();
-    this.gameService.game.K++;
+    this.game.situation.pa.reset();
+    this.game.K++;
     this.gameService.recordOut();
   }
 
   recordBall(): void {
-    this.gameService.game.balls++;
+    this.game.balls++;
 
-    this.varService.pa.balls++;
+    this.game.situation.pa.ball();
 
-    if (this.varService.pa.balls === 4) {
-      this.varService.resetpa();
+    if (this.game.situation.pa.balls === 4) {
+      this.game.situation.pa.reset();
       this.messageService.message('BB');
-      this.gameService.game.BB++;
+      this.game.BB++;
 
       this.advanceRunners('BB');
     }
   }
 
   advanceRunners(outcome: string): void {
-    if (this.varService.bases.first && this.varService.bases.second && this.varService.bases.third) { // bases loaded
+    if (this.game.situation.bases.first && this.game.situation.bases.second && this.game.situation.bases.third) { // bases loaded
       if (outcome === 'BB') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = true;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = true;
         this.recordRuns(1);
       }
       if (outcome === '1B') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = true;
-        this.varService.bases.third = false;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = false;
         this.recordRuns(2);
       }
       if (outcome === '2B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = true;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = true;
         this.recordRuns(2);
       }
       if (outcome === '3B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = false;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = false;
+        this.game.situation.bases.third = true;
         this.recordRuns(3);
       }
       if (outcome === 'HR') {
-        this.varService.resetbases();
+        this.game.situation.bases.reset();
         this.recordRuns(4);
       }
       return;
     }
-    if (this.varService.bases.first && this.varService.bases.second && !this.varService.bases.third) { // 2 on, first & second
+    if (this.game.situation.bases.first && this.game.situation.bases.second && !this.game.situation.bases.third) { // 2 on, first & second
       if (outcome === 'BB') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = true;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = true;
       }
       if (outcome === '1B') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = true;
-        this.varService.bases.third = false;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = false;
         this.recordRuns(1);
       }
       if (outcome === '2B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = true;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = true;
         this.recordRuns(1);
       }
       if (outcome === '3B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = false;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = false;
+        this.game.situation.bases.third = true;
         this.recordRuns(2);
       }
       if (outcome === 'HR') {
-        this.varService.resetbases();
+        this.game.situation.bases.reset();
         this.recordRuns(3);
       }
       return;
     }
-    if (this.varService.bases.first && !this.varService.bases.second && this.varService.bases.third) { // 2 on, corners
+    if (this.game.situation.bases.first && !this.game.situation.bases.second && this.game.situation.bases.third) { // 2 on, corners
       if (outcome === 'BB') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = true;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = true;
       }
       if (outcome === '1B') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = true;
-        this.varService.bases.third = false;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = false;
         this.recordRuns(1);
       }
       if (outcome === '2B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = true;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = true;
         this.recordRuns(1);
       }
       if (outcome === '3B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = false;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = false;
+        this.game.situation.bases.third = true;
         this.recordRuns(2);
       }
       if (outcome === 'HR') {
-        this.varService.resetbases();
+        this.game.situation.bases.reset();
         this.recordRuns(3);
       }
       return;
     }
-    if (!this.varService.bases.first && this.varService.bases.second && this.varService.bases.third) { // 2 on, second & third
+    if (!this.game.situation.bases.first && this.game.situation.bases.second && this.game.situation.bases.third) { // 2 on, second & third
       if (outcome === 'BB') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = true;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = true;
       }
       if (outcome === '1B') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = false;
-        this.varService.bases.third = false;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = false;
+        this.game.situation.bases.third = false;
         this.recordRuns(2);
       }
       if (outcome === '2B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = true;
-        this.varService.bases.third = false;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = false;
         this.recordRuns(2);
       }
       if (outcome === '3B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = false;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = false;
+        this.game.situation.bases.third = true;
         this.recordRuns(2);
       }
       if (outcome === 'HR') {
-        this.varService.resetbases();
+        this.game.situation.bases.reset();
         this.recordRuns(3);
       }
       return;
     }
-    if (this.varService.bases.first && !this.varService.bases.second && !this.varService.bases.third) { // 1 on, first
+    if (this.game.situation.bases.first && !this.game.situation.bases.second && !this.game.situation.bases.third) { // 1 on, first
       if (outcome === 'BB') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = true;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = true;
       }
       if (outcome === '1B') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = true;
-        this.varService.bases.third = false;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = false;
       }
       if (outcome === '2B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = true;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = true;
       }
       if (outcome === '3B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = false;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = false;
+        this.game.situation.bases.third = true;
         this.recordRuns(1);
       }
       if (outcome === 'HR') {
-        this.varService.resetbases();
+        this.game.situation.bases.reset();
         this.recordRuns(2);
       }
       return;
     }
-    if (!this.varService.bases.first && this.varService.bases.second && !this.varService.bases.third) { // 1 on, second
+    if (!this.game.situation.bases.first && this.game.situation.bases.second && !this.game.situation.bases.third) { // 1 on, second
       if (outcome === 'BB') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = true;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = true;
       }
       if (outcome === '1B') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = false;
-        this.varService.bases.third = false;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = false;
+        this.game.situation.bases.third = false;
         this.recordRuns(1);
       }
       if (outcome === '2B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = true;
-        this.varService.bases.third = false;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = false;
         this.recordRuns(1);
       }
       if (outcome === '3B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = false;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = false;
+        this.game.situation.bases.third = true;
         this.recordRuns(1);
       }
       if (outcome === 'HR') {
-        this.varService.resetbases();
+        this.game.situation.bases.reset();
         this.recordRuns(2);
       }
       return;
     }
-    if (!this.varService.bases.first && !this.varService.bases.second && this.varService.bases.third) { // 1 on, third
+    if (!this.game.situation.bases.first && !this.game.situation.bases.second && this.game.situation.bases.third) { // 1 on, third
       if (outcome === 'BB') {
-        this.varService.bases.first = true;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.third = true;
       }
       if (outcome === '1B') {
-        this.varService.bases.first = true;
-        this.varService.bases.second = false;
-        this.varService.bases.third = false;
+        this.game.situation.bases.first = true;
+        this.game.situation.bases.second = false;
+        this.game.situation.bases.third = false;
         this.recordRuns(1);
       }
       if (outcome === '2B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = true;
-        this.varService.bases.third = false;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = true;
+        this.game.situation.bases.third = false;
         this.recordRuns(1);
       }
       if (outcome === '3B') {
-        this.varService.bases.first = false;
-        this.varService.bases.second = false;
-        this.varService.bases.third = true;
+        this.game.situation.bases.first = false;
+        this.game.situation.bases.second = false;
+        this.game.situation.bases.third = true;
         this.recordRuns(1);
       }
       if (outcome === 'HR') {
-        this.varService.resetbases();
+        this.game.situation.bases.reset();
         this.recordRuns(2);
       }
       return;
     }
-    if (!this.varService.bases.first && !this.varService.bases.second && !this.varService.bases.third) { // no one on base
+    if (!this.game.situation.bases.first && !this.game.situation.bases.second && !this.game.situation.bases.third) { // no one on base
       if (outcome === 'BB') {
-        this.varService.bases.first = true;
+        this.game.situation.bases.first = true;
       }
       if (outcome === '1B') {
-        this.varService.bases.first = true;
+        this.game.situation.bases.first = true;
       }
       if (outcome === '2B') {
-        this.varService.bases.second = true;
+        this.game.situation.bases.second = true;
       }
       if (outcome === '3B') {
-        this.varService.bases.third = true;
+        this.game.situation.bases.third = true;
       }
       if (outcome === 'HR') {
         this.recordRuns(1);
@@ -319,11 +319,11 @@ export class AppComponent implements OnInit {
   }
 
   recordHit(): void {
-    this.gameService.game.hits++;
+    this.game.hits++;
 
     this.messageService.message('hit');
 
-    const roll = this.rand(0, 100);
+    const roll = this.varService.rand(0, 100);
 
     if (roll <= this.varService.ODDS3B) { // rarest
       this.teamService.teambatting(this.gameService.inningHalf()).hits.triples++;
@@ -352,22 +352,22 @@ export class AppComponent implements OnInit {
   }
 
   inPlay(): void {
-    this.varService.pa.inplay = true;
-    this.gameService.game.inplay++;
+    this.game.situation.pa.inplay = true;
+    this.game.inplay++;
 
-    if (this.rand(1, 100) <= this.varService.BABIP) {
-      this.varService.pa.hit = true;
+    if (this.varService.rand(1, 100) <= this.varService.BABIP) {
+      this.game.situation.pa.hit = true;
 
       this.recordHit();
     } else {
-      this.varService.pa.out = true;
+      this.game.situation.pa.out = true;
 
       this.messageService.message('out');
 
       this.gameService.recordOut();
     }
 
-    this.varService.resetpa();
+    this.game.situation.pa.reset();
   }
 
   swing(zone: boolean): void {
@@ -381,9 +381,9 @@ export class AppComponent implements OnInit {
     }
 
     // this.messageService.message('swing');
-    this.gameService.game.swings++;
+    this.game.swings++;
 
-    this.pitchOutcome = this.rand(1, 100);
+    this.pitchOutcome = this.varService.rand(1, 100);
     if (this.pitchOutcome <= contact) {
       // Contact!
       if (zone === false) {
@@ -412,45 +412,45 @@ export class AppComponent implements OnInit {
   }
 
   resetGame(): void {
-    this.gameService.game.pitches = 0;
-    this.gameService.game.swings = 0;
-    this.gameService.game.misses = 0;
-    this.gameService.game.taken = 0;
-    this.gameService.game.balls = 0;
-    this.gameService.game.strikes = 0;
-    this.gameService.game.BB = 0;
-    this.gameService.game.K = 0;
-    this.gameService.game.inplay = 0;
-    this.gameService.game.hits = 0;
-    this.gameService.game.outs = 0;
-    this.gameService.game.inning_current = null;
+    this.game.pitches = 0;
+    this.game.swings = 0;
+    this.game.misses = 0;
+    this.game.taken = 0;
+    this.game.balls = 0;
+    this.game.strikes = 0;
+    this.game.BB = 0;
+    this.game.K = 0;
+    this.game.inplay = 0;
+    this.game.hits = 0;
+    this.game.outs = 0;
+    this.game.inningCurrent = null;
 
     this.messageService.pitchResult = '';
     this.pitchOutput = '';
 
-    this.varService.resetpa();
-    this.varService.resetbases();
+    this.game.situation.pa.reset();
+    this.game.situation.bases.reset();
 
     this.gameService.startGame();
   }
 
   pitch(pitches = 1): void {
     for (let i = 1; i <= pitches; i++) {
-      if (this.gameService.game.final === false) {
+      if (this.game.final === false) {
         this.messageService.pitchResult = ''; // clear pitch result
 
-        this.gameService.game.pitches++;
+        this.game.pitches++;
         this.messageService.message('pitch');
 
         let zone: boolean;
 
         // Inside strike zone?
-        this.pitchOutcome = this.rand(1, 100);
+        this.pitchOutcome = this.varService.rand(1, 100);
         if (this.pitchOutcome <= this.varService.ZONE) {
           // Inside the zone
           zone = true;
 
-          this.pitchOutcome = this.rand(1, 100);
+          this.pitchOutcome = this.varService.rand(1, 100);
           if (this.pitchOutcome <= this.varService.ZSWING) {
             // Pitch swung on
             this.swing(zone);
@@ -462,7 +462,7 @@ export class AppComponent implements OnInit {
           // Outside the zone
           zone = false;
 
-          this.pitchOutcome = this.rand(1, 100);
+          this.pitchOutcome = this.varService.rand(1, 100);
           if (this.pitchOutcome <= this.varService.OSWING) {
             // Pitch swung on
             this.swing(zone);
