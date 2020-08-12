@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-
 import { MessageService } from './message.service';
 
-describe('MessageService', () => {
+describe('Service: Message', () => {
   let service: MessageService;
 
   beforeEach(() => {
@@ -11,6 +10,6 @@ describe('MessageService', () => {
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    void expect(service).toBeTruthy();
   });
 });

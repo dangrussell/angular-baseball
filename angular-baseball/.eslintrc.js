@@ -23,7 +23,11 @@ module.exports = {
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "project": "tsconfig.eslint.json",
-        "sourceType": "module"
+        "sourceType": "module",
+        "extraFileExtensions": [
+          ".html",
+          ".scss"
+        ]
     },
     "plugins": [
         "@typescript-eslint",

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { VarService } from './var.service';
 import { TeamService } from './team.service';
 import { MessageService } from './message.service';
-import { Team } from './../team/team';
+import { Team } from '../interfaces/team';
 
 class PlateAppearance {
   balls: number;

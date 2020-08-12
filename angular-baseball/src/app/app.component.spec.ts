@@ -1,4 +1,4 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppComponent } from './app.component';
@@ -8,7 +8,7 @@ import { TeamService } from './services/team.service';
 import { MessageService } from './services/message.service';
 import { GameService } from './services/game.service';
 
-describe('AppComponent', () => {
+describe('Component: App', () => {
 
   /*
   const FakeVarService = {
@@ -33,6 +33,9 @@ describe('AppComponent', () => {
 
   let component: AppComponent;
 
+  let fixture: ComponentFixture<AppComponent>;
+  let app: AppComponent;
+
   beforeEach(async(() => {
     void TestBed.configureTestingModule({
       imports: [
@@ -45,26 +48,29 @@ describe('AppComponent', () => {
     }).compileComponents();
 
     component = new AppComponent(varService, gameService, teamService, messageService);
+
+    fixture = TestBed.createComponent(AppComponent);
+    app = fixture.debugElement.componentInstance as AppComponent;
   }));
 
   it('should 1 + 1', () => {
-    expect(1 + 1).toEqual(2);
+    void expect(1 + 1).toEqual(2);
   });
 
   it('should have a component', () => {
-    expect(component).toBeTruthy();
+    void expect(component).toBeTruthy();
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
+    // const fixture = TestBed.createComponent(AppComponent);
+    // const app = fixture.debugElement.componentInstance;
+    void expect(app).toBeTruthy();
   });
 
   it('should have as title "angular-baseball"', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('angular-baseball');
+    // const fixture = TestBed.createComponent(AppComponent);
+    // const app = fixture.debugElement.componentInstance;
+    void expect(app.title).toEqual('angular-baseball');
   });
 
   /*

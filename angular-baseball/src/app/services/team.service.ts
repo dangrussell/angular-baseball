@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Team } from '../team/team';
+import { Team } from '../interfaces/team';
 
 @Injectable({
   providedIn: 'root'

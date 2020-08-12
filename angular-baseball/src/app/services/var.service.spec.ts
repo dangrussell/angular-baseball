@@ -1,14 +1,15 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { VarService } from './var.service';
 
 describe('Service: Var', () => {
+  let service: VarService;
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [VarService]
-    });
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(VarService);
   });
 
-  it('should ...', inject([VarService], (service: VarService) => {
+  it('should be created', () => {
     void expect(service).toBeTruthy();
-  }));
+  });
 });

@@ -1,4 +1,4 @@
-import { Team } from './../team/team';
+import { Team } from './team';
 
 export interface InningHalfInterface {
   toporbot: string;
