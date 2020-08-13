@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { VarService } from './var.service';
-import { TeamService } from './team.service';
+import { TeamService, Team } from './team.service';
+import { PlayerService } from './player.service';
 import { MessageService } from './message.service';
-import { Team } from '../interfaces/team';
 
 class PlateAppearance {
   balls: number;
@@ -93,13 +93,16 @@ export class Game {
   inningCurrent: Inning;
   inningHalfCurrent: InningHalf;
   innings: Inning[];
-  teams: Team[];
+  teams: {
+    away: Team;
+    home: Team;
+  };
   situation: {
     pa: PlateAppearance;
     bases: Bases;
   };
 
-  constructor(gameTeams: Team[], gameInnings: number) {
+  constructor(gameAwayTeam: Team, gameHomeTeam: Team, gameInnings: number) {
     this.final = false;
     this.pitches = 0;
     this.swings = 0;
@@ -115,7 +118,10 @@ export class Game {
     this.inningCurrent = new Inning(1);
     this.inningHalfCurrent = new InningHalf('top');
     this.innings = [];
-    this.teams = gameTeams;
+    this.teams = {
+      away: gameAwayTeam,
+      home: gameHomeTeam
+    };
     this.situation = {
       pa: new PlateAppearance(),
       bases: new Bases()
@@ -137,6 +143,14 @@ export class Game {
     this.innings.push(inning);
     // console.log('Added inning', i);
   }
+
+  getInningHalfCurrent(): InningHalf {
+    return this.inningHalfCurrent;
+  }
+
+  getInningCurrent(): Inning {
+    return this.inningCurrent;
+  }
 }
 
 @Injectable({
@@ -149,34 +163,25 @@ export class GameService {
   constructor(
     public varService: VarService,
     public teamService: TeamService,
+    public playerService: PlayerService,
     public messageService: MessageService,
   ) {
-    this.game = new Game(this.teamService.teams, this.varService.INNINGS);
+    this.game = new Game(this.teamService.teams.away, this.teamService.teams.home, this.varService.INNINGS);
   }
 
   whereAreWe(): void {
-    console.log(this.inningHalf(), this.inning());
+    console.log(this.inningHalfText(), this.inning());
+    console.log(this.teamService.teamAway.name, this.teamService.teamAway.runs);
+    console.log(this.teamService.teamHome.name, this.teamService.teamHome.runs);
     console.log(this.game.inningHalfCurrent.outs, 'outs');
   }
 
-  inningCurrent(): Inning {
-    return this.game.inningCurrent;
-  }
-
-  inningHalfCurrent(): InningHalf {
-    return this.game.inningHalfCurrent;
-  }
-
-  inning(inning: Inning = this.inningCurrent()): number {
+  inning(inning: Inning = this.game.getInningCurrent()): number {
     return inning.num;
   }
 
-  inningHalf(inningHalf: InningHalf = this.inningHalfCurrent()): string {
+  inningHalfText(inningHalf: InningHalf = this.game.getInningHalfCurrent()): string {
     return inningHalf.toporbot;
-  }
-
-  inningTotal(): number {
-    return this.game.innings.length;
   }
 
   nextInning(): void {
@@ -237,8 +242,16 @@ export class GameService {
   }
 
   resetGame(): void {
-    this.game = new Game(this.teamService.teams, this.varService.INNINGS);
+    this.game = new Game(this.teamService.teams.away, this.teamService.teams.home, this.varService.INNINGS);
     this.startGame();
+  }
+
+  teamBatting(): Team {
+    if (this.inningHalfText() === 'top') {
+      return this.game.teams.away;
+    } else {
+      return this.game.teams.home;
+    }
   }
 
 }

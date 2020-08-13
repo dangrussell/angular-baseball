@@ -1,4 +1,4 @@
-import { Team } from './team';
+import { Team } from './../services/team.service';
 
 export interface InningHalfInterface {
   toporbot: string;
@@ -26,5 +26,8 @@ export interface GameInterface {
   inningCurrent: InningInterface;
   inningHalfCurrent: InningHalfInterface;
   innings: InningInterface[];
-  teams: Team[];
+  teams: {
+    away: Team;
+    home: Team;
+  };
 }

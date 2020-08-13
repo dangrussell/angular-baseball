@@ -1,26 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { GameService } from '../../services/game.service';
-import { TeamService } from '../../services/team.service';
+import { Component, OnInit, Input } from '@angular/core';
 
+import { GameService } from '../../services/game.service';
+import { GameInterface } from './../../interfaces/game';
 @Component({
   selector: 'app-scoreboard',
   templateUrl: './scoreboard.component.html',
   styleUrls: ['./scoreboard.component.scss'],
   providers: [
-    GameService,
-    TeamService,
+    GameService
   ]
 })
 export class ScoreboardComponent implements OnInit {
 
-  teamAway = this.teamService.teamAway;
-  teamHome = this.teamService.teamHome;
-
-  game = this.gameService.game;
+  @Input() game: GameInterface;
 
   constructor(
-    public gameService: GameService,
-    public teamService: TeamService,
+    public gameService: GameService
   ) { }
 
   ngOnInit(): void {

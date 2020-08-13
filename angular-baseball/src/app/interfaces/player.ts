@@ -1,7 +1,5 @@
-export interface Player {
-  name: string;
-  position: number;
-  hits: number;
-  AB: number;
-  battingorder: number;
+import { Player } from '../services/player.service';
+
+export interface Players {
+  data: Player[];
 }

@@ -32,44 +32,53 @@ export class VarService {
 
   INNINGS = 9;
 
-  positions = {
-    1: {
+  positions = [
+    {
+      num: 1,
       name: 'pitcher',
       abbreviation: 'P',
     },
-    2: {
+    {
+      num: 2,
       name: 'catcher',
       abbreviation: 'C',
     },
-    3: {
+    {
+      num: 3,
       name: 'first baseman',
       abbreviation: '1B',
     },
-    4: {
+    {
+      num: 4,
       name: 'second baseman',
       abbreviation: '2B',
     },
-    5: {
+    {
+      num: 5,
       name: 'third baseman',
       abbreviation: '3B',
     },
-    6: {
+    {
+      num: 6,
       name: 'shortstop',
       abbreviation: 'SS',
     },
-    7: {
+    {
+      num: 7,
       name: 'left fielder',
       abbreviation: 'LF',
     },
-    8: {
+    {
+      num: 8,
       name: 'center fielder',
       abbreviation: 'CF',
     },
-    9: {
+    {
+      num: 9,
       name: 'right fielder',
       abbreviation: 'RF',
-    },
-  };
+    }
+  ];
 
   constructor() { }
 
@@ -92,6 +101,11 @@ export class VarService {
       return 'rd';
     }
     return 'th';
+  }
+
+  getPositionAbbreviation(positionNum: number): string {
+    const position = this.positions.find(el => el.num === positionNum);
+    return position.abbreviation;
   }
 
 }

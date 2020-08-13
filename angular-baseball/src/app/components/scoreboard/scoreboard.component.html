@@ -18,18 +18,18 @@
   </thead>
   <tbody>
     <tr>
-      <th col="row">{{teamAway.name}}</th>
+      <th col="row">{{game.teams.away.name}}</th>
       <td *ngFor="let i of game.innings">{{i?.top?.runs}}</td>
-      <th scope="row" class="font-weight-bold">{{teamAway.runs}}</th>
-      <th scope="row" class="font-weight-bold">{{teamService.teamHits(teamAway)}}</th>
-      <th scope="row" class="font-weight-bold">{{teamAway.errors}}</th>
+      <th scope="row" class="font-weight-bold">{{game.teams.away.getRuns()}}</th>
+      <th scope="row" class="font-weight-bold">{{game.teams.away.getHits()}}</th>
+      <th scope="row" class="font-weight-bold">{{game.teams.away.getErrors()}}</th>
     </tr>
     <tr>
-      <th col="row">{{teamHome.name}}</th>
+      <th col="row">{{game.teams.home.name}}</th>
       <td *ngFor="let i of game.innings">{{i?.bot?.runs}}</td>
-      <th scope="row" class="font-weight-bold">{{teamHome.runs}}</th>
-      <th scope="row" class="font-weight-bold">{{teamService.teamHits(teamHome)}}</th>
-      <th scope="row" class="font-weight-bold">{{teamHome.errors}}</th>
+      <th scope="row" class="font-weight-bold">{{game.teams.home.getRuns()}}</th>
+      <th scope="row" class="font-weight-bold">{{game.teams.home.getHits()}}</th>
+      <th scope="row" class="font-weight-bold">{{game.teams.home.getErrors()}}</th>
     </tr>
   </tbody>
 </table>

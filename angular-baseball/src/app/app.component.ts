@@ -19,6 +19,7 @@ import { MessageService } from './services/message.service';
 export class AppComponent implements OnInit {
 
   title = 'angular-baseball';
+  titleHTML = this.varService.titleHTML;
 
   showbuttons = false;
 
@@ -38,8 +39,6 @@ export class AppComponent implements OnInit {
   ) {
     this.game = this.gameService.game;
   }
-
-
 
   recordStrike(strikekind: string, zone?: boolean): void {
     this.game.strikes++;
@@ -326,29 +325,28 @@ export class AppComponent implements OnInit {
     const roll = this.varService.rand(0, 100);
 
     if (roll <= this.varService.ODDS3B) { // rarest
-      this.teamService.teambatting(this.gameService.inningHalf()).hits.triples++;
+      this.gameService.teamBatting().addHit('triples');
       this.advanceRunners('3B');
       this.messageService.message('3B');
     } else if (roll <= this.varService.ODDSHR) { // second rarest
-      this.teamService.teambatting(this.gameService.inningHalf()).hits.homeruns++;
+      this.gameService.teamBatting().hits.homeruns++;
       this.advanceRunners('HR');
       this.messageService.message('HR');
     } else if (roll <= this.varService.ODDS2B) { // second most common
-      this.teamService.teambatting(this.gameService.inningHalf()).hits.doubles++;
+      this.gameService.teamBatting().hits.doubles++;
       this.advanceRunners('2B');
       this.messageService.message('2B');
     } else { // most common
-      this.teamService.teambatting(this.gameService.inningHalf()).hits.singles++;
+      this.gameService.teamBatting().hits.singles++;
       this.advanceRunners('1B');
       this.messageService.message('1B');
     }
   }
 
   recordRuns(runs: number): void {
-    this.gameService.inningHalfCurrent().runs = this.gameService.inningHalfCurrent().runs + runs;
+    this.game.getInningHalfCurrent().runs = this.game.getInningHalfCurrent().runs + runs;
 
-    const ih = this.gameService.inningHalf();
-    this.teamService.teambatting(ih).runs = this.teamService.teambatting(ih).runs + runs;
+    this.gameService.teamBatting().runs = this.gameService.teamBatting().runs + runs;
   }
 
   inPlay(): void {

@@ -1,18 +1,18 @@
 <div class="app">
   <!--<app-players></app-players>-->
   <div class="text-center">
-    <h1 *ngIf="varService.titleHTML" [innerHtml]="varService.titleHTML"></h1>
+    <h1 *ngIf="titleHTML" [innerHtml]="titleHTML"></h1>
 
     <div class="container">
       <div class="row">
 
-        <app-lineup *ngIf="game.teams" [team]="teamService.teamAway"></app-lineup>
+        <app-lineup *ngIf="game.teams" [team]="game.teams.away"></app-lineup>
 
         <div class="col plate">
           <div class="text-center" *ngIf="showbuttons">
             <button class="btn btn-dark mr-2" (click)="pitch()" [disabled]="game.final">Pitch</button>
             <button class="btn btn-dark mr-2" (click)="pitch(100)" [disabled]="game.final">100 Pitches</button>
-            <button class="btn btn-dark" (click)="gameService.resetGame();">New Game</button>
+            <!--<button class="btn btn-dark" (click)="resetGame();">New Game</button>-->
           </div>
 
           <svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -54,12 +54,12 @@
           <!--<p *ngIf="game.pitches" class="result" [innerHTML]="pitchOutput"></p>-->
         </div>
 
-        <app-lineup *ngIf="game.teams" [team]="teamService.teamHome"></app-lineup>
+        <app-lineup *ngIf="game.teams" [team]="game.teams.home"></app-lineup>
 
       </div>
     </div>
 
-    <app-scoreboard></app-scoreboard>
+    <app-scoreboard *ngIf="game.teams" [game]="game"></app-scoreboard>
 
   </div>
 
