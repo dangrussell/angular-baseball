@@ -103,9 +103,4 @@ export class VarService {
     return 'th';
   }
 
-  getPositionAbbreviation(positionNum: number): string {
-    const position = this.positions.find(el => el.num === positionNum);
-    return position.abbreviation;
-  }
-
 }

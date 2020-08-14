@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { LineupComponent } from './components/lineup/lineup.component';
 
+import { PositionAbbreviationPipe } from './pipes/position-abbreviation.pipe';
+
 import { httpInterceptorProviders } from './http-interceptors';
 
 @NgModule({
@@ -14,6 +16,7 @@ import { httpInterceptorProviders } from './http-interceptors';
       AppComponent,
       ScoreboardComponent,
       LineupComponent,
+      PositionAbbreviationPipe
    ],
    imports: [
       BrowserModule,
