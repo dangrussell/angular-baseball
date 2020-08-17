@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { VarService } from './var.service';
 import { TeamService, Team } from './team.service';
-import { PlayerService } from './player.service';
+import { PlayerService, Player } from './player.service';
 import { MessageService } from './message.service';
 
 class PlateAppearance {
@@ -11,6 +11,7 @@ class PlateAppearance {
   inplay: boolean;
   hit: boolean;
   out: boolean;
+  player: Player;
 
   constructor() {
     this.balls = 0;
@@ -63,6 +64,10 @@ class InningHalf {
     this.outs = 0;
     this.runs = 0;
   }
+
+  getOuts(): number {
+    return this.outs;
+  }
 }
 
 class Inning {
@@ -74,6 +79,13 @@ class Inning {
     this.num = num;
     this.top = new InningHalf('top');
     this.bot = new InningHalf('bot');
+  }
+
+  getOuts(): number {
+    const topOuts = this.top.getOuts();
+    const botOuts = this.bot.getOuts();
+
+    return topOuts + botOuts;
   }
 }
 
@@ -151,6 +163,18 @@ export class Game {
   getInningCurrent(): Inning {
     return this.inningCurrent;
   }
+
+  getOuts(): number {
+    let outs = 0;
+    this.innings.forEach(i => {
+      outs += i.getOuts();
+    });
+    return outs;
+  }
+
+  getBatterUp(): Player {
+    return this.situation.pa.player;
+  }
 }
 
 @Injectable({
@@ -169,11 +193,17 @@ export class GameService {
     this.game = new Game(this.teamService.teams.away, this.teamService.teams.home, this.varService.INNINGS);
   }
 
+  setBatterUp(): void {
+    const nowUp = this.teamBatting().players.find(el => el.battingorder === this.teamBatting().nowBatting);
+    this.game.situation.pa.player = nowUp;
+  }
+
   whereAreWe(): void {
     console.log(this.inningHalfText(), this.inning());
     console.log(this.teamService.teamAway.name, this.teamService.teamAway.runs);
     console.log(this.teamService.teamHome.name, this.teamService.teamHome.runs);
-    console.log(this.game.inningHalfCurrent.outs, 'outs');
+    console.log(this.game.inningHalfCurrent.getOuts(), 'outs');
+    console.log('Now Batting', this.game.getBatterUp().name);
   }
 
   inning(inning: Inning = this.game.getInningCurrent()): number {
@@ -213,11 +243,11 @@ export class GameService {
   }
 
   recordOut(): void {
-    this.game.outs++;
+    // this.game.outs++;
 
     this.game.inningHalfCurrent.outs++;
 
-    if ((this.game.outs >= (3 * 2 * this.varService.INNINGS)) && (this.teamService.teamAway.runs !== this.teamService.teamHome.runs)) {
+    if ((this.game.getOuts() >= (3 * 2 * this.varService.INNINGS)) && (this.teamService.teamAway.runs !== this.teamService.teamHome.runs)) {
 
       this.messageService.message('game-over', 1);
 
@@ -228,7 +258,7 @@ export class GameService {
       }
       this.game.final = true;
     } else {
-      if (this.game.inningHalfCurrent.outs === 3) {
+      if (this.game.inningHalfCurrent.getOuts() === 3) {
         this.nextInningHalf();
       }
     }
@@ -238,13 +268,16 @@ export class GameService {
   }
 
   startGame(): void {
+    this.setBatterUp();
     this.whereAreWe();
   }
 
+  /*
   resetGame(): void {
     this.game = new Game(this.teamService.teams.away, this.teamService.teams.home, this.varService.INNINGS);
     this.startGame();
   }
+  */
 
   teamBatting(): Team {
     if (this.inningHalfText() === 'top') {

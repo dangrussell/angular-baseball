@@ -409,6 +409,7 @@ export class AppComponent implements OnInit {
     }
   }
 
+  /*
   resetGame(): void {
     this.game.pitches = 0;
     this.game.swings = 0;
@@ -431,9 +432,10 @@ export class AppComponent implements OnInit {
 
     this.gameService.startGame();
   }
+  */
 
   pitch(pitches = 1): void {
-    for (let i = 1; i <= pitches; i++) {
+    for (let p = 1; p <= pitches; p++) {
       if (this.game.final === false) {
         this.messageService.pitchResult = ''; // clear pitch result
 

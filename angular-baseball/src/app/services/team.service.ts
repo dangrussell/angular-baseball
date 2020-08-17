@@ -14,6 +14,7 @@ export class Team {
   players: Player[];
   isHome: boolean;
   name: string;
+  nowBatting: number;
 
   constructor(
     teamName: string,
@@ -30,6 +31,7 @@ export class Team {
       this.players = teamPlayers;
       this.isHome = teamIsHome;
       this.name = teamName;
+      this.nowBatting = 1;
   }
 
   getRuns(): number {
