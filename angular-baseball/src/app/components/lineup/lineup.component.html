@@ -7,12 +7,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let player of team.players">
-        <td class="lineup-card-td">{{player.battingorder}}</td>
-        <td class="lineup-card-td">{{player.position | positionAbbreviation}}</td>
-        <td class="lineup-card-td">{{player.name}}</td>
-        <td class="lineup-card-td">{{player.hits}}-{{player.AB}}</td>
-      </tr>
+      <ng-container *ngFor="let player of team.players">
+        <tr app-lineup-player [player]="player"></tr>
+      </ng-container>
     </tbody>
   </table>
 </div>

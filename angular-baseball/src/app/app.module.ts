@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { LineupComponent } from './components/lineup/lineup.component';
+import { LineupPlayerComponent } from './components/lineup/lineup-player/lineup-player.component';
 
 import { PositionAbbreviationPipe } from './pipes/position-abbreviation.pipe';
 
@@ -16,7 +17,8 @@ import { httpInterceptorProviders } from './http-interceptors';
       AppComponent,
       ScoreboardComponent,
       LineupComponent,
-      PositionAbbreviationPipe
+      LineupPlayerComponent,
+      PositionAbbreviationPipe,
    ],
    imports: [
       BrowserModule,
