@@ -193,9 +193,13 @@ export class GameService {
     this.game = new Game(this.teamService.teams.away, this.teamService.teams.home, this.varService.INNINGS);
   }
 
+  getBatterUp(): Player {
+    const nowBatting = this.teamBatting().players.find(el => el.battingorder === this.teamBatting().nowBatting);
+    return nowBatting;
+  }
+
   setBatterUp(): void {
-    const nowUp = this.teamBatting().players.find(el => el.battingorder === this.teamBatting().nowBatting);
-    this.game.situation.pa.player = nowUp;
+    this.game.situation.pa.player = this.getBatterUp();
   }
 
   whereAreWe(): void {

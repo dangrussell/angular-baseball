@@ -1,88 +1,86 @@
 <div class="app">
-  <!--<app-players></app-players>-->
-  <div class="text-center">
-    <h1 *ngIf="titleHTML" [innerHtml]="titleHTML"></h1>
+    <!--<app-players></app-players>-->
+    <div class="text-center">
+        <h1 *ngIf="titleHTML" [innerHtml]="titleHTML"></h1>
 
-    <div class="container">
-      <div class="row">
+        <div class="container">
+            <div class="row">
 
-        <app-lineup *ngIf="game.teams" [team]="game.teams.away"></app-lineup>
+                <app-lineup *ngIf="gameService.game.teams" [team]="gameService.game.teams.away"></app-lineup>
 
-        <div class="col plate">
-          <div class="text-center" *ngIf="showbuttons">
-            <button class="btn btn-dark mr-2" (click)="pitch()" [disabled]="game.final">Pitch</button>
-            <button class="btn btn-dark mr-2" (click)="pitch(100)" [disabled]="game.final">100 Pitches</button>
-            <!--<button class="btn btn-dark" (click)="resetGame();">New Game</button>-->
-          </div>
+                <div class="col plate">
+                    <div class="text-center" *ngIf="showbuttons">
+                        <button class="btn btn-dark mr-2" (click)="pitch()" [disabled]="gameService.game.final">Pitch</button>
+                        <button class="btn btn-dark mr-2" (click)="pitch(100)" [disabled]="gameService.game.final">100
+              Pitches</button>
+                        <!--<button class="btn btn-dark" (click)="resetGame();">New Game</button>-->
+                    </div>
 
-          <svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <svg:polygon points="5,5 395,5 395,200 200,395 5,200" stroke="black" fill="white" stroke-width="5" />
+                    <svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg">
             <!-- plate -->
+            <svg:polygon points="5,5 395,5 395,200 200,395 5,200" stroke="black" fill="white" stroke-width="5" />
 
-            <svg:polygon points="200,385 180,365 200,345 220,365" stroke="brown" fill="green" stroke-width="3" />
             <!-- infield diamond -->
+            <svg:polygon points="200,385 180,365 200,345 220,365" stroke="brown" fill="green" stroke-width="3" />
 
-            <svg:polygon *ngIf="game.situation.bases.first == false" points="215,370 210,365 215,360 220,365" stroke="black"
-              fill="white" stroke-width="1" /><!-- 1B, open -->
-            <svg:polygon *ngIf="game.situation.bases.first == true" points="215,370 210,365 215,360 220,365" stroke="black"
-              fill="yellow" stroke-width="1" /><!-- 1B, occupied -->
+            <!-- 1B -->
+            <svg:polygon points="215,370 210,365 215,360 220,365" stroke="black"
+              [attr.fill]="gameService.game.situation.bases.first ? 'yellow' : 'white'" stroke-width="1" />
 
-            <svg:polygon *ngIf="game.situation.bases.second == false" points="200,355 195,350 200,345 205,350" stroke="black"
-              fill="white" stroke-width="1" /><!-- 2B, open -->
-            <svg:polygon *ngIf="game.situation.bases.second == true" points="200,355 195,350 200,345 205,350" stroke="black"
-              fill="yellow" stroke-width="1" /><!-- 2B, occupied -->
+            <!-- 2B -->
+            <svg:polygon points="200,355 195,350 200,345 205,350" stroke="black"
+              [attr.fill]="gameService.game.situation.bases.second ? 'yellow' : 'white'" stroke-width="1" />
 
-            <svg:polygon *ngIf="game.situation.bases.third == false" points="185,370 180,365 185,360 190,365" stroke="black"
-              fill="white" stroke-width="1" /><!-- 3B, open -->
-            <svg:polygon *ngIf="game.situation.bases.third == true" points="185,370 180,365 185,360 190,365" stroke="black"
-              fill="yellow" stroke-width="1" /><!-- 3B, occupied -->
+            <!-- 3B -->
+            <svg:polygon points="185,370 180,365 185,360 190,365" stroke="black"
+              [attr.fill]="gameService.game.situation.bases.third ? 'yellow' : 'white'" stroke-width="1" />
 
             <svg:foreignObject x="8" y="8" width="385" height="190">
-              <xhtml:p *ngIf="game.pitches" class="result" xmlns="http://www.w3.org/1999/xhtml"
+              <xhtml:p *ngIf="gameService.game.pitches" class="result" xmlns="http://www.w3.org/1999/xhtml"
                 [innerHTML]="pitchOutput"></xhtml:p>
             </svg:foreignObject>
             <svg:foreignObject x="167" y="260" width="60" height="80">
               <xhtml:p>
-                B: {{game.situation.pa.balls}}
+                B: {{gameService.game.situation.pa.balls}}
                 <xhtml:br />
-                S: {{game.situation.pa.strikes}}
+                S: {{gameService.game.situation.pa.strikes}}
                 <xhtml:br />
-                O: {{game.inningHalfCurrent.outs}}
+                O: {{gameService.game.inningHalfCurrent.outs}}
               </xhtml:p>
             </svg:foreignObject>
           </svg>
-          <!--<p *ngIf="game.pitches" class="result" [innerHTML]="pitchOutput"></p>-->
+                    <!--<p *ngIf="gameService.game.pitches" class="result" [innerHTML]="pitchOutput"></p>-->
+                </div>
+
+                <app-lineup *ngIf="gameService.game.teams" [team]="gameService.game.teams.home"></app-lineup>
+
+            </div>
         </div>
 
-        <app-lineup *ngIf="game.teams" [team]="game.teams.home"></app-lineup>
+        <app-scoreboard *ngIf="gameService.game.teams" [game]="gameService.game"></app-scoreboard>
 
-      </div>
     </div>
 
-    <app-scoreboard *ngIf="game.teams" [game]="game"></app-scoreboard>
+    <!--
+  <div *ngIf="gameService.game.pitches" class="row">
 
-  </div>
-
-  <!--
-  <div *ngIf="game.pitches" class="row">
-
-      <div class="col">
+    <div class="col">
       <h4>The Count</h4>
-      <p>Balls: <strong>{{game.situation.pa.balls}}</strong></p>
-      <p>Strikes: <strong>{{game.situation.pa.strikes}}</strong></p>
+      <p>Balls: <strong>{{gameService.game.situation.pa.balls}}</strong></p>
+      <p>Strikes: <strong>{{gameService.game.situation.pa.strikes}}</strong></p>
     </div>
     <div class="col">
       <h4>The Game</h4>
-      <p *ngIf="game.pitches">Pitches: <strong>{{game.pitches}}</strong></p>
-      <p *ngIf="game.BB">Walks: <strong>{{game.BB}}</strong></p>
-      <p *ngIf="game.K">Strikeouts: <strong>{{game.K}}</strong></p>
-      <p *ngIf="game.inplay">In Play: <strong>{{game.inplay}}</strong></p>
-      <p *ngIf="game.hits">Hits: <strong>{{game.hits}}</strong></p>
-      <p *ngIf="game.outs">Outs: <strong>{{game.outs}}</strong></p>
+      <p *ngIf="gameService.game.pitches">Pitches: <strong>{{gameService.game.pitches}}</strong></p>
+      <p *ngIf="gameService.game.BB">Walks: <strong>{{gameService.game.BB}}</strong></p>
+      <p *ngIf="gameService.game.K">Strikeouts: <strong>{{gameService.game.K}}</strong></p>
+      <p *ngIf="gameService.game.inplay">In Play: <strong>{{gameService.game.inplay}}</strong></p>
+      <p *ngIf="gameService.game.hits">Hits: <strong>{{gameService.game.hits}}</strong></p>
+      <p *ngIf="gameService.game.outs">Outs: <strong>{{gameService.game.outs}}</strong></p>
     </div>
 
   </div>
--->
+  -->
 
 </div>
 
