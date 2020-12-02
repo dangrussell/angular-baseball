@@ -7,7 +7,7 @@ describe('LineupPlayerComponent', () => {
   let fixture: ComponentFixture<LineupPlayerComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       declarations: [ LineupPlayerComponent ]
     })
     .compileComponents();
@@ -20,6 +20,6 @@ describe('LineupPlayerComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    void expect(component).toBeTruthy();
   });
 });

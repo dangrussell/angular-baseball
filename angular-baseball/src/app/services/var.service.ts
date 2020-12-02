@@ -82,13 +82,13 @@ export class VarService {
 
   constructor() { }
 
-  rand(min: number, max: number): number {
+  public rand(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  ordinal(i: number): string {
+  public ordinal(i: number): string {
     const j = i % 10;
     const k = i % 100;
     if (j === 1 && k !== 11) {

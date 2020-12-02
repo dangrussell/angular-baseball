@@ -24,22 +24,17 @@ export class MessageService {
     );
   }
 
-  getMessages(): Observable<Messages> {
-    return this.http.get<Messages>(this.messagesUrl);
-  }
-
-  randMessage(messagekind: string): string {
-    const messageCollection: Messages = this.messages;
-    const messageItem: Message = messageCollection.data.find(el => el.kind === messagekind);
-    return messageItem.text[Math.floor(Math.random() * messageItem.text.length)];
-  }
-
-  message(messagekind: string, brs = 2): void {
+  public message(messagekind: string, brs = 2): void {
     let message = this.randMessage(messagekind);
     for (let br = 1; br <= brs; br++) {
       message += '<br />';
     }
     this.pitchResult += message;
+  }
+
+  public log(...args: any[]): void {
+    console.log(...args);
+    this.pitchResult += args.join(' ') + '<br /><br />';
   }
 
   switchSides(ih: InningHalfInterface, i: InningInterface, o: string, messagekind = 'switchSides'): void {
@@ -50,6 +45,16 @@ export class MessageService {
     }
     message += '<br />We head to the ' + ihtext + ' of the ' + i.num.toString() + o + '.';
     this.pitchResult += message;
+  }
+
+  private getMessages(): Observable<Messages> {
+    return this.http.get<Messages>(this.messagesUrl);
+  }
+
+  private randMessage(messagekind: string): string {
+    const messageCollection: Messages = this.messages;
+    const messageItem: Message = messageCollection.data.find(el => el.kind === messagekind);
+    return messageItem.text[Math.floor(Math.random() * messageItem.text.length)];
   }
 
 }

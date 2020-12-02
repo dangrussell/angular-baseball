@@ -4,6 +4,7 @@ import { VarService } from './var.service';
 import { TeamService, Team } from './team.service';
 import { PlayerService, Player } from './player.service';
 import { MessageService } from './message.service';
+import { Players } from '../interfaces/player';
 
 class PlateAppearance {
   balls: number;
@@ -193,13 +194,46 @@ export class GameService {
     this.game = new Game(this.teamService.teams.away, this.teamService.teams.home, this.varService.INNINGS);
   }
 
+  public startPA(): void {
+    this.whereAreWe();
+    console.log('Now batting for the ' + this.teamBatting().name + ':', this.getBatterUp().name);
+  }
+
+  public endPA(): void {
+    this.game.situation.pa.reset();
+    this.teamBatting().nowBatting++;
+    if (this.game.inningHalfCurrent.getOuts() === 3) {
+      this.dueUp();
+    } else {
+      this.startPA();
+    }
+  }
+
+  dueUp(): void {
+    console.group('Due up for the ' + this.teamFielding().name + ':');
+    console.log(this.getBatterDueUp(0).name);
+    console.log('On deck:', this.getBatterDueUp(1).name);
+    console.log('In the hole:', this.getBatterDueUp(2).name);
+    console.groupEnd();
+  }
+
   getBatterUp(): Player {
     const nowBatting = this.teamBatting().players.find(el => el.battingorder === this.teamBatting().nowBatting);
     return nowBatting;
   }
 
+  getBatterDueUp(i: number): Player {
+    const upcomingSpot = this.teamFielding().nowBatting;
+    const dueUp = this.teamFielding().players.find(el => el.battingorder === upcomingSpot + i);
+    return dueUp;
+  }
+
   setBatterUp(): void {
+    console.log(this.game.situation);
+    console.log(this.game.situation.pa);
+    console.log(this.game.situation.pa.player);
     this.game.situation.pa.player = this.getBatterUp();
+    this.startPA();
   }
 
   whereAreWe(): void {
@@ -207,7 +241,6 @@ export class GameService {
     console.log(this.teamService.teamAway.name, this.teamService.teamAway.runs);
     console.log(this.teamService.teamHome.name, this.teamService.teamHome.runs);
     console.log(this.game.inningHalfCurrent.getOuts(), 'outs');
-    console.log('Now Batting', this.game.getBatterUp().name);
   }
 
   inning(inning: Inning = this.game.getInningCurrent()): number {
@@ -251,29 +284,43 @@ export class GameService {
 
     this.game.inningHalfCurrent.outs++;
 
+    this.endPA();
+
     if ((this.game.getOuts() >= (3 * 2 * this.varService.INNINGS)) && (this.teamService.teamAway.runs !== this.teamService.teamHome.runs)) {
-
-      this.messageService.message('game-over', 1);
-
-      if (this.teamService.teamAway.runs > this.teamService.teamHome.runs) {
-        this.messageService.message('winner-away', 0);
-      } else {
-        this.messageService.message('winner-home', 0);
-      }
-      this.game.final = true;
+      this.gameOver();
     } else {
       if (this.game.inningHalfCurrent.getOuts() === 3) {
         this.nextInningHalf();
+        this.startPA();
       }
     }
-
-    this.whereAreWe();
-
   }
 
-  startGame(): void {
-    this.setBatterUp();
-    this.whereAreWe();
+  public startGame(): void {
+
+    this.playerService.getPlayers().subscribe(
+      (response: Players) => {
+        this.playerService.players = {
+          ...response
+        };
+
+        this.playerService.players.data.forEach(player => {
+          if (player.team === 0){
+            this.playerService.teamAwayPlayers.push(player);
+          }
+          if (player.team === 1){
+            this.playerService.teamHomePlayers.push(player);
+          }
+        });
+      },
+      (err) => console.error(err),
+      () => {
+        console.log('Players fetched.');
+
+        this.setBatterUp();
+        // this.whereAreWe();
+      }
+    );
   }
 
   /*
@@ -289,6 +336,25 @@ export class GameService {
     } else {
       return this.game.teams.home;
     }
+  }
+
+  teamFielding(): Team {
+    if (this.inningHalfText() === 'top') {
+      return this.game.teams.home;
+    } else {
+      return this.game.teams.away;
+    }
+  }
+
+  private gameOver(): void {
+    this.messageService.message('game-over', 1);
+
+    if (this.teamService.teamAway.runs > this.teamService.teamHome.runs) {
+      this.messageService.message('winner-away', 0);
+    } else {
+      this.messageService.message('winner-home', 0);
+    }
+    this.game.final = true;
   }
 
 }

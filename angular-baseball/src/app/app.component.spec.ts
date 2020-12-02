@@ -1,5 +1,6 @@
 import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { AppComponent } from './app.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
@@ -7,6 +8,7 @@ import { VarService } from './services/var.service';
 import { TeamService } from './services/team.service';
 import { MessageService } from './services/message.service';
 import { GameService } from './services/game.service';
+import { PlayerService } from './services/player.service';
 
 describe('Component: App', () => {
 
@@ -27,9 +29,10 @@ describe('Component: App', () => {
   */
 
   const varService = new VarService();
-  const teamService = new TeamService();
-  const messageService = new MessageService();
-  const gameService = new GameService(varService, teamService, messageService);
+  const playerService = TestBed.inject(PlayerService);
+  const teamService = new TeamService(playerService);
+  const messageService = TestBed.inject(MessageService);
+  const gameService = new GameService(varService, teamService, playerService, messageService);
 
   let component: AppComponent;
 
@@ -39,12 +42,17 @@ describe('Component: App', () => {
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        HttpClientTestingModule
       ],
       declarations: [
         AppComponent,
         ScoreboardComponent,
       ],
+      providers: [
+        PlayerService,
+        MessageService
+      ]
     }).compileComponents();
 
     component = new AppComponent(varService, gameService, teamService, messageService);
@@ -53,7 +61,7 @@ describe('Component: App', () => {
     app = fixture.debugElement.componentInstance as AppComponent;
   }));
 
-  it('should 1 + 1', () => {
+  it('should calculate 1 + 1 correctly', () => {
     void expect(1 + 1).toEqual(2);
   });
 

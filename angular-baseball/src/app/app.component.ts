@@ -67,7 +67,6 @@ export class AppComponent implements OnInit {
     if (strikekind === 'swinging') {
       this.messageService.message('K-swinging');
     }
-    this.gameService.game.situation.pa.reset();
     this.gameService.game.K++;
     this.gameService.recordOut();
   }
@@ -78,12 +77,16 @@ export class AppComponent implements OnInit {
     this.gameService.game.situation.pa.ball();
 
     if (this.gameService.game.situation.pa.balls === 4) {
-      this.gameService.game.situation.pa.reset();
-      this.messageService.message('BB');
-      this.gameService.game.BB++;
-
-      this.advanceRunners('BB');
+      this.recordBB();
     }
+  }
+
+  recordBB(): void {
+    this.gameService.endPA();
+    this.messageService.message('BB');
+    this.gameService.game.BB++;
+
+    this.advanceRunners('BB');
   }
 
   advanceRunners(outcome: string): void {
@@ -368,6 +371,8 @@ export class AppComponent implements OnInit {
     if (this.varService.rand(1, 100) <= this.varService.BABIP) {
       this.gameService.game.situation.pa.hit = true;
 
+      this.gameService.endPA();
+
       this.recordHit();
     } else {
       this.gameService.game.situation.pa.out = true;
@@ -376,8 +381,6 @@ export class AppComponent implements OnInit {
 
       this.gameService.recordOut();
     }
-
-    this.gameService.game.situation.pa.reset();
   }
 
   swing(zone: boolean): void {
@@ -439,7 +442,7 @@ export class AppComponent implements OnInit {
     this.messageService.pitchResult = '';
     this.pitchOutput = '';
 
-    this.gameService.game.situation.pa.reset();
+    this.gameService.endPA();
     this.gameService.game.situation.bases.reset();
 
     this.gameService.startGame();
