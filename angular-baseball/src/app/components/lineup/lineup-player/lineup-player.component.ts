@@ -8,9 +8,9 @@ import { Player } from 'src/app/services/player.service';
 })
 export class LineupPlayerComponent implements OnInit {
 
-  constructor() { }
-
   @Input() player: Player;
+
+  constructor() { }
 
   ngOnInit(): void {
   }
