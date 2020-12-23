@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { GameService } from '../../services/game.service';
+import { GameService, Inning } from '../../services/game.service';
+import { Team } from '../../services/team.service';
 import { GameInterface } from './../../interfaces/game';
 
 @Component({
@@ -14,11 +15,20 @@ export class ScoreboardComponent implements OnInit {
 
   @Input() game: GameInterface;
 
+  gameInnings: Inning[];
+  gameInningCurrent: Inning;
+  gameTeamAway: Team;
+  gameTeamHome: Team;
+
   constructor(
     public gameService: GameService
   ) { }
 
   ngOnInit(): void {
+    this.gameInnings = this.gameService.game.innings;
+    this.gameInningCurrent = this.gameService.game.inningCurrent;
+    this.gameTeamAway = this.gameService.game.teams.away;
+    this.gameTeamHome = this.gameService.game.teams.home;
   }
 
 }

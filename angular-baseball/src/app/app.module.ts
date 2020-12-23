@@ -10,23 +10,23 @@ import { httpInterceptorProviders } from './http-interceptors';
 import { PositionAbbreviationPipe } from './pipes/position-abbreviation.pipe';
 
 @NgModule({
-   declarations: [
-      AppComponent,
-      ScoreboardComponent,
-      LineupComponent,
-      LineupPlayerComponent,
-      PositionAbbreviationPipe,
-   ],
-   imports: [
-      BrowserModule,
-      HttpClientModule,
-      AppRoutingModule
-   ],
-   providers: [
+  declarations: [
+    AppComponent,
+    ScoreboardComponent,
+    LineupComponent,
+    LineupPlayerComponent,
+    PositionAbbreviationPipe,
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule
+  ],
+  providers: [
     httpInterceptorProviders
-   ],
-   bootstrap: [
-      AppComponent
-   ]
+  ],
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }

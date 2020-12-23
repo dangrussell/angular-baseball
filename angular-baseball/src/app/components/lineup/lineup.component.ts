@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Player } from 'src/app/services/player.service';
 import { Team, TeamService } from '../../services/team.service';
 import { VarService } from './../../services/var.service';
 
@@ -17,6 +18,7 @@ export class LineupComponent implements OnInit {
 
   homeAwayText: string;
   teamName: string;
+  teamPlayers: Player[];
 
   constructor(
     public varService: VarService,
@@ -27,6 +29,7 @@ export class LineupComponent implements OnInit {
     if (this.team) {
       this.homeAwayText = this.team.getHomeAwayText();
       this.teamName = this.team.name;
+      this.teamPlayers = this.team.players;
     }
   }
 

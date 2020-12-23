@@ -1,4 +1,4 @@
-<ng-container>
+<ng-container *ngIf="player">
   <td class="lineup-card-td">{{player.battingorder}}</td>
   <td class="lineup-card-td">{{player.position | positionAbbreviation}}</td>
   <td class="lineup-card-td">{{player.name}}</td>

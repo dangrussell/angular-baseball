@@ -70,7 +70,7 @@ class InningHalf {
   }
 }
 
-class Inning {
+export class Inning {
   num: number;
   top: InningHalf;
   bot: InningHalf;
