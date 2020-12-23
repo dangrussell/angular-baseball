@@ -1,14 +1,13 @@
-import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
-import { VarService } from './services/var.service';
-import { TeamService } from './services/team.service';
-import { MessageService } from './services/message.service';
 import { GameService } from './services/game.service';
+import { MessageService } from './services/message.service';
 import { PlayerService } from './services/player.service';
+import { TeamService } from './services/team.service';
+import { VarService } from './services/var.service';
 
 describe('Component: App', () => {
 

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
-import { VarService } from './services/var.service';
 import { GameService } from './services/game.service';
-import { TeamService } from './services/team.service';
 import { MessageService } from './services/message.service';
+import { TeamService } from './services/team.service';
+import { VarService } from './services/var.service';
 
 @Component({
   selector: 'app-root',

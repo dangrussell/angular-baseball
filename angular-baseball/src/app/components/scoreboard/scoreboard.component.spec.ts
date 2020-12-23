@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
 import { ScoreboardComponent } from './scoreboard.component';
 
 describe('Component: Scoreboard', () => {

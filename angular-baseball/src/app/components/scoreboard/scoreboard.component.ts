@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-
+import { Component, Input, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { GameInterface } from './../../interfaces/game';
+
 @Component({
   selector: 'app-scoreboard',
   templateUrl: './scoreboard.component.html',

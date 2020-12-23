@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
 import { LineupComponent } from './lineup.component';
 
 describe('Component: Lineup', () => {

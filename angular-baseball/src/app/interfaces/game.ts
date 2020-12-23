@@ -5,11 +5,13 @@ export interface InningHalfInterface {
   outs: number;
   runs: number;
 }
+
 export interface InningInterface {
   num: number;
   top: InningHalfInterface;
   bot: InningHalfInterface;
 }
+
 export interface GameInterface {
   final: boolean;
   pitches: number;

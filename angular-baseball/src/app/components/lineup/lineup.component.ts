@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Team, TeamService } from '../../services/team.service';
 import { VarService } from './../../services/var.service';
-import { TeamService, Team } from '../../services/team.service';
 
 @Component({
   selector: 'app-lineup',

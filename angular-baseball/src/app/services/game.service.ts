@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-
-import { VarService } from './var.service';
-import { TeamService, Team } from './team.service';
-import { PlayerService, Player } from './player.service';
-import { MessageService } from './message.service';
 import { Players } from '../interfaces/player';
+import { MessageService } from './message.service';
+import { Player, PlayerService } from './player.service';
+import { Team, TeamService } from './team.service';
+import { VarService } from './var.service';
 
 class PlateAppearance {
   balls: number;

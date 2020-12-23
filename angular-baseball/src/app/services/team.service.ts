@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { Player, PlayerService } from './player.service';
 
 export class Team {

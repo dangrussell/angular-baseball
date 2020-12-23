@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
 import { VarService } from './../services/var.service';
 
 @Pipe({
