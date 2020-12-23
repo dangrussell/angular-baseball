@@ -42,7 +42,6 @@
     "@types/jasminewd2": "^2.0.8",
     "@types/node": "^12.19.8",
     "@typescript-eslint/eslint-plugin": "4.3.0",
-    "@typescript-eslint/eslint-plugin-tslint": "^4.9.0",
     "@typescript-eslint/parser": "4.3.0",
     "codelyzer": "^6.0.1",
     "eslint": "^7.6.0",
