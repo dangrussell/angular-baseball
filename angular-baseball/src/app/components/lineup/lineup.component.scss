@@ -6,3 +6,10 @@
   width: 100%;
 }
 
+.player {
+  background-color: white;
+}
+
+.player.is-up {
+  background-color: yellow;
+}
