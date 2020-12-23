@@ -10,3 +10,4 @@ coverage
 **/*.json
 **/*.scss
 test.ts
+karma.conf.js
