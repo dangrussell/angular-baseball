@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { LineupComponent } from './lineup.component';
 
@@ -7,9 +8,11 @@ describe('Component: Lineup', () => {
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      declarations: [ LineupComponent ]
-    })
-    .compileComponents();
+      imports: [
+        HttpClientTestingModule,
+      ],
+      declarations: [LineupComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

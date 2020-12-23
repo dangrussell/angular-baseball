@@ -27,18 +27,13 @@ describe('Component: App', () => {
   } as any;
   */
 
-  const varService = new VarService();
-  const playerService = TestBed.inject(PlayerService);
-  const teamService = new TeamService(playerService);
-  const messageService = TestBed.inject(MessageService);
-  const gameService = new GameService(varService, teamService, playerService, messageService);
-
   let component: AppComponent;
-
   let fixture: ComponentFixture<AppComponent>;
   let app: AppComponent;
 
   beforeEach(waitForAsync(() => {
+
+
     void TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
@@ -53,12 +48,19 @@ describe('Component: App', () => {
         MessageService
       ]
     }).compileComponents();
+  }));
+
+  beforeEach(() => {
+    const varService = new VarService();
+    const playerService = TestBed.inject(PlayerService);
+    const teamService = new TeamService(playerService);
+    const messageService = TestBed.inject(MessageService);
+    const gameService = new GameService(varService, teamService, playerService, messageService);
 
     component = new AppComponent(varService, gameService, teamService, messageService);
-
     fixture = TestBed.createComponent(AppComponent);
     app = fixture.debugElement.componentInstance as AppComponent;
-  }));
+  });
 
   it('should calculate 1 + 1 correctly', () => {
     void expect(1 + 1).toEqual(2);
