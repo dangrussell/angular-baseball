@@ -7,6 +7,7 @@ export class Player {
   name: string;
   position: number;
   hits: number;
+  PA: number;
   AB: number;
   battingorder: number;
   team: number;
@@ -24,7 +25,7 @@ export class PlayerService {
 
   players: Players;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public getPlayers(): Observable<Players> {
     return this.http.get<Players>(this.playersUrl);

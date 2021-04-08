@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Player } from 'src/app/services/player.service';
 
 @Component({
@@ -6,13 +6,8 @@ import { Player } from 'src/app/services/player.service';
   templateUrl: './lineup-player.component.html',
   styleUrls: ['./lineup-player.component.scss']
 })
-export class LineupPlayerComponent implements OnInit {
+export class LineupPlayerComponent {
 
   @Input() player: Player;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

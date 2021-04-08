@@ -1,9 +1,8 @@
+import { VarService } from './var.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { InningHalfInterface, InningInterface } from '../interfaces/game';
 import { Message, Messages } from '../interfaces/message';
-
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,9 @@ export class MessageService {
 
   messages: Messages;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private varService: VarService) {
     this.getMessages().subscribe(
       (fetchedData: Messages) => this.messages = {
         ...fetchedData
@@ -37,13 +38,14 @@ export class MessageService {
     this.pitchResult += args.join(' ') + '<br /><br />';
   }
 
-  switchSides(ih: InningHalfInterface, i: InningInterface, o: string, messagekind = 'switchSides'): void {
+  switchSides(toporbot: string, i: number, messagekind = 'switchSides'): void {
     let message = this.randMessage(messagekind);
-    let ihtext = ih.toporbot;
-    if (ih.toporbot === 'bot') {
+    let ihtext = toporbot;
+    if (toporbot === 'bot') {
       ihtext = 'bottom';
     }
-    message += '<br />We head to the ' + ihtext + ' of the ' + i.num.toString() + o + '.';
+    const ordinal = this.varService.ordinal(i);
+    message += '<br />We head to the ' + ihtext + ' of the ' + i.toString() + ordinal + '.';
     this.pitchResult += message;
   }
 

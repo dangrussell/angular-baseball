@@ -6,7 +6,7 @@ import { VarService } from './../services/var.service';
 })
 export class PositionAbbreviationPipe implements PipeTransform {
 
-  constructor(public varService: VarService){}
+  constructor(public varService: VarService) { }
 
   transform(positionNum: number): string {
     const position = this.varService.positions.find(el => el.num === positionNum);

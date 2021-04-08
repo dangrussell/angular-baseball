@@ -1,15 +1,14 @@
 <table class="table scoreboard">
   <colgroup>
     <col>
-    <col span="{{gameInnings.length}}">
+    <col span="{{ gameInnings.length }}">
     <col span="3">
   </colgroup>
   <thead>
     <tr>
       <th></th>
-      <th scope="col" *ngFor="let i of gameInnings">
-        <em *ngIf="gameInningCurrent === i">{{i.num}}</em>
-        <span *ngIf="gameInningCurrent !== i">{{i.num}}</span>
+      <th scope="col" *ngFor="let i of gameInnings" [ngClass]="{ 'currentInning': isCurrentInning(i.num) }">
+        <span>{{ i.num }}</span>
       </th>
       <th id="scoreboard-runs">R</th>
       <th id="scoreboard-hits">H</th>
@@ -18,18 +17,18 @@
   </thead>
   <tbody>
     <tr>
-      <th col="row">{{gameTeamAway.name}}</th>
-      <td *ngFor="let i of gameInnings">{{i.top.runs}}</td>
-      <th scope="row" class="font-weight-bold">{{gameTeamAway.getRuns()}}</th>
-      <th scope="row" class="font-weight-bold">{{gameTeamAway.getHits()}}</th>
-      <th scope="row" class="font-weight-bold">{{gameTeamAway.getErrors()}}</th>
+      <th col="row" [ngClass]="{ 'currentTeam': game.getInningHalfCurrent().toporbot === 'top' }">{{ gameTeamAway.name }}</th>
+      <td *ngFor="let i of gameInnings">{{ i.top.getRuns() !== undefined ? i.top.getRuns().toString() : '&nbsp;' }}</td>
+      <th scope="row" class="font-weight-bold">{{ gameTeamAway.getRuns() }}</th>
+      <th scope="row" class="font-weight-bold">{{ gameTeamAway.getHits() }}</th>
+      <th scope="row" class="font-weight-bold">{{ gameTeamAway.getErrors() }}</th>
     </tr>
     <tr>
-      <th col="row">{{gameTeamHome.name}}</th>
-      <td *ngFor="let i of gameInnings">{{i.bot.runs}}</td>
-      <th scope="row" class="font-weight-bold">{{gameTeamHome.getRuns()}}</th>
-      <th scope="row" class="font-weight-bold">{{gameTeamHome.getHits()}}</th>
-      <th scope="row" class="font-weight-bold">{{gameTeamHome.getErrors()}}</th>
+      <th col="row" [ngClass]="{ 'currentTeam': game.getInningHalfCurrent().toporbot === 'bot' }">{{ gameTeamHome.name }}</th>
+      <td *ngFor="let i of gameInnings">{{ i.bot.getRuns() !== undefined ? i.bot.getRuns().toString() : '&nbsp;' }}</td>
+      <th scope="row" class="font-weight-bold">{{ gameTeamHome.getRuns() }}</th>
+      <th scope="row" class="font-weight-bold">{{ gameTeamHome.getHits() }}</th>
+      <th scope="row" class="font-weight-bold">{{ gameTeamHome.getErrors() }}</th>
     </tr>
   </tbody>
 </table>

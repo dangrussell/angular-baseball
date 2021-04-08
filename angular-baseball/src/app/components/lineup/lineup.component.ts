@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Player } from 'src/app/services/player.service';
+import { GameService } from '../../services/game.service';
 import { Team, TeamService } from '../../services/team.service';
 import { VarService } from './../../services/var.service';
 
@@ -23,6 +24,7 @@ export class LineupComponent implements OnInit {
   constructor(
     public varService: VarService,
     public teamService: TeamService,
+    private gameService: GameService,
   ) { }
 
   ngOnInit(): void {
@@ -31,6 +33,11 @@ export class LineupComponent implements OnInit {
       this.teamName = this.team.name;
       this.teamPlayers = this.team.players;
     }
+  }
+
+  public isUp(player: Player): boolean {
+    const playerUp: Player = this.gameService.getBatterUp();
+    return player === playerUp;
   }
 
 }
