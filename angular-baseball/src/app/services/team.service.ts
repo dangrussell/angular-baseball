@@ -19,18 +19,18 @@ export class Team {
     teamName: string,
     teamIsHome: boolean,
     teamPlayers: Player[]) {
-      this.runs = 0;
-      this.hits = {
-        singles: 0,
-        doubles: 0,
-        triples: 0,
-        homeruns: 0,
-      };
-      this.errors = 0;
-      this.players = teamPlayers;
-      this.isHome = teamIsHome;
-      this.name = teamName;
-      this.nowBatting = 1;
+    this.runs = 0;
+    this.hits = {
+      singles: 0,
+      doubles: 0,
+      triples: 0,
+      homeruns: 0,
+    };
+    this.errors = 0;
+    this.players = teamPlayers;
+    this.isHome = teamIsHome;
+    this.name = teamName;
+    this.nowBatting = 1;
   }
 
   getRuns(): number {
