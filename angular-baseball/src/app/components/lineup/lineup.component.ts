@@ -11,6 +11,7 @@ import { VarService } from './../../services/var.service';
   providers: [
     VarService,
     TeamService,
+    GameService,
   ]
 })
 export class LineupComponent implements OnInit {

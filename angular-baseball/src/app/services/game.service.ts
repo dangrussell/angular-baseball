@@ -118,8 +118,6 @@ export class Inning {
 
     return topOuts + botOuts;
   }
-
-
 }
 
 export class Game {

@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Game, Inning } from '../../services/game.service';
+import { Component, OnInit } from '@angular/core';
+import { GameService, Game, Inning } from '../../services/game.service';
 import { Team } from '../../services/team.service';
 
 @Component({
@@ -9,20 +9,26 @@ import { Team } from '../../services/team.service';
 })
 export class ScoreboardComponent implements OnInit {
 
-  @Input() game: Game;
+  game: Game;
 
   gameInnings: Inning[];
   gameTeamAway: Team;
   gameTeamHome: Team;
 
+  constructor(
+    private gameService: GameService,
+  ) {
+    this.game = this.gameService.game;
+  }
+
   ngOnInit(): void {
-    this.gameInnings = this.game.getInnings();
-    this.gameTeamAway = this.game.getTeamAway();
-    this.gameTeamHome = this.game.getTeamHome();
+    this.gameInnings = this.gameService.game.getInnings();
+    this.gameTeamAway = this.gameService.game.getTeamAway();
+    this.gameTeamHome = this.gameService.game.getTeamHome();
   }
 
   public isCurrentInning(inning: number): boolean {
-    return this.game.getInningCurrent().num === inning;
+    return this.gameService.game.getInningCurrent().num === inning;
   }
 
 }
