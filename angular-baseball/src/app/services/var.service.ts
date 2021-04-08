@@ -80,8 +80,6 @@ export class VarService {
     }
   ];
 
-  constructor() { }
-
   public rand(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
