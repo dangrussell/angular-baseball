@@ -8,7 +8,6 @@ import { LineupComponent } from './components/lineup/lineup.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { httpInterceptorProviders } from './http-interceptors';
 import { PositionAbbreviationPipe } from './pipes/position-abbreviation.pipe';
-import { IsUpPipe } from './pipes/is-up.pipe';
 
 @NgModule({
   declarations: [
@@ -17,7 +16,6 @@ import { IsUpPipe } from './pipes/is-up.pipe';
     LineupComponent,
     LineupPlayerComponent,
     PositionAbbreviationPipe,
-    IsUpPipe,
   ],
   imports: [
     BrowserModule,

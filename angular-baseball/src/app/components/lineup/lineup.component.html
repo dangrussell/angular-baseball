@@ -1,13 +1,13 @@
-<div class="col lineup-card lineup-card-{{homeAwayText}} justify-content-center" id="lineup-{{homeAwayText}}">
+<div class="col lineup-card lineup-card-{{ homeAwayText }} justify-content-center" id="lineup-{{ homeAwayText }}">
   <table>
     <thead>
       <tr>
-        <th colspan="4">{{teamName}}</th>
+        <th colspan="4">{{ teamName }}</th>
       </tr>
     </thead>
     <tbody>
       <ng-container *ngFor="let player of teamPlayers">
-        <tr app-lineup-player [player]="player" class="player" [ngClass]="{'is-up': player | isUp}"></tr>
+        <tr app-lineup-player [player]="player" class="player" [ngClass]="{ 'is-up': isUp(player) }"></tr>
       </ng-container>
     </tbody>
   </table>
