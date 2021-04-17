@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
 
+export interface Position {
+  num: number;
+  name: string;
+  abbreviation: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -32,7 +38,7 @@ export class VarService {
 
   INNINGS = 9;
 
-  positions = [
+  positions: Position[] = [
     {
       num: 1,
       name: 'pitcher',
