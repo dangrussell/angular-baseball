@@ -14,12 +14,12 @@ export class VarService {
   title = 'Angular Baseball';
   titleHTML = '<em><strong>ANGULAR</strong>Baseball</em>';
 
-  /* Uses 2018 MLB totals */
-  MLBHITS = 41019;
-  MLBHR = 5585;
-  MLB3B = 847;
-  MLB2B = 8264;
-  // MLB1B = this.MLBHITS - this.MLB2B - this.MLB3B - this.MLBHR; // 26323
+  /* Uses 2019 MLB totals */
+  MLBHITS = 42039;
+  MLBHR = 6776;
+  MLB3B = 785;
+  MLB2B = 8531;
+  // MLB1B = this.MLBHITS - this.MLB2B - this.MLB3B - this.MLBHR;
 
   // ODDS1B = (this.MLB1B / this.MLBHITS) * 100;
   ODDS2B = (this.MLB2B / this.MLBHITS) * 100;
