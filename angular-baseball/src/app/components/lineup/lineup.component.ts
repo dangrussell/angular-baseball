@@ -8,11 +8,6 @@ import { VarService } from './../../services/var.service';
   selector: 'app-lineup',
   templateUrl: './lineup.component.html',
   styleUrls: ['./lineup.component.scss'],
-  providers: [
-    VarService,
-    TeamService,
-    GameService,
-  ]
 })
 export class LineupComponent implements OnInit {
 
