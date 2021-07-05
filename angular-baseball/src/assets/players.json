@@ -4,109 +4,127 @@
       "name": "Cap Framer",
       "position": 2,
       "battingorder": 1,
-      "team": 0
+      "team": 0,
+      "contact": 60
     },
     {
       "name": "Lefty Baggs",
       "position": 3,
       "battingorder": 2,
-      "team": 0
+      "team": 0,
+      "contact": 80
     },
     {
       "name": "Ramón Manos",
       "position": 4,
       "battingorder": 3,
-      "team": 0
+      "team": 0,
+      "contact": 75
     },
     {
       "name": "Trip Rounding",
       "position": 5,
       "battingorder": 4,
-      "team": 0
+      "team": 0,
+      "contact": 70
     },
     {
       "name": "I.C. Rodríguez",
       "position": 6,
       "battingorder": 5,
-      "team": 0
+      "team": 0,
+      "contact": 64
     },
     {
       "name": "Mickey Flenderson",
       "position": 7,
       "battingorder": 6,
-      "team": 0
+      "team": 0,
+      "contact": 50
     },
     {
       "name": "Niels Giffey, Jr.",
       "position": 8,
       "battingorder": 7,
-      "team": 0
+      "team": 0,
+      "contact": 49
     },
     {
       "name": "Barry Strasberg",
       "position": 9,
       "battingorder": 8,
-      "team": 0
+      "team": 0,
+      "contact": 40
     },
     {
       "name": "Dewey Doctor",
       "position": 1,
       "battingorder": 9,
-      "team": 0
+      "team": 0,
+      "contact": 20
     },
     {
       "name": "Mitt Paddington",
       "position": 2,
       "battingorder": 1,
-      "team": 1
+      "team": 1,
+      "contact": 80
     },
     {
       "name": "Stretch Scooply",
       "position": 3,
       "battingorder": 2,
-      "team": 1
+      "team": 1,
+      "contact": 79
     },
     {
       "name": "Ecky Davidstein",
       "position": 4,
       "battingorder": 3,
-      "team": 1
+      "team": 1,
+      "contact": 65
     },
     {
       "name": "Rivers Corning",
       "position": 5,
       "battingorder": 4,
-      "team": 1
+      "team": 1,
+      "contact": 40
     },
     {
       "name": "Rip Calvin",
       "position": 6,
       "battingorder": 5,
-      "team": 1
+      "team": 1,
+      "contact": 47
     },
     {
       "name": "Wally Munster",
       "position": 7,
       "battingorder": 6,
-      "team": 1
+      "team": 1,
+      "contact": 39
     },
     {
       "name": "Leap Parker",
       "position": 8,
       "battingorder": 7,
-      "team": 1
+      "team": 1,
+      "contact": 72
     },
     {
       "name": "Yoshi Konami",
       "position": 9,
       "battingorder": 8,
-      "team": 1
+      "team": 1,
+      "contact": 50
     },
     {
       "name": "José Pelota",
       "position": 1,
       "battingorder": 9,
-      "team": 1
+      "team": 1,
+      "contact": 27
     }
   ]
 }

@@ -11,6 +11,7 @@ export class Player {
   AB: number;
   battingorder: number;
   team: number;
+  contact: number; // uses 80-20 scale
 }
 
 @Injectable({
