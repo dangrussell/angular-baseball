@@ -453,6 +453,10 @@ export class AppComponent implements OnInit {
       contact = this.varService.ZCONTACT;
     }
 
+    contact = contact * (1 + (this.gameService.getBatterUp().contact - 50) / 100);
+
+    console.warn('SWING! Contact chance = ', contact);
+
     // this.messageService.message('swing');
     this.gameService.game.swings++;
 
