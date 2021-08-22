@@ -8,6 +8,7 @@ import { LineupComponent } from './components/lineup/lineup.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { httpInterceptorProviders } from './http-interceptors';
 import { PositionAbbreviationPipe } from './pipes/position-abbreviation.pipe';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { PositionAbbreviationPipe } from './pipes/position-abbreviation.pipe';
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    StoreModule.forRoot({}, {})
   ],
   providers: [
     httpInterceptorProviders
