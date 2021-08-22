@@ -1,4 +1,6 @@
+import { LocationStrategy } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MockLocationStrategy } from '@angular/common/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ScoreboardComponent } from './scoreboard.component';
 
@@ -11,7 +13,10 @@ describe('Component: Scoreboard', () => {
       imports: [
         HttpClientTestingModule,
       ],
-      declarations: [ScoreboardComponent]
+      declarations: [ScoreboardComponent],
+      providers: [
+        { provide: LocationStrategy, useClass: MockLocationStrategy },
+      ],
     }).compileComponents();
   }));
 

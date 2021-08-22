@@ -26,13 +26,16 @@ import { pitchReducer } from './reducers/pitch.reducer';
     HttpClientModule,
     AppRoutingModule,
     StoreModule.forRoot({ pitch: pitchReducer }),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
   ],
   providers: [
-    httpInterceptorProviders
+    httpInterceptorProviders,
   ],
   bootstrap: [
-    AppComponent
-  ]
+    AppComponent,
+  ],
+  exports: [
+    AppComponent,
+  ],
 })
 export class AppModule { }

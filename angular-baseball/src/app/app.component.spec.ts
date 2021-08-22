@@ -1,7 +1,11 @@
+import { LocationStrategy } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MockLocationStrategy } from '@angular/common/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { AppComponent } from './app.component';
+import { LineupComponent } from './components/lineup/lineup.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { GameService } from './services/game.service';
 import { MessageService } from './services/message.service';
@@ -31,9 +35,9 @@ describe('Component: App', () => {
   let fixture: ComponentFixture<AppComponent>;
   let app: AppComponent;
 
+  const initialState: number = 0;
+
   beforeEach(waitForAsync(() => {
-
-
     void TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
@@ -41,23 +45,27 @@ describe('Component: App', () => {
       ],
       declarations: [
         AppComponent,
+        LineupComponent,
         ScoreboardComponent,
       ],
       providers: [
         PlayerService,
-        MessageService
-      ]
+        MessageService,
+        { provide: LocationStrategy, useClass: MockLocationStrategy },
+        provideMockStore({ initialState }),
+      ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    const varService = new VarService();
-    const playerService = TestBed.inject(PlayerService);
-    const teamService = new TeamService(playerService);
-    const messageService = TestBed.inject(MessageService);
-    const gameService = new GameService(varService, teamService, playerService, messageService);
+    const varService: VarService = new VarService();
+    const playerService: PlayerService = TestBed.inject(PlayerService);
+    const teamService: TeamService = new TeamService(playerService);
+    const messageService: MessageService = TestBed.inject(MessageService);
+    const gameService: GameService = new GameService(varService, teamService, playerService, messageService);
+    const store: MockStore<{ pitch: number }> = TestBed.inject(MockStore);
 
-    component = new AppComponent(varService, gameService, teamService, messageService);
+    component = new AppComponent(varService, gameService, teamService, messageService, store);
     fixture = TestBed.createComponent(AppComponent);
     app = fixture.debugElement.componentInstance as AppComponent;
   });
