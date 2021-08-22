@@ -51,10 +51,10 @@ export class AppComponent implements OnInit {
   }
 
   public pitch(pitches = 1): void {
-    this.store.dispatch(pitch({ pitches }));
-
     for (let p = 1; p <= pitches; p++) {
       if (this.gameService.game.final === false) {
+        this.store.dispatch(pitch());
+
         this.messageService.pitchResult = ''; // clear pitch result
 
         this.gameService.game.pitches++;

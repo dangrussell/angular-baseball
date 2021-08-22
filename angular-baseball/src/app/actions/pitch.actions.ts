@@ -1,6 +1,3 @@
-import { createAction, props } from '@ngrx/store';
+import { createAction } from '@ngrx/store';
 
-export const pitch = createAction(
-  '[Pitch] Pitch',
-  props<{ pitches: number }>()
-);
+export const pitch = createAction('[Pitch] Pitch');

@@ -1,7 +1,7 @@
-import { createReducer, on } from '@ngrx/store';
+import { Action, createReducer, on } from '@ngrx/store';
 import { pitch } from '../actions/pitch.actions';
 
-export const initialState = 0;
+export const initialState: number = 0;
 
 const _pitchReducer = createReducer(
   initialState,
@@ -10,6 +10,6 @@ const _pitchReducer = createReducer(
   }),
 );
 
-export function pitchReducer(state, action) {
+export function pitchReducer(state: number, action: Action) {
   return _pitchReducer(state, action);
 }
