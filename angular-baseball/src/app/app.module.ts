@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { StoreModule } from '@ngrx/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LineupPlayerComponent } from './components/lineup/lineup-player/lineup-player.component';
@@ -8,7 +9,7 @@ import { LineupComponent } from './components/lineup/lineup.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { httpInterceptorProviders } from './http-interceptors';
 import { PositionAbbreviationPipe } from './pipes/position-abbreviation.pipe';
-import { StoreModule } from '@ngrx/store';
+import { pitchReducer } from './reducers/pitch.reducer';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,7 @@ import { StoreModule } from '@ngrx/store';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {})
+    StoreModule.forRoot({ pitch: pitchReducer })
   ],
   providers: [
     httpInterceptorProviders

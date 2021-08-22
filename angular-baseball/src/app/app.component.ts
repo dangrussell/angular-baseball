@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { pitch } from './actions/pitch.actions';
 import { GameService } from './services/game.service';
 import { MessageService } from './services/message.service';
 import { Player } from './services/player.service';
@@ -29,12 +32,17 @@ export class AppComponent implements OnInit {
 
   pitchOutput = '';
 
+  pitch$: Observable<number>;
+
   constructor(
     public varService: VarService,
     public gameService: GameService,
     public teamService: TeamService,
     public messageService: MessageService,
-  ) { }
+    private store: Store<{ pitch: number }>
+  ) {
+    this.pitch$ = store.select('pitch');
+  }
 
   ngOnInit(): void {
     this.showbuttons = true;
@@ -43,6 +51,8 @@ export class AppComponent implements OnInit {
   }
 
   public pitch(pitches = 1): void {
+    this.store.dispatch(pitch({ pitches }));
+
     for (let p = 1; p <= pitches; p++) {
       if (this.gameService.game.final === false) {
         this.messageService.pitchResult = ''; // clear pitch result
