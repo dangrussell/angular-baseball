@@ -33,15 +33,15 @@ export class Team {
     this.nowBatting = 1;
   }
 
-  getRuns(): number {
+  getTeamRuns(): number {
     return this.runs;
   }
 
-  getHits(): number {
+  getTeamHits(): number {
     return this.hits.singles + this.hits.doubles + this.hits.triples + this.hits.homeruns;
   }
 
-  getErrors(): number {
+  getTeamErrors(): number {
     return this.errors;
   }
 
@@ -53,7 +53,7 @@ export class Team {
     }
   }
 
-  addHit(hit: string): void {
+  addTeamHit(hit: string): void {
     this.hits[hit]++;
   }
 }
@@ -62,14 +62,19 @@ export class Team {
 })
 export class TeamService {
 
-  teamAway = new Team('Shelby Villains', false, this.playerService.teamAwayPlayers);
-  teamHome = new Team('Hartford Homers', true, this.playerService.teamHomePlayers);
-
-  teams = {
-    away: this.teamAway,
-    home: this.teamHome
+  public teams: {
+    away: Team;
+    home: Team;
   };
 
-  constructor(public playerService: PlayerService) { }
+  private teamAway = new Team('Shelby Villains', false, this.playerService.teamAwayPlayers);
+  private teamHome = new Team('Hartford Homers', true, this.playerService.teamHomePlayers);
+
+  constructor(public playerService: PlayerService) {
+    this.teams = {
+      away: this.teamAway,
+      home: this.teamHome
+    };
+  }
 
 }

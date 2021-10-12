@@ -7,8 +7,8 @@
   <thead>
     <tr>
       <th></th>
-      <th scope="col" *ngFor="let i of gameInnings" [ngClass]="{ 'currentInning': isCurrentInning(i.num) }">
-        <span>{{ i.num }}</span>
+      <th scope="col" *ngFor="let inning of gameInnings" [ngClass]="{ 'currentInning': isCurrentInning(inning.num) }">
+        <span>{{ inning.num }}</span>
       </th>
       <th id="scoreboard-runs">R</th>
       <th id="scoreboard-hits">H</th>
@@ -18,17 +18,17 @@
   <tbody>
     <tr>
       <th col="row" [ngClass]="{ 'currentTeam': game.getInningHalfCurrent().toporbot === 'top' }">{{ gameTeamAway.name }}</th>
-      <td *ngFor="let i of gameInnings">{{ i.top.getRuns() !== undefined ? i.top.getRuns().toString() : '&nbsp;' }}</td>
-      <th scope="row" class="font-weight-bold">{{ gameTeamAway.getRuns() }}</th>
-      <th scope="row" class="font-weight-bold">{{ gameTeamAway.getHits() }}</th>
-      <th scope="row" class="font-weight-bold">{{ gameTeamAway.getErrors() }}</th>
+      <td *ngFor="let inning of gameInnings">{{ inning.top.getHalfInningRuns() !== undefined ? inning.top.getHalfInningRuns().toString() : '&nbsp;' }}</td>
+      <th scope="row" class="font-weight-bold">{{ gameTeamAway.getTeamRuns() }}</th>
+      <th scope="row" class="font-weight-bold">{{ gameTeamAway.getTeamHits() }}</th>
+      <th scope="row" class="font-weight-bold">{{ gameTeamAway.getTeamErrors() }}</th>
     </tr>
     <tr>
       <th col="row" [ngClass]="{ 'currentTeam': game.getInningHalfCurrent().toporbot === 'bot' }">{{ gameTeamHome.name }}</th>
-      <td *ngFor="let i of gameInnings">{{ i.bot.getRuns() !== undefined ? i.bot.getRuns().toString() : '&nbsp;' }}</td>
-      <th scope="row" class="font-weight-bold">{{ gameTeamHome.getRuns() }}</th>
-      <th scope="row" class="font-weight-bold">{{ gameTeamHome.getHits() }}</th>
-      <th scope="row" class="font-weight-bold">{{ gameTeamHome.getErrors() }}</th>
+      <td *ngFor="let inning of gameInnings">{{ inning.bot.getHalfInningRuns() !== undefined ? inning.bot.getHalfInningRuns().toString() : '&nbsp;' }}</td>
+      <th scope="row" class="font-weight-bold">{{ gameTeamHome.getTeamRuns() }}</th>
+      <th scope="row" class="font-weight-bold">{{ gameTeamHome.getTeamHits() }}</th>
+      <th scope="row" class="font-weight-bold">{{ gameTeamHome.getTeamErrors() }}</th>
     </tr>
   </tbody>
 </table>

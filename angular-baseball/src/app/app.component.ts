@@ -152,9 +152,9 @@ export class AppComponent implements OnInit {
   }
 
   private advanceRunners(outcome: string): void {
-    const firstRunner = this.gameService.game.situation.bases[1];
-    const secondRunner = this.gameService.game.situation.bases[2];
-    const thirdRunner = this.gameService.game.situation.bases[3];
+    const firstRunner: Player = this.gameService.game.situation.bases.getBase(1);
+    const secondRunner: Player = this.gameService.game.situation.bases.getBase(2);
+    const thirdRunner: Player = this.gameService.game.situation.bases.getBase(3);
 
     if (firstRunner && secondRunner && thirdRunner) { // bases loaded
       if (outcome === 'BB') {
@@ -408,10 +408,10 @@ export class AppComponent implements OnInit {
 
     this.messageService.message('hit');
 
-    const roll = this.varService.rand(0, 100);
+    const roll: number = this.varService.rand(0, 100);
 
     if (roll <= this.varService.ODDS3B) { // rarest
-      this.gameService.teamBatting().addHit('triples');
+      this.gameService.teamBatting().addTeamHit('triples');
       this.advanceRunners('3B');
       this.messageService.message('3B');
     } else if (roll <= this.varService.ODDSHR) { // second rarest
@@ -430,7 +430,7 @@ export class AppComponent implements OnInit {
   }
 
   private recordRuns(runs: number): void {
-    this.gameService.game.getInningHalfCurrent().addRuns(runs);
+    this.gameService.game.getInningHalfCurrent().addHalfInningRuns(runs);
 
     this.gameService.teamBatting().runs = this.gameService.teamBatting().runs + runs;
   }
