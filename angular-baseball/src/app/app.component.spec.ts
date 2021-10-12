@@ -35,7 +35,7 @@ describe('Component: App', () => {
   let fixture: ComponentFixture<AppComponent>;
   let app: AppComponent;
 
-  const initialState: number = 0;
+  const initialState = 0;
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
@@ -63,7 +63,7 @@ describe('Component: App', () => {
     const teamService: TeamService = new TeamService(playerService);
     const messageService: MessageService = TestBed.inject(MessageService);
     const gameService: GameService = new GameService(varService, teamService, playerService, messageService);
-    const store: MockStore<{ pitch: number }> = TestBed.inject(MockStore);
+    const store: MockStore<any> = TestBed.inject(MockStore);
 
     component = new AppComponent(varService, gameService, teamService, messageService, store);
     fixture = TestBed.createComponent(AppComponent);

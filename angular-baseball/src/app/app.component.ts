@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { pitch } from './actions/pitch.actions';
+import { selectPitchCount } from './selectors/pitch.selector';
 import { GameService } from './services/game.service';
 import { MessageService } from './services/message.service';
 import { Player } from './services/player.service';
@@ -39,9 +40,9 @@ export class AppComponent implements OnInit {
     public gameService: GameService,
     public teamService: TeamService,
     public messageService: MessageService,
-    private store: Store<{ pitch: number }>
+    private store: Store,
   ) {
-    this.pitch$ = store.select('pitch');
+    this.pitch$ = this.store.select(selectPitchCount, pitch);
   }
 
   ngOnInit(): void {
