@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Players } from '../interfaces/player';
 import { MessageService } from './message.service';
 import { Player, PlayerService } from './player.service';
@@ -362,31 +363,33 @@ export class GameService {
   }
 
   public startGame(): void {
+    const players$: Observable<Players> = this.playerService.getPlayers();
+    players$.subscribe(
+      {
+        next: (response: Players) => {
+          this.playerService.players = {
+            ...response
+          };
 
-    this.playerService.getPlayers().subscribe(
-      (response: Players) => {
-        this.playerService.players = {
-          ...response
-        };
+          this.playerService.players.data.forEach((player: Player) => {
+            if (player.team === 0) {
+              this.playerService.teamAwayPlayers.push(player);
+            } else if (player.team === 1) {
+              this.playerService.teamHomePlayers.push(player);
+            }
 
-        this.playerService.players.data.forEach((player: Player) => {
-          if (player.team === 0) {
-            this.playerService.teamAwayPlayers.push(player);
-          } else if (player.team === 1) {
-            this.playerService.teamHomePlayers.push(player);
-          }
+            player.PA = 0;
+            player.AB = 0;
+            player.hits = 0;
+          });
+        },
+        error: (err: unknown) => console.error(err),
+        complete: () => {
+          console.log('Players fetched.');
 
-          player.PA = 0;
-          player.AB = 0;
-          player.hits = 0;
-        });
-      },
-      (err) => console.error(err),
-      () => {
-        console.log('Players fetched.');
-
-        this.setBatterUp();
-        // this.whereAreWe();
+          this.setBatterUp();
+          // this.whereAreWe();
+        }
       }
     );
   }
