@@ -1,4 +1,4 @@
-<tr class="lineup-player-tr" [ngClass]="{ 'is-up': isUp(player) }">
+<tr *ngIf="player" class="lineup-player-tr" [ngClass]="{ 'is-up': isUp(player) }">
   <td class="lineup-card-td">{{player.battingorder}}</td>
   <td class="lineup-card-td">{{player.position | positionAbbreviation}}</td>
   <td class="lineup-card-td">{{player.name}}</td>
