@@ -1,6 +1,8 @@
 <ng-container *ngIf="player">
-  <td class="lineup-card-td">{{player.battingorder}}</td>
-  <td class="lineup-card-td">{{player.position | positionAbbreviation}}</td>
-  <td class="lineup-card-td">{{player.name}}</td>
-  <td class="lineup-card-td">{{player.hits}}-{{player.AB}}</td>
+  <tr class="lineup-player-tr" [ngClass]="{ 'is-up': isUp(player) }">
+    <td class="lineup-card-td">{{player.battingorder}}</td>
+    <td class="lineup-card-td">{{player.position | positionAbbreviation}}</td>
+    <td class="lineup-card-td">{{player.name}}</td>
+    <td class="lineup-card-td">{{player.hits}}-{{player.AB}}</td>
+  </tr>
 </ng-container>

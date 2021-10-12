@@ -2,3 +2,11 @@
   border: 1px solid #000;
   padding: 1em;
 }
+
+.lineup-player-tr {
+  background-color: #fff;
+}
+
+.lineup-player-tr.is-up {
+  background-color: yellow;
+}
