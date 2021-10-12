@@ -26,13 +26,22 @@ module.exports = {
         node: true
       },
       extends: [
+        'plugin:@angular-eslint/recommended',
+        'plugin:@angular-eslint/ng-cli-compat',
+        'plugin:@angular-eslint/ng-cli-compat--formatting-add-on',
+        'plugin:@angular-eslint/template/process-inline-templates',
+        'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
-        'plugin:@typescript-eslint/recommended-requiring-type-checking'
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        'plugin:ngrx/recommended',
+        'plugin:rxjs/recommended'
       ],
       parser: '@typescript-eslint/parser',
       parserOptions: {
         project: [
+          'tsconfig.app.json',
           'tsconfig.eslint.json',
+          'tsconfig.spec.json',
           'e2e/tsconfig.eslint.json'
         ],
         sourceType: 'module'
@@ -240,7 +249,7 @@ module.exports = {
         'no-throw-literal': 'error',
         'no-trailing-spaces': 'error',
         'no-undef-init': 'error',
-        'no-underscore-dangle': 'allow',
+        'no-underscore-dangle': 0,
         'no-unsafe-finally': 'error',
         'no-unused-labels': 'error',
         'no-unused-vars': 'off',
