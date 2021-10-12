@@ -199,7 +199,7 @@ export class Game {
     return this.innings;
   }
 
-  getInningCurrent(): Inning {
+  public getInningCurrent(): Inning {
     // console.log('getInningCurrent');
     // console.log(this.innings);
     return this.innings.find((inning: Inning) => inning.isCurrent);
@@ -277,6 +277,10 @@ export class GameService {
     return nowBatting;
   }
 
+  public isTied(): boolean {
+    return this.teamService.teams.away.runs === this.teamService.teams.home.runs;
+  }
+
   public recordOut(): void {
     // this.game.outs++;
 
@@ -286,13 +290,15 @@ export class GameService {
 
     this.endPA();
 
-    if (
-      (this.game.getOuts() >= (3 * 2 * this.varService.INNINGS))
-      && (this.teamService.teams.away.runs !== this.teamService.teams.home.runs)
-    ) {
-      this.gameOver();
-    } else {
-      if (this.game.getInningHalfCurrent().getHalfInningOuts() === 3) {
+    if (this.game.getInningHalfCurrent().getHalfInningOuts() === 3) {
+      if (
+        // Last out of away team in last inning or later
+        (this.game.getInningCurrent().num >= this.varService.INNINGS)
+        && (!this.teamBatting().isHome)
+        && (!this.isTied())
+      ) {
+        this.gameOver();
+      } else {
         this.nextInningHalf();
         this.startPA();
       }
@@ -344,6 +350,17 @@ export class GameService {
     } else {
       return this.game.getTeamHome();
     }
+  }
+
+  public gameOver(): void {
+    this.messageService.message('game-over', 1);
+
+    if (this.teamService.teams.away.runs > this.teamService.teams.home.runs) {
+      this.messageService.message('winner-away', 0);
+    } else {
+      this.messageService.message('winner-home', 0);
+    }
+    this.game.final = true;
   }
 
   private dueUp(): void {
@@ -418,17 +435,6 @@ export class GameService {
     } else {
       return this.game.getTeamAway();
     }
-  }
-
-  private gameOver(): void {
-    this.messageService.message('game-over', 1);
-
-    if (this.teamService.teams.away.runs > this.teamService.teams.home.runs) {
-      this.messageService.message('winner-away', 0);
-    } else {
-      this.messageService.message('winner-home', 0);
-    }
-    this.game.final = true;
   }
 
 }

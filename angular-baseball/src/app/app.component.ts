@@ -433,6 +433,15 @@ export class AppComponent implements OnInit {
     this.gameService.game.getInningHalfCurrent().addHalfInningRuns(runs);
 
     this.gameService.teamBatting().runs = this.gameService.teamBatting().runs + runs;
+
+    if (
+      // Walk-off
+      (this.gameService.game.getInningCurrent().num >= this.varService.INNINGS)
+      && (this.gameService.teamBatting().isHome)
+      && (!this.gameService.isTied())
+    ) {
+      this.gameService.gameOver();
+    }
   }
 
   private inPlay(): void {
