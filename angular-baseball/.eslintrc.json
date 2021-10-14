@@ -3,6 +3,7 @@
     "ngrx"
   ],
   "extends": [
-    "plugin:ngrx/recommended"
+    "plugin:ngrx/recommended",
+    "plugin:ngrx/all"
   ]
 }
