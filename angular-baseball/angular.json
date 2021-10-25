@@ -126,5 +126,8 @@
       }
     }
   },
-  "defaultProject": "angular-baseball"
+  "defaultProject": "angular-baseball",
+  "cli": {
+    "packageManager": "yarn"
+  }
 }
