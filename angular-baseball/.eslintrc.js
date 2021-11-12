@@ -48,7 +48,8 @@ module.exports = {
       },
       plugins: [
         '@typescript-eslint',
-        '@angular-eslint'
+        '@angular-eslint',
+        'rxjs-angular'
       ],
       rules: {
         '@typescript-eslint/adjacent-overload-signatures': 'error',
@@ -266,6 +267,9 @@ module.exports = {
         ],
         radix: 'error',
         'require-await': 'off',
+        'rxjs-angular/prefer-async-pipe': 'error',
+        'rxjs-angular/prefer-composition': 'error',
+        'rxjs-angular/prefer-takeuntil': 'error',
         'space-before-function-paren': [
           'error',
           {
