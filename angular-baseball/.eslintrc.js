@@ -333,6 +333,16 @@ module.exports = {
         '@angular-eslint/template/no-positive-tabindex': 'warn',
         '@angular-eslint/template/use-track-by-function': 'off'
       }
+    },
+    {
+      files: ['*.js'],
+      env: {
+        browser: true,
+        node: true
+      },
+      extends: [
+        'eslint:recommended'
+      ],
     }
   ]
 };
