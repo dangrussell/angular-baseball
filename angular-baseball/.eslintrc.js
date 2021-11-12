@@ -301,6 +301,7 @@ module.exports = {
      */
     {
       files: ['*.html'],
+      parser: '@angular-eslint/template-parser',
       extends: [
         'plugin:@angular-eslint/template/recommended',
         'eslint:recommended'
