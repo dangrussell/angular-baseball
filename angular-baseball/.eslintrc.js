@@ -33,6 +33,7 @@ module.exports = {
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        'plugin:ngrx/all',
         'plugin:ngrx/recommended',
         'plugin:rxjs/recommended'
       ],
@@ -49,6 +50,7 @@ module.exports = {
       plugins: [
         '@typescript-eslint',
         '@angular-eslint',
+        'ngrx',
         'rxjs-angular'
       ],
       rules: {
