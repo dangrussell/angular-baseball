@@ -34,7 +34,7 @@ export class MessageService {
   }
 
   public log(...args: any[]): void {
-    console.log(...args);
+    console.log(...args.toString());
     this.pitchResult += args.join(' ') + '<br /><br />';
   }
 
