@@ -46,7 +46,7 @@
     "eslint": "^7.26.0",
     "eslint-plugin-import": "2.24.2",
     "eslint-plugin-jsdoc": "30.7.13",
-    "eslint-plugin-ngrx": "^1.46.3",
+    "eslint-plugin-ngrx": "^1.47.1",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-rxjs-angular": "^2.0.0",
     "jasmine-core": "~3.9.0",
