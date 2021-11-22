@@ -103,14 +103,14 @@ export class Inning {
   top: InningHalf;
   bot: InningHalf;
 
-  get isCurrent(): boolean {
-    return this.top.current || this.bot.current;
-  }
-
   constructor(num: number) {
     this.num = num;
     this.top = new InningHalf('top');
     this.bot = new InningHalf('bot');
+  }
+
+  get isCurrent(): boolean {
+    return this.top.current || this.bot.current;
   }
 
   public getInningOuts(): number {
