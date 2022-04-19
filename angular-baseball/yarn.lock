@@ -1691,17 +1691,17 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@ngrx/store-devtools@^13.0.1":
-  version "13.0.1"
-  resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-13.0.1.tgz#bd1c2e4de1195fae9785cf79a3e5bfb6d51a8b6b"
-  integrity sha512-iIdneTVMiyCWZKxaG7KPLTfrkCIKGrQ61W1ay0PhbqjZE7jgY/TRsp7OWai9WzBStxjU+gunEocEA7dPL0hYIQ==
+"@ngrx/store-devtools@^13.1.0":
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-13.1.0.tgz#2bea7d6e4e0e85f23062ff07068e4640f59abf70"
+  integrity sha512-HAF2q1qk7n0Q3rkHncdXIokGXbPFKWwmfhGFS9pnq63FScgPgHjNXSlPmwgycb+LqDvDR4C8f1HSbPhOb6I29w==
   dependencies:
     tslib "^2.0.0"
 
-"@ngrx/store@^13.0.1":
-  version "13.0.1"
-  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-13.0.1.tgz#85ad5335292d37f2554f9a16cdc80646e8eebee9"
-  integrity sha512-YCArklbrZNeFN9I2Ibvl+M8sgepwY36n1aGzyEL6R4iK6VWaqpJAwOIlQ+41qyztelallyzz5waQmCLa+OQ38w==
+"@ngrx/store@^13.1.0":
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-13.1.0.tgz#40665a09f673d64e9b6df3aed224ce51219151d3"
+  integrity sha512-2Phsd/CC5FcoS2VgC+Fo5VgfAUK3m7bjWTc8d6+h3UcoQpS3xyPnybGYifa/JYN1CFYmqypVDRWSMAgML2NU/A==
   dependencies:
     tslib "^2.0.0"
 
