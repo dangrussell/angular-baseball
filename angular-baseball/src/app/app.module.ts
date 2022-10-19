@@ -12,6 +12,7 @@ import { ScoreboardComponent } from './components/scoreboard/scoreboard.componen
 import { httpInterceptorProviders } from './http-interceptors';
 import { PositionAbbreviationPipe } from './pipes/position-abbreviation.pipe';
 import { pitchReducer } from './reducers/pitch.reducer';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { pitchReducer } from './reducers/pitch.reducer';
     AppRoutingModule,
     StoreModule.forRoot({ pitch: pitchReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    EffectsModule.forRoot([]),
   ],
   providers: [
     httpInterceptorProviders,
