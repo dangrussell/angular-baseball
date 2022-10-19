@@ -10,7 +10,7 @@ import { Team } from '../../services/team.service';
 export class ScoreboardComponent {
 
   constructor(
-    private gameService: GameService,
+    private readonly gameService: GameService,
   ) { }
 
   public get gameInnings(): Inning[] {

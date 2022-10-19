@@ -7,7 +7,6 @@ import { GameService } from './services/game.service';
 import { MessageService } from './services/message.service';
 import { PitchService } from './services/pitch.service';
 import { Player } from './services/player.service';
-import { TeamService } from './services/team.service';
 import { rand, VarService } from './services/var.service';
 
 type StrikeKind = 'looking' | 'swinging';
@@ -32,12 +31,11 @@ export class AppComponent implements OnInit {
   pitch$: Observable<number>;
 
   constructor(
-    public varService: VarService,
-    public gameService: GameService,
-    public teamService: TeamService,
-    public messageService: MessageService,
-    private pitchService: PitchService,
-    private store: Store,
+    private readonly varService: VarService,
+    public readonly gameService: GameService, // TODO: avoid using gameService in the template
+    private readonly messageService: MessageService,
+    private readonly pitchService: PitchService,
+    private readonly store: Store,
   ) {
     this.pitch$ = this.store.select(selectPitchCount, pitch);
   }

@@ -9,6 +9,7 @@ import { LineupComponent } from './components/lineup/lineup.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { GameService } from './services/game.service';
 import { MessageService } from './services/message.service';
+import { PitchService } from './services/pitch.service';
 import { PlayerService } from './services/player.service';
 import { TeamService } from './services/team.service';
 import { VarService } from './services/var.service';
@@ -64,8 +65,9 @@ describe('Component: App', () => {
     const messageService: MessageService = TestBed.inject(MessageService);
     const gameService: GameService = new GameService(varService, teamService, playerService, messageService);
     const store: MockStore<any> = TestBed.inject(MockStore);
+    const pitchService: PitchService = new PitchService(varService, store);
 
-    component = new AppComponent(varService, gameService, teamService, messageService, store);
+    component = new AppComponent(varService, gameService, messageService, pitchService, store);
     fixture = TestBed.createComponent(AppComponent);
     app = fixture.debugElement.componentInstance as AppComponent;
   });

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Player } from 'src/app/services/player.service';
-import { Team, TeamService } from '../../services/team.service';
-import { VarService } from './../../services/var.service';
+import { Team } from '../../services/team.service';
 
 @Component({
   selector: 'app-lineup',
@@ -15,11 +14,6 @@ export class LineupComponent implements OnInit {
   homeAwayText: string;
   teamName: string;
   teamPlayers: Player[];
-
-  constructor(
-    public varService: VarService,
-    public teamService: TeamService,
-  ) { }
 
   ngOnInit(): void {
     if (this.team) {

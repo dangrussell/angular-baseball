@@ -73,7 +73,9 @@ export class TeamService {
   private teamAway = new Team('Shelby Villains', false, this.playerService.teamAwayPlayers);
   private teamHome = new Team('Hartford Homers', true, this.playerService.teamHomePlayers);
 
-  constructor(public playerService: PlayerService) {
+  constructor(
+    private readonly playerService: PlayerService,
+  ) {
     this.teams = {
       away: this.teamAway,
       home: this.teamHome

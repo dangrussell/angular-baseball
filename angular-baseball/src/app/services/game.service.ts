@@ -248,10 +248,10 @@ export class GameService {
   public game: Game;
 
   constructor(
-    public varService: VarService,
-    public teamService: TeamService,
-    public playerService: PlayerService,
-    public messageService: MessageService,
+    private readonly varService: VarService,
+    private readonly teamService: TeamService,
+    private readonly playerService: PlayerService,
+    private readonly messageService: MessageService,
   ) {
     this.game = new Game(this.teamService.teams.away, this.teamService.teams.home, this.varService.INNINGS);
   }

@@ -12,7 +12,7 @@ export class LineupPlayerComponent {
   @Input() player: Player;
 
   constructor(
-    private gameService: GameService,
+    private readonly gameService: GameService,
   ) { }
 
   public isUp(player: Player): boolean {

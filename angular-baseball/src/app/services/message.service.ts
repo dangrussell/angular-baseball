@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Message, Messages } from '../interfaces/message';
-import { getOrdinal, VarService } from './var.service';
+import { getOrdinal } from './var.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +16,8 @@ export class MessageService {
   messages: Messages;
 
   constructor(
-    private http: HttpClient,
-    private varService: VarService) {
+    private readonly http: HttpClient,
+  ) {
     this.getMessages().subscribe(
       (fetchedData: Messages) => this.messages = {
         ...fetchedData

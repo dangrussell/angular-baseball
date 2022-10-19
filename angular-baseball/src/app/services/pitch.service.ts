@@ -10,7 +10,7 @@ import { rand, VarService } from './var.service';
 export class PitchService {
 
   constructor(
-    private varService: VarService,
+    private readonly varService: VarService,
     private readonly store: Store,
   ) { }
 

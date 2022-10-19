@@ -26,7 +26,9 @@ export class PlayerService {
 
   players: Players;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private readonly http: HttpClient,
+  ) { }
 
   public getPlayers(): Observable<Players> {
     return this.http.get<Players>(this.playersUrl);
