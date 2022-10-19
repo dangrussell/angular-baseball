@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { GameService, Game, Inning } from '../../services/game.service';
+import { Component } from '@angular/core';
+import { GameService, Inning } from '../../services/game.service';
 import { Team } from '../../services/team.service';
 
 @Component({
@@ -7,24 +7,26 @@ import { Team } from '../../services/team.service';
   templateUrl: './scoreboard.component.html',
   styleUrls: ['./scoreboard.component.scss'],
 })
-export class ScoreboardComponent implements OnInit {
-
-  game: Game;
-
-  gameInnings: Inning[];
-  gameTeamAway: Team;
-  gameTeamHome: Team;
+export class ScoreboardComponent {
 
   constructor(
     private gameService: GameService,
-  ) {
-    this.game = this.gameService.game;
+  ) { }
+
+  public get gameInnings(): Inning[] {
+    return this.gameService.game.getInnings();
   }
 
-  ngOnInit(): void {
-    this.gameInnings = this.gameService.game.getInnings();
-    this.gameTeamAway = this.gameService.game.getTeamAway();
-    this.gameTeamHome = this.gameService.game.getTeamHome();
+  public get toporbot(): string {
+    return this.gameService.game.getInningHalfCurrent().toporbot;
+  }
+
+  public get teamAway(): Team {
+    return this.gameService.game.getTeamAway();
+  }
+
+  public get teamHome(): Team {
+    return this.gameService.game.getTeamHome();
   }
 
   public isCurrentInning(inning: number): boolean {

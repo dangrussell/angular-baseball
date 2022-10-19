@@ -5,20 +5,18 @@ import { pitch } from './actions/pitch.actions';
 import { selectPitchCount } from './selectors/pitch.selector';
 import { GameService } from './services/game.service';
 import { MessageService } from './services/message.service';
+import { PitchService } from './services/pitch.service';
 import { Player } from './services/player.service';
 import { TeamService } from './services/team.service';
-import { VarService } from './services/var.service';
+import { rand, VarService } from './services/var.service';
+
+type StrikeKind = 'looking' | 'swinging';
+type PAOutcome = 'BB' | '1B' | '2B' | '3B' | 'HR';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [
-    VarService,
-    GameService,
-    TeamService,
-    MessageService,
-  ]
 })
 export class AppComponent implements OnInit {
 
@@ -26,8 +24,6 @@ export class AppComponent implements OnInit {
   titleHTML = this.varService.titleHTML;
 
   showbuttons = false;
-
-  pitchOutcome = 0;
 
   // game.innings[game.inning].top.runs = 0;
 
@@ -40,6 +36,7 @@ export class AppComponent implements OnInit {
     public gameService: GameService,
     public teamService: TeamService,
     public messageService: MessageService,
+    private pitchService: PitchService,
     private store: Store,
   ) {
     this.pitch$ = this.store.select(selectPitchCount, pitch);
@@ -53,7 +50,7 @@ export class AppComponent implements OnInit {
 
   public pitch(pitches = 1): void {
     for (let p = 1; p <= pitches; p++) {
-      if (this.gameService.game.final === false) {
+      if (!this.gameService.game.final) {
         this.store.dispatch(pitch());
 
         this.messageService.pitchResult = ''; // clear pitch result
@@ -61,33 +58,43 @@ export class AppComponent implements OnInit {
         this.gameService.game.pitches++;
         this.messageService.message('pitch');
 
-        let zone: boolean;
-
         // Inside strike zone?
-        this.pitchOutcome = this.varService.rand(1, 100);
-        if (this.pitchOutcome <= this.varService.ZONE) {
-          // Inside the zone
-          zone = true;
+        const inZone: boolean = rand(1, 100) <= this.varService.ZONE;
 
-          this.pitchOutcome = this.varService.rand(1, 100);
-          if (this.pitchOutcome <= this.varService.ZSWING) {
-            // Pitch swung on
-            this.swing(zone);
+        let didSwing: boolean;
+
+        if (inZone) {
+          didSwing = rand(1, 100) <= this.varService.ZSWING;
+        } else {
+          didSwing = rand(1, 100) <= this.varService.OSWING;
+        }
+
+        if (didSwing) {
+          this.messageService.message('swing');
+          this.gameService.game.swings++;
+
+          const madeContact: boolean = this.pitchService.swing(inZone, this.gameService.getBatterUp());
+          if (madeContact) {
+            // Contact!
+            if (inZone) {
+              this.messageService.message('swing-hit-strike');
+            } else {
+              this.messageService.message('swing-hit-ball');
+            }
+
+            this.inPlay();
           } else {
-            // Pitch taken
-            this.take(zone);
+            // Missed
+            this.recordStrike('swinging', inZone);
           }
         } else {
-          // Outside the zone
-          zone = false;
+          // Take
 
-          this.pitchOutcome = this.varService.rand(1, 100);
-          if (this.pitchOutcome <= this.varService.OSWING) {
-            // Pitch swung on
-            this.swing(zone);
+          if (inZone) {
+            this.recordStrike('looking');
           } else {
-            // Pitch taken
-            this.take(zone);
+            this.messageService.message('taken-ball');
+            this.recordBall();
           }
         }
 
@@ -99,33 +106,32 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private recordStrike(strikekind: string, zone?: boolean): void {
+  private recordStrike(strikeKind: StrikeKind, inZone?: boolean): void {
     this.gameService.game.strikes++;
 
     this.gameService.game.situation.pa.strike();
 
-    if (strikekind === 'looking') {
+    if (strikeKind === 'looking') {
       this.gameService.game.taken++;
       this.messageService.message('taken-strike');
-    }
-    if (strikekind === 'swinging') {
+    } else if (strikeKind === 'swinging') {
       this.gameService.game.misses++;
-      if (zone === false) {
-        this.messageService.message('swing-miss-ball');
-      } else if (zone === true) {
+      if (inZone) {
         this.messageService.message('swing-miss-strike');
+      } else {
+        this.messageService.message('swing-miss-ball');
       }
     }
 
     if (this.gameService.game.situation.pa.strikes === 3) {
-      this.recordK(strikekind);
+      this.recordK(strikeKind);
     }
   }
 
-  private recordK(strikekind: string): void {
-    if (strikekind === 'looking') {
+  private recordK(strikeKind: StrikeKind): void {
+    if (strikeKind === 'looking') {
       this.messageService.message('K-looking');
-    } else if (strikekind === 'swinging') {
+    } else if (strikeKind === 'swinging') {
       this.messageService.message('K-swinging');
     }
     this.gameService.game.K++;
@@ -151,46 +157,47 @@ export class AppComponent implements OnInit {
     this.gameService.endPA();
   }
 
-  private advanceRunners(outcome: string): void {
+  private advanceRunners(outcome: PAOutcome): void {
     const firstRunner: Player = this.gameService.game.situation.bases.getBase(1);
     const secondRunner: Player = this.gameService.game.situation.bases.getBase(2);
     const thirdRunner: Player = this.gameService.game.situation.bases.getBase(3);
+
+    let advanceBatterRunnerTo: number;
+    if (outcome === '2B') {
+      advanceBatterRunnerTo = 2;
+    } else if (outcome === '3B') {
+      advanceBatterRunnerTo = 3;
+    } else if (outcome === 'HR') {
+      advanceBatterRunnerTo = 4;
+    } else {
+      advanceBatterRunnerTo = 1; // outcome === 'BB' || outcome === '1B'
+    }
 
     if (firstRunner && secondRunner && thirdRunner) { // bases loaded
       if (outcome === 'BB') {
         this.advanceRunner(3, 4);
         this.advanceRunner(2, 3);
         this.advanceRunner(1, 2);
-        this.advanceRunner(0, 1);
-        return;
       }
       if (outcome === '1B') {
         this.advanceRunner(3, 4);
         this.advanceRunner(2, 4);
         this.advanceRunner(1, 2);
-        this.advanceRunner(0, 1);
-        return;
       }
       if (outcome === '2B') {
         this.advanceRunner(3, 4);
         this.advanceRunner(2, 4);
         this.advanceRunner(1, 3);
-        this.advanceRunner(0, 2);
-        return;
       }
       if (outcome === '3B') {
         this.advanceRunner(3, 4);
         this.advanceRunner(2, 4);
         this.advanceRunner(1, 4);
-        this.advanceRunner(0, 3);
-        return;
       }
       if (outcome === 'HR') {
         this.advanceRunner(3, 4);
         this.advanceRunner(2, 4);
         this.advanceRunner(1, 4);
-        this.advanceRunner(0, 4);
-        return;
       }
     }
 
@@ -198,32 +205,22 @@ export class AppComponent implements OnInit {
       if (outcome === 'BB') {
         this.advanceRunner(2, 3);
         this.advanceRunner(1, 2);
-        this.advanceRunner(0, 1);
-        return;
       }
       if (outcome === '1B') {
         this.advanceRunner(2, 4);
         this.advanceRunner(1, 2);
-        this.advanceRunner(0, 1);
-        return;
       }
       if (outcome === '2B') {
         this.advanceRunner(2, 4);
         this.advanceRunner(1, 3);
-        this.advanceRunner(0, 2);
-        return;
       }
       if (outcome === '3B') {
         this.advanceRunner(2, 4);
         this.advanceRunner(1, 4);
-        this.advanceRunner(0, 3);
-        return;
       }
       if (outcome === 'HR') {
         this.advanceRunner(2, 4);
         this.advanceRunner(1, 4);
-        this.advanceRunner(0, 4);
-        return;
       }
     }
 
@@ -231,173 +228,97 @@ export class AppComponent implements OnInit {
       if (outcome === 'BB') {
         // runner on 3rd doesn't advance
         this.advanceRunner(1, 2);
-        this.advanceRunner(0, 1);
-        return;
       }
       if (outcome === '1B') {
         this.advanceRunner(3, 4);
         this.advanceRunner(1, 2);
-        this.advanceRunner(0, 1);
-        return;
       }
       if (outcome === '2B') {
         this.advanceRunner(3, 4);
         this.advanceRunner(1, 3);
-        this.advanceRunner(0, 2);
-        return;
       }
       if (outcome === '3B') {
         this.advanceRunner(3, 4);
         this.advanceRunner(1, 4);
-        this.advanceRunner(0, 3);
-        return;
       }
       if (outcome === 'HR') {
         this.advanceRunner(3, 4);
         this.advanceRunner(1, 4);
-        this.advanceRunner(0, 4);
-        return;
       }
     }
 
     if (!firstRunner && secondRunner && thirdRunner) { // 2 on, second & third
-      if (outcome === 'BB') {
-        // runners on 2nd & 3rd don't advance
-        this.advanceRunner(0, 1);
-        return;
-      }
+      // runners on 2nd & 3rd don't advance on BB
       if (outcome === '1B') {
         this.advanceRunner(3, 4);
         this.advanceRunner(2, 4);
-        this.advanceRunner(0, 1);
-        return;
       }
       if (outcome === '2B') {
         this.advanceRunner(3, 4);
         this.advanceRunner(2, 4);
-        this.advanceRunner(0, 2);
-        return;
       }
       if (outcome === '3B') {
         this.advanceRunner(3, 4);
         this.advanceRunner(2, 4);
-        this.advanceRunner(0, 3);
-        return;
       }
       if (outcome === 'HR') {
         this.advanceRunner(3, 4);
         this.advanceRunner(2, 4);
-        this.advanceRunner(0, 4);
-        return;
       }
     }
 
     if (firstRunner && !secondRunner && !thirdRunner) { // 1 on, first
       if (outcome === 'BB') {
         this.advanceRunner(1, 2);
-        this.advanceRunner(0, 1);
-        return;
       }
       if (outcome === '1B') {
         this.advanceRunner(1, 2);
-        this.advanceRunner(0, 1);
-        return;
       }
       if (outcome === '2B') {
         this.advanceRunner(1, 3);
-        this.advanceRunner(0, 2);
-        return;
       }
       if (outcome === '3B') {
         this.advanceRunner(1, 4);
-        this.advanceRunner(0, 3);
-        return;
       }
       if (outcome === 'HR') {
         this.advanceRunner(1, 4);
-        this.advanceRunner(0, 4);
-        return;
       }
     }
 
     if (!firstRunner && secondRunner && !thirdRunner) { // 1 on, second
-      if (outcome === 'BB') {
-        // runner on 2nd doesn't advance
-        this.advanceRunner(0, 1);
-        return;
-      }
+      // runner on 2nd doesn't advance on BB
       if (outcome === '1B') {
         this.advanceRunner(2, 4);
-        this.advanceRunner(0, 1);
-        return;
       }
       if (outcome === '2B') {
         this.advanceRunner(2, 4);
-        this.advanceRunner(0, 2);
-        return;
       }
       if (outcome === '3B') {
         this.advanceRunner(2, 4);
-        this.advanceRunner(0, 3);
-        return;
       }
       if (outcome === 'HR') {
         this.advanceRunner(2, 4);
-        this.advanceRunner(0, 4);
-        return;
       }
     }
 
     if (!firstRunner && !secondRunner && thirdRunner) { // 1 on, third
-      if (outcome === 'BB') {
-        // runner on 3rd doesn't advance
-        this.advanceRunner(0, 1);
-        return;
-      }
+      // runner on 3rd doesn't advance on BB
       if (outcome === '1B') {
         this.advanceRunner(3, 4);
-        this.advanceRunner(0, 1);
-        return;
       }
       if (outcome === '2B') {
         this.advanceRunner(3, 4);
-        this.advanceRunner(0, 2);
-        return;
       }
       if (outcome === '3B') {
         this.advanceRunner(3, 4);
-        this.advanceRunner(0, 3);
-        return;
       }
       if (outcome === 'HR') {
         this.advanceRunner(3, 4);
-        this.advanceRunner(0, 4);
-        return;
       }
     }
 
-    if (!firstRunner && !secondRunner && !thirdRunner) { // no one on base
-      if (outcome === 'BB') {
-        this.advanceRunner(0, 1);
-        return;
-      }
-      if (outcome === '1B') {
-        this.advanceRunner(0, 1);
-        return;
-      }
-      if (outcome === '2B') {
-        this.advanceRunner(0, 2);
-        return;
-      }
-      if (outcome === '3B') {
-        this.advanceRunner(0, 3);
-        return;
-      }
-      if (outcome === 'HR') {
-        this.advanceRunner(0, 4);
-        return;
-      }
-    }
+    // Advance the batter-runner
+    this.advanceRunner(0, advanceBatterRunnerTo);
   }
 
   private recordHit(): void {
@@ -408,7 +329,7 @@ export class AppComponent implements OnInit {
 
     this.messageService.message('hit');
 
-    const roll: number = this.varService.rand(0, 100);
+    const roll: number = rand(0, 100);
 
     if (roll <= this.varService.ODDS3B) { // rarest
       this.gameService.teamBatting().addTeamHit('triples');
@@ -438,7 +359,7 @@ export class AppComponent implements OnInit {
       // Walk-off
       (this.gameService.game.getInningCurrent().num >= this.varService.INNINGS)
       && (this.gameService.teamBatting().isHome)
-      && (!this.gameService.isTied())
+      && (this.gameService.teamBatting().runs > this.gameService.teamFielding().runs)
     ) {
       this.gameService.gameOver();
     }
@@ -448,7 +369,7 @@ export class AppComponent implements OnInit {
     this.gameService.game.situation.pa.inplay = true;
     this.gameService.game.inplay++;
 
-    if (this.varService.rand(1, 100) <= this.varService.BABIP) {
+    if (rand(1, 100) <= this.varService.BABIP) {
       this.gameService.game.situation.pa.hit = true;
 
       this.recordHit();
@@ -460,40 +381,6 @@ export class AppComponent implements OnInit {
       this.messageService.message('out');
 
       this.gameService.recordOut();
-    }
-  }
-
-  private swing(zone: boolean): void {
-    let contact: number;
-
-    if (zone === false) {
-      contact = this.varService.OCONTACT;
-    }
-    if (zone === true) {
-      contact = this.varService.ZCONTACT;
-    }
-
-    contact = contact * (1 + (this.gameService.getBatterUp().contact - 50) / 100);
-
-    console.warn('SWING! Contact chance = ', contact);
-
-    // this.messageService.message('swing');
-    this.gameService.game.swings++;
-
-    this.pitchOutcome = this.varService.rand(1, 100);
-    if (this.pitchOutcome <= contact) {
-      // Contact!
-      if (zone === false) {
-        this.messageService.message('swing-hit-ball');
-      }
-      if (zone === true) {
-        this.messageService.message('swing-hit-strike');
-      }
-
-      this.inPlay();
-    } else {
-      // Missed
-      this.recordStrike('swinging', zone);
     }
   }
 
@@ -519,12 +406,5 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private take(zone: boolean): void {
-    if (zone === false) {
-      this.messageService.message('taken-ball');
-      this.recordBall();
-    } else if (zone === true) {
-      this.recordStrike('looking');
-    }
-  }
+
 }

@@ -17,18 +17,18 @@
   </thead>
   <tbody>
     <tr>
-      <th col="row" [ngClass]="{ 'currentTeam': game.getInningHalfCurrent().toporbot === 'top' }">{{ gameTeamAway.name }}</th>
-      <td *ngFor="let inning of gameInnings">{{ inning.top.getHalfInningRuns() !== undefined ? inning.top.getHalfInningRuns().toString() : '&nbsp;' }}</td>
-      <th scope="row" class="font-weight-bold">{{ gameTeamAway.getTeamRuns() }}</th>
-      <th scope="row" class="font-weight-bold">{{ gameTeamAway.getTeamHits() }}</th>
-      <th scope="row" class="font-weight-bold">{{ gameTeamAway.getTeamErrors() }}</th>
+      <th col="row" [ngClass]="{ 'currentTeam': toporbot === 'top' }">{{ teamAway.name }}</th>
+      <td *ngFor="let inning of gameInnings" [innerHTML]="inning.top.halfInningRunsForScoreboard"></td>
+      <th scope="row" class="font-weight-bold">{{ teamAway.getTeamRuns() }}</th>
+      <th scope="row" class="font-weight-bold">{{ teamAway.getTeamHits() }}</th>
+      <th scope="row" class="font-weight-bold">{{ teamAway.getTeamErrors() }}</th>
     </tr>
     <tr>
-      <th col="row" [ngClass]="{ 'currentTeam': game.getInningHalfCurrent().toporbot === 'bot' }">{{ gameTeamHome.name }}</th>
-      <td *ngFor="let inning of gameInnings">{{ inning.bot.getHalfInningRuns() !== undefined ? inning.bot.getHalfInningRuns().toString() : '&nbsp;' }}</td>
-      <th scope="row" class="font-weight-bold">{{ gameTeamHome.getTeamRuns() }}</th>
-      <th scope="row" class="font-weight-bold">{{ gameTeamHome.getTeamHits() }}</th>
-      <th scope="row" class="font-weight-bold">{{ gameTeamHome.getTeamErrors() }}</th>
+      <th col="row" [ngClass]="{ 'currentTeam': toporbot === 'bot' }">{{ teamHome.name }}</th>
+      <td *ngFor="let inning of gameInnings" [innerHTML]="inning.bot.halfInningRunsForScoreboard"></td>
+      <th scope="row" class="font-weight-bold">{{ teamHome.getTeamRuns() }}</th>
+      <th scope="row" class="font-weight-bold">{{ teamHome.getTeamHits() }}</th>
+      <th scope="row" class="font-weight-bold">{{ teamHome.getTeamErrors() }}</th>
     </tr>
   </tbody>
 </table>

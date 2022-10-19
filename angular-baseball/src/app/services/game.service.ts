@@ -57,44 +57,65 @@ class Bases {
   }
 
   resetBases(): void {
-    this[1] = null;
-    this[2] = null;
-    this[3] = null;
+    this.setBase(1, null);
+    this.setBase(2, null);
+    this.setBase(3, null);
   }
 }
 
 class InningHalf {
   toporbot: string;
-  current: boolean;
-  private runs: number;
-  private outs: number;
+  private _isCurrent = false;
+  private _final = false;
+  private _runs: number;
+  private _outs = 0;
 
   constructor(toporbot: string) {
     this.toporbot = toporbot;
-    this.outs = 0;
-    // this.runs = 0;
-    this.current = false;
   }
 
-  public getHalfInningOuts(): number {
-    return this.outs;
+  public get halfInningRunsForScoreboard(): string {
+    let placeholder = '&nbsp;';
+    if (this.final) {
+      placeholder = 'X';
+    }
+    return this._runs !== undefined ? this._runs.toString() : placeholder;
   }
 
-  public getHalfInningRuns(): number {
-    return this.runs;
+  public get outs(): number {
+    return this._outs;
+  }
+
+  public get isCurrent(): boolean {
+    return this._isCurrent;
+  }
+  public set isCurrent(isCurrent: boolean) {
+    this._isCurrent = isCurrent;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  private get final(): boolean {
+    return this._final;
+  }
+  private set final(isFinal: boolean) {
+    this._final = isFinal;
   }
 
   public addHalfInningRuns(runs: number): void {
-    this.runs += runs;
+    this._runs += runs;
   }
 
   public recordOut(): void {
-    this.outs++;
+    this._outs++;
   }
 
-  public start() {
-    this.current = true;
-    this.runs = 0;
+  public start(): void {
+    this._isCurrent = true;
+    this._runs = 0;
+  }
+
+  public finalize(): void {
+    this.final = true;
   }
 }
 
@@ -110,14 +131,7 @@ export class Inning {
   }
 
   get isCurrent(): boolean {
-    return this.top.current || this.bot.current;
-  }
-
-  public getInningOuts(): number {
-    const topOuts: number = this.top.getHalfInningOuts();
-    const botOuts: number = this.bot.getHalfInningOuts();
-
-    return topOuts + botOuts;
+    return this.top.isCurrent || this.bot.isCurrent;
   }
 }
 
@@ -191,7 +205,7 @@ export class Game {
 
   addInning(i: number): Inning {
     const inning: Inning = new Inning(i);
-    // console.log('Added inning', i);
+    console.log('Added inning', i);
     return inning;
   }
 
@@ -205,12 +219,14 @@ export class Game {
     return this.innings.find((inning: Inning) => inning.isCurrent);
   }
 
-  getInningHalfCurrent(): InningHalf {
+  public getInningHalfCurrent(): InningHalf {
     const currentInning: Inning = this.getInningCurrent();
-    if (currentInning.top.current) {
+    // console.error('getInningHalfCurrent()');
+    // console.log(currentInning);
+    if (currentInning.top.isCurrent) {
       return currentInning.top;
     }
-    if (currentInning.bot.current) {
+    if (currentInning.bot.isCurrent) {
       return currentInning.bot;
     }
   }
@@ -222,20 +238,6 @@ export class Game {
   public getTeamHome(): Team {
     return this.teams.home;
   }
-
-  getOuts(): number {
-    let outs = 0;
-    this.innings.forEach((inning: Inning) => {
-      outs += inning.getInningOuts();
-    });
-    return outs;
-  }
-
-  /*
-  getBatterUp(): Player {
-    return this.situation.pa.player;
-  }
-  */
 }
 
 @Injectable({
@@ -267,7 +269,7 @@ export class GameService {
     } else {
       this.teamBatting().nowBatting = 1; // top of the order
     }
-    if (this.game.getInningHalfCurrent().getHalfInningOuts() < 3) {
+    if (this.game.getInningHalfCurrent().outs < 3) {
       this.startPA();
     }
   }
@@ -290,19 +292,25 @@ export class GameService {
 
     this.endPA();
 
-    if (this.game.getInningHalfCurrent().getHalfInningOuts() === 3) {
+    if (this.game.getInningHalfCurrent().outs === 3) {
       if (
-        // Last out of away team in last inning or later
-        (this.game.getInningCurrent().num >= this.varService.INNINGS)
-        && (!this.teamBatting().isHome)
-        && (!this.isTied())
+        this.game.getInningCurrent().num >= this.varService.INNINGS &&
+        !this.teamBatting().isHome &&
+        this.teamBatting().runs < this.teamFielding().runs
       ) {
+        // Last out of away team in last inning or later
+        console.log('Last inning or later');
+        console.log('Away team is batting');
+        console.log('Away team is losing');
+        this.game.getInningHalfCurrent().finalize();
         this.gameOver();
       } else {
         this.nextInningHalf();
         this.startPA();
       }
     }
+    this.nextInningHalf();
+    this.startPA();
   }
 
   public startGame(): void {
@@ -337,19 +345,18 @@ export class GameService {
     );
   }
 
-  /*
-  public resetGame(): void {
-    this.game = new Game(this.teamService.teams.away, this.teamService.teams.home, this.varService.INNINGS);
-    this.startGame();
-  }
-  */
-
   public teamBatting(): Team {
-    if (this.game.getInningCurrent().top.current === true) {
+    if (this.game.getInningCurrent().top.isCurrent === true) {
       return this.game.getTeamAway();
-    } else {
+    }
+    return this.game.getTeamHome();
+  }
+
+  public teamFielding(): Team {
+    if (this.game.getInningCurrent().top.isCurrent === true) {
       return this.game.getTeamHome();
     }
+    return this.game.getTeamAway();
   }
 
   public gameOver(): void {
@@ -392,20 +399,27 @@ export class GameService {
     console.log(this.game.getInningHalfCurrent().toporbot, this.game.getInningCurrent().num);
     console.log(this.teamService.teams.away.name, this.teamService.teams.away.runs);
     console.log(this.teamService.teams.home.name, this.teamService.teams.home.runs);
-    console.log(this.game.getInningHalfCurrent().getHalfInningOuts(), 'outs');
+    console.log(this.game.getInningHalfCurrent().outs, 'outs');
   }
 
   private nextInning(nextInningNumber: number): void {
-    console.log('End of inning!');
+    console.log(`End of inning ${nextInningNumber - 1}!`);
+    console.log(`Next up: inning ${nextInningNumber}!`);
+
+    let nextInning: Inning = this.game.innings.find((inning: Inning) => inning.num === nextInningNumber);
+
+    console.log(this.game.innings);
 
     // extra innings
-    if (!this.game.innings.find((inning: Inning) => inning.num === nextInningNumber)) {
-      this.game.addInning(nextInningNumber);
+    if (!nextInning) {
+      nextInning = this.game.addInning(nextInningNumber);
     }
+
+    console.log(nextInning);
 
     // this.game.getinningCurrent = this.game.innings.find((inning: Inning) => inning.num === ni);
 
-    this.game.innings.find((inning: Inning) => inning.num === nextInningNumber).top.start();
+    nextInning.top.start();
   }
 
   private nextInningHalf(): void {
@@ -418,23 +432,15 @@ export class GameService {
 
     // console.log(currentInning);
 
-    if (currentInning.top.current) {
-      currentInning.top.current = false;
+    if (currentInning.top.isCurrent) {
+      currentInning.top.isCurrent = false;
       currentInning.bot.start();
     } else {
-      currentInning.bot.current = false;
+      currentInning.bot.isCurrent = false;
       this.nextInning(currentInning.num + 1);
     }
 
     this.messageService.switchSides(this.game.getInningHalfCurrent().toporbot, this.game.getInningCurrent().num);
-  }
-
-  private teamFielding(): Team {
-    if (this.game.getInningCurrent().top.current === true) {
-      return this.game.getTeamHome();
-    } else {
-      return this.game.getTeamAway();
-    }
   }
 
 }

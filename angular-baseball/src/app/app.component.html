@@ -20,12 +20,6 @@
               class="btn btn-dark mr-2"
               (click)="pitch(100)"
               [disabled]="gameService.game.final">100 Pitches</button>
-            <!--
-              <button
-              type="button"
-              class="btn btn-dark"
-              (click)="resetGame();">New Game</button>
-            -->
           </div>
 
           <svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +69,7 @@
                 <xhtml:br />
                 S: {{ gameService.game.situation.pa.strikes }}
                 <xhtml:br />
-                O: {{ gameService.game.getInningHalfCurrent().getHalfInningOuts() }}
+                O: {{ gameService.game.getInningHalfCurrent().outs }}
               </xhtml:p>
             </svg:foreignObject>
           </svg>
