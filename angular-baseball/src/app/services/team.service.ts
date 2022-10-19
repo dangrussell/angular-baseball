@@ -13,6 +13,9 @@ export class Team {
   players: Player[];
   isHome: boolean;
   name: string;
+  /**
+   * The number in the batting order
+   */
   nowBatting: number;
 
   constructor(
