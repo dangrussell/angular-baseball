@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Message, Messages } from '../interfaces/message';
-import { VarService } from './var.service';
+import { getOrdinal, VarService } from './var.service';
 
 @Injectable({
   providedIn: 'root'
@@ -44,7 +44,7 @@ export class MessageService {
     if (toporbot === 'bot') {
       ihtext = 'bottom';
     }
-    const ordinal: string = this.varService.ordinal(i);
+    const ordinal: string = getOrdinal(i);
     message += '<br />We head to the ' + ihtext + ' of the ' + i.toString() + ordinal + '.';
     this.pitchResult += message;
   }
