@@ -4,7 +4,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { pitch } from '../actions/pitch.actions';
 
-export const initialState = 0;
+const initialState = 0;
 
 const _pitchReducer = createReducer(
   initialState,

@@ -8,7 +8,7 @@ export interface AppState {
   pitches: PitchState;
 }
 
-export const selectPitches = (state: AppState): PitchState => state.pitches;
+const selectPitches = (state: AppState): PitchState => state.pitches;
 
 export const selectPitchCount = createSelector(
   selectPitches,
