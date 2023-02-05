@@ -44,7 +44,8 @@ module.exports = {
           'tsconfig.spec.json',
           'e2e/tsconfig.eslint.json'
         ],
-        sourceType: 'module'
+        sourceType: 'module',
+        tsconfigRootDir: __dirname,
       },
       plugins: [
         '@typescript-eslint',
