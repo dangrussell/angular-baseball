@@ -35,27 +35,30 @@ export class VarService {
   public readonly title = 'Angular Baseball';
   public readonly titleHTML = '<em><strong>ANGULAR</strong>Baseball</em>';
 
-  /* Uses 2021 MLB totals */
-  public readonly MLBHITS = 39484;
-  public readonly MLBHR = 5944;
-  public readonly MLB3B = 671;
-  public readonly MLB2B = 7863;
-  // public readonly MLB1B = this.MLBHITS - this.MLB2B - this.MLB3B - this.MLBHR;
+  // 2023 League Stats: https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&qual=0&type=0&month=0&ind=1&rost=&age=&filter=&players=0&startdate=&enddate=&season1=2023&season=2023&team=0%2Css
+
+  /* Uses 2023 MLB totals */
+  private readonly MLBHITS = 40839;
+  private readonly MLBHR = 5868;
+  private readonly MLB3B = 712;
+  private readonly MLB2B = 8228;
+  // private readonly MLB1B = this.MLBHITS - this.MLB2B - this.MLB3B - this.MLBHR;
 
   // ODDS1B = (this.MLB1B / this.MLBHITS) * 100;
   public readonly ODDS2B = (this.MLB2B / this.MLBHITS) * 100;
   public readonly ODDS3B = (this.MLB3B / this.MLBHITS) * 100;
   public readonly ODDSHR = (this.MLBHR / this.MLBHITS) * 100;
 
-  public readonly BABIP = 29.2; // League-average BABIP
+  public readonly BABIP = 29.7; // League-average BABIP
 
-  public readonly ZONE = 42.1; // Zone%
+  // 2023 Plate Discipline: https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&qual=0&type=5&month=0&ind=1&rost=&age=&filter=&players=0&startdate=&enddate=&season1=2023&season=2023&team=0%2Css
+  public readonly ZONE = 41.9; // Zone%
 
-  public readonly ZSWING = 68.9; // Z-Swing%
-  public readonly OSWING = 31.3; // O-Swing%
+  public readonly ZSWING = 68.8; // Z-Swing%
+  public readonly OSWING = 31.9; // O-Swing%
 
-  public readonly OCONTACT = 62.4; // O-Contact%
-  public readonly ZCONTACT = 84.6; // Z-Contact%
+  public readonly OCONTACT = 62.3; // O-Contact%
+  public readonly ZCONTACT = 85.4; // Z-Contact%
 
   public readonly INNINGS = 9;
 
