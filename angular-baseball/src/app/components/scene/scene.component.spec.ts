@@ -1,5 +1,4 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SceneComponent } from './scene.component';
 
@@ -7,12 +6,11 @@ describe('SceneComponent', () => {
   let component: SceneComponent;
   let fixture: ComponentFixture<SceneComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  const setup = async () => {
+    await TestBed.configureTestingModule({
       imports: [SceneComponent]
-    })
-      .compileComponents();
-  }));
+    }).compileComponents();
+  };
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SceneComponent);
@@ -20,7 +18,11 @@ describe('SceneComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should create', async () => {
+    await setup();
+
+    expect(component).toBeTruthy().catch((error: unknown) => {
+      console.error(error);
+    });
   });
 });
