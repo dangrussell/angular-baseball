@@ -194,7 +194,7 @@ module.exports = {
         'import/order': 'off',
         'max-classes-per-file': 'off',
         'max-len': [
-          'error',
+          'off',
           {
             code: 140
           }
