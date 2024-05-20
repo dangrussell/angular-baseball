@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { BoxGeometry, Mesh, MeshBasicMaterial, MeshBasicMaterialParameters, MeshStandardMaterial, PerspectiveCamera, Scene, SphereGeometry, WebGLRenderer, WebGLRendererParameters } from 'three';
 
 @Component({
@@ -7,7 +7,7 @@ import { BoxGeometry, Mesh, MeshBasicMaterial, MeshBasicMaterialParameters, Mesh
   styleUrl: './scene.component.css',
   standalone: true
 })
-export class SceneComponent implements OnInit, AfterViewInit {
+export class SceneComponent implements AfterViewInit {
 
   @ViewChild('canvas') public canvas: ElementRef<HTMLCanvasElement>;
 
@@ -45,10 +45,9 @@ export class SceneComponent implements OnInit, AfterViewInit {
     this.sphere = new Mesh(this.sphereGeometry, this.sphereMaterial);
   }
 
-  ngOnInit(): void {
-    // document.body.appendChild(this.renderer.domElement);
-
-  }
+  // ngOnInit(): void {
+  //   document.body.appendChild(this.renderer.domElement);
+  // }
 
   ngAfterViewInit(): void {
     const webGLRendererParameters: WebGLRendererParameters = {
