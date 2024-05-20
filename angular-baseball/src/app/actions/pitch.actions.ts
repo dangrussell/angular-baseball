@@ -1,3 +1,8 @@
-import { createAction } from '@ngrx/store';
+import { createActionGroup, emptyProps } from '@ngrx/store';
 
-export const pitch = createAction('[Pitch] Pitch');
+export const pitchActions = createActionGroup({
+  source: 'Pitch',
+  events: {
+    Pitch: emptyProps(),
+  },
+});

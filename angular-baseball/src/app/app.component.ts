@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { pitch } from './actions/pitch.actions';
+import { pitchActions } from './actions/pitch.actions';
 import { LineupComponent } from './components/lineup/lineup.component';
 import { SceneComponent } from './components/scene/scene.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
     private readonly pitchService: PitchService,
     private readonly store: Store,
   ) {
-    this.pitch$ = this.store.select(selectPitchCount, pitch);
+    this.pitch$ = this.store.select(selectPitchCount, pitchActions.pitch);
   }
 
   ngOnInit(): void {
@@ -62,7 +62,7 @@ export class AppComponent implements OnInit {
   public pitch(pitches = 1): void {
     for (let p = 1; p <= pitches; p++) {
       if (!this.gameService.game.final) {
-        this.store.dispatch(pitch());
+        this.store.dispatch(pitchActions.pitch());
 
         this.messageService.pitchResult = ''; // clear pitch result
 
