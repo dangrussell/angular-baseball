@@ -9,11 +9,11 @@ import { getOrdinal } from './var.service';
 })
 export class MessageService {
 
-  pitchResult = '';
+  public pitchResult = '';
 
-  messagesUrl = 'assets/messages.json';
+  private messagesUrl = 'assets/messages.json';
 
-  messages: Messages;
+  private messages: Messages;
 
   constructor(
     private readonly http: HttpClient,
@@ -26,7 +26,7 @@ export class MessageService {
   }
 
   public message(messagekind: string, brs = 2): void {
-    let message = this.randMessage(messagekind);
+    let message: string = this.randMessage(messagekind);
     for (let br = 1; br <= brs; br++) {
       message += '<br />';
     }
@@ -38,7 +38,7 @@ export class MessageService {
     this.pitchResult += args.join(' ') + '<br /><br />';
   }
 
-  switchSides(toporbot: string, i: number, messagekind = 'switchSides'): void {
+  public switchSides(toporbot: string, i: number, messagekind = 'switchSides'): void {
     let message = this.randMessage(messagekind);
     let ihtext = toporbot;
     if (toporbot === 'bot') {
@@ -55,7 +55,7 @@ export class MessageService {
 
   private randMessage(messagekind: string): string {
     const messageCollection: Messages = this.messages;
-    const messageItem: Message = messageCollection.data.find(el => el.kind === messagekind);
+    const messageItem: Message = messageCollection.data.find((message: Message) => message.kind === messagekind);
     return messageItem.text[Math.floor(Math.random() * messageItem.text.length)];
   }
 
