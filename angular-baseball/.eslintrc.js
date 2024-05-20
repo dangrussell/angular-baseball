@@ -33,8 +33,6 @@ module.exports = {
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
-        // 'plugin:ngrx/all', // Not yet updated for ESLint 8
-        // 'plugin:ngrx/recommended',  // Not yet updated for ESLint 8
       ],
       parser: '@typescript-eslint/parser',
       parserOptions: {
@@ -50,7 +48,6 @@ module.exports = {
       plugins: [
         '@typescript-eslint',
         '@angular-eslint',
-        // 'ngrx', // Not yet updated for ESLint 8
         'rxjs-angular'
       ],
       rules: {
