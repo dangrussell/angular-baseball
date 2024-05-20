@@ -1,29 +1,58 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": false, // Angular default is `true`
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
-    "module": "es2020",
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "ES2022",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "module": "ES2022",
+    "useDefineForClassFields": false,
     "lib": [
-      "es2018",
+      "ES2022",
       "dom"
     ],
-    "forceConsistentCasingInFileNames": true,
-    "useDefineForClassFields": false
+    //#region Additional compiler options
+    "baseUrl": "./",
+    "removeComments": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    //#endregion Additional compiler options
   },
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
     "strictTemplates": true,
-    "strictInjectionParameters": true
-  }
+    //#region Additional Angular compiler options
+    "extendedDiagnostics": {
+      "checks": {
+        "invalidBananaInBox": "warning",
+        "nullishCoalescingNotNullable": "warning",
+        "missingControlFlowDirective": "warning",
+        "textAttributeNotBinding": "warning",
+        "missingNgForOfLet": "warning",
+        "suffixNotSupported": "warning",
+        "optionalChainNotNullable": "warning",
+      },
+      "defaultCategory": "warning"
+    },
+    //#endregion Additional Angular compiler options
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }
