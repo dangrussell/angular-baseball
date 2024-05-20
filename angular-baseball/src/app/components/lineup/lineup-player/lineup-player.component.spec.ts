@@ -11,8 +11,6 @@ describe('Component: LineupPlayer', () => {
     void TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-      ],
-      declarations: [
         LineupPlayerComponent,
         PositionAbbreviationPipe,
       ]

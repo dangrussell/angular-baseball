@@ -42,13 +42,11 @@ describe('Component: App', () => {
     void TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        HttpClientTestingModule
-      ],
-      declarations: [
-        AppComponent,
+        HttpClientTestingModule,
         LineupComponent,
-        ScoreboardComponent,
+        ScoreboardComponent
       ],
+      declarations: [AppComponent],
       providers: [
         PlayerService,
         MessageService,

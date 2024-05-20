@@ -12,8 +12,8 @@ describe('Component: Scoreboard', () => {
     void TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
+        ScoreboardComponent,
       ],
-      declarations: [ScoreboardComponent],
       providers: [
         { provide: LocationStrategy, useClass: MockLocationStrategy },
       ],

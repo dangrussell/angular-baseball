@@ -12,8 +12,8 @@ describe('Component: Lineup', () => {
     void TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
+        LineupComponent,
       ],
-      declarations: [LineupComponent],
       providers: [
         { provide: LocationStrategy, useClass: MockLocationStrategy },
       ],

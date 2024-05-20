@@ -1,3 +1,4 @@
+import { NgClass, NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 import { GameService, Inning } from '../../services/game.service';
 import { Team } from '../../services/team.service';
@@ -6,6 +7,8 @@ import { Team } from '../../services/team.service';
   selector: 'app-scoreboard',
   templateUrl: './scoreboard.component.html',
   styleUrls: ['./scoreboard.component.scss'],
+  standalone: true,
+  imports: [NgFor, NgClass],
 })
 export class ScoreboardComponent {
 

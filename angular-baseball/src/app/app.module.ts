@@ -16,14 +16,7 @@ import { PositionAbbreviationPipe } from './pipes/position-abbreviation.pipe';
 import { pitchReducer } from './reducers/pitch.reducer';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ScoreboardComponent,
-    LineupComponent,
-    LineupPlayerComponent,
-    PositionAbbreviationPipe,
-    SceneComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -31,6 +24,11 @@ import { pitchReducer } from './reducers/pitch.reducer';
     StoreModule.forRoot({ pitch: pitchReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     EffectsModule.forRoot([]),
+    ScoreboardComponent,
+    LineupComponent,
+    LineupPlayerComponent,
+    PositionAbbreviationPipe,
+    SceneComponent,
   ],
   providers: [
     httpInterceptorProviders,

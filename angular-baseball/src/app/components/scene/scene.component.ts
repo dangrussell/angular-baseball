@@ -4,7 +4,8 @@ import { BoxGeometry, Mesh, MeshBasicMaterial, MeshBasicMaterialParameters, Mesh
 @Component({
   selector: 'app-scene',
   templateUrl: './scene.component.html',
-  styleUrls: ['./scene.component.css']
+  styleUrls: ['./scene.component.css'],
+  standalone: true
 })
 export class SceneComponent implements OnInit, AfterViewInit {
 
