@@ -93,7 +93,6 @@ class InningHalf {
     this._isCurrent = isCurrent;
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   private get final(): boolean {
     return this._final;
   }
