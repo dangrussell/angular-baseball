@@ -38,22 +38,33 @@ class PlateAppearance {
 }
 
 class Bases {
-  private 1: Player | null;
-  private 2: Player | null;
-  private 3: Player | null;
+  private firstBase: Player | null = null;
+  private secondBase: Player | null = null;
+  private thirdBase: Player | null = null;
 
-  constructor() {
-    this[1] = null;
-    this[2] = null;
-    this[3] = null;
+  public getBase(base: 1 | 2 | 3): Player | null {
+    switch (base) {
+      case 1:
+        return this.firstBase;
+      case 2:
+        return this.secondBase;
+      case 3:
+        return this.thirdBase;
+    }
   }
 
-  public getBase(base: number): Player | null {
-    return this[base] as Player | null;
-  }
-
-  public setBase(base: number, value: Player | null) {
-    this[base] = value;
+  public setBase(base: 1 | 2 | 3, value: Player | null) {
+    switch (base) {
+      case 1:
+        this.firstBase = value;
+        break;
+      case 2:
+        this.secondBase = value;
+        break;
+      case 3:
+        this.thirdBase = value;
+        break;
+    }
   }
 
   resetBases(): void {
@@ -228,6 +239,7 @@ export class Game {
     if (currentInning.bot.isCurrent) {
       return currentInning.bot;
     }
+    throw new Error('No current inning half found');
   }
 
   public getTeamAway(): Team {

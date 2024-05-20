@@ -172,7 +172,7 @@ export class AppComponent implements OnInit {
     const secondRunner: Player = this.gameService.game.situation.bases.getBase(2);
     const thirdRunner: Player = this.gameService.game.situation.bases.getBase(3);
 
-    let advanceBatterRunnerTo: number;
+    let advanceBatterRunnerTo: 1 | 2 | 3 | 4;
     if (outcome === '2B') {
       advanceBatterRunnerTo = 2;
     } else if (outcome === '3B') {
@@ -328,7 +328,7 @@ export class AppComponent implements OnInit {
     }
 
     // Advance the batter-runner
-    this.advanceRunner(0, advanceBatterRunnerTo);
+    this.advanceRunner(null, advanceBatterRunnerTo);
   }
 
   private recordHit(): void {
@@ -394,7 +394,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private advanceRunner(fromBase: number, toBase: number): void {
+  private advanceRunner(fromBase: null | 1 | 2 | 3, toBase: 1 | 2 | 3 | 4): void {
     let runner: Player;
     if (fromBase > 0) {
       runner = this.gameService.game.situation.bases.getBase(fromBase);
