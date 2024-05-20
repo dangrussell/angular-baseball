@@ -320,7 +320,7 @@ export class GameService {
         this.startPA();
       }
     }
-    this.nextInningHalf();
+
     this.startPA();
   }
 
