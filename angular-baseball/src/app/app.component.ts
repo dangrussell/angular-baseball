@@ -81,7 +81,6 @@ export class AppComponent implements OnInit {
         }
 
         if (didSwing) {
-          this.messageService.message('swing');
           this.gameService.game.swings++;
 
           const madeContact: boolean = this.pitchService.swing(inZone, this.gameService.getBatterUp());
