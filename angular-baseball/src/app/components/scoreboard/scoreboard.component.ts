@@ -6,7 +6,7 @@ import { Team } from '../../services/team.service';
 @Component({
   selector: 'app-scoreboard',
   templateUrl: './scoreboard.component.html',
-  styleUrls: ['./scoreboard.component.scss'],
+  styleUrl: './scoreboard.component.scss',
   standalone: true,
   imports: [NgFor, NgClass],
 })

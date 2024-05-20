@@ -7,7 +7,7 @@ import { GameService } from '../../../services/game.service';
 @Component({
   selector: 'app-lineup-player',
   templateUrl: './lineup-player.component.html',
-  styleUrls: ['./lineup-player.component.scss'],
+  styleUrl: './lineup-player.component.scss',
   standalone: true,
   imports: [NgIf, NgClass, PositionAbbreviationPipe]
 })

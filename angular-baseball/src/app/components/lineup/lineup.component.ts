@@ -7,7 +7,7 @@ import { LineupPlayerComponent } from './lineup-player/lineup-player.component';
 @Component({
   selector: 'app-lineup',
   templateUrl: './lineup.component.html',
-  styleUrls: ['./lineup.component.scss'],
+  styleUrl: './lineup.component.scss',
   standalone: true,
   imports: [NgFor, LineupPlayerComponent],
 })

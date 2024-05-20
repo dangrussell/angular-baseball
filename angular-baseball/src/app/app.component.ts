@@ -20,7 +20,7 @@ type PAOutcome = 'BB' | '1B' | '2B' | '3B' | 'HR';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrl: './app.component.scss',
   standalone: true,
   imports: [
     NgIf,
