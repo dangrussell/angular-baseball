@@ -1,13 +1,18 @@
+import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { pitch } from './actions/pitch.actions';
+import { LineupComponent } from './components/lineup/lineup.component';
+import { SceneComponent } from './components/scene/scene.component';
+import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { selectPitchCount } from './selectors/pitch.selector';
 import { GameService } from './services/game.service';
 import { MessageService } from './services/message.service';
 import { PitchService } from './services/pitch.service';
 import { Player } from './services/player.service';
-import { rand, VarService } from './services/var.service';
+import { VarService, rand } from './services/var.service';
 
 type StrikeKind = 'looking' | 'swinging';
 type PAOutcome = 'BB' | '1B' | '2B' | '3B' | 'HR';
@@ -16,6 +21,14 @@ type PAOutcome = 'BB' | '1B' | '2B' | '3B' | 'HR';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [
+    NgIf,
+    LineupComponent,
+    ScoreboardComponent,
+    SceneComponent,
+    RouterOutlet,
+  ],
 })
 export class AppComponent implements OnInit {
 

@@ -44,9 +44,9 @@ describe('Component: App', () => {
         RouterTestingModule,
         HttpClientTestingModule,
         LineupComponent,
-        ScoreboardComponent
+        ScoreboardComponent,
+        AppComponent
       ],
-      declarations: [AppComponent],
       providers: [
         PlayerService,
         MessageService,
