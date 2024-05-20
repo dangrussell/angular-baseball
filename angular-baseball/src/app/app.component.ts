@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -23,11 +22,10 @@ type PAOutcome = 'BB' | '1B' | '2B' | '3B' | 'HR';
   styleUrl: './app.component.scss',
   standalone: true,
   imports: [
-    NgIf,
     LineupComponent,
     ScoreboardComponent,
     SceneComponent,
-    RouterOutlet,
+    RouterOutlet
   ],
 })
 export class AppComponent implements OnInit {

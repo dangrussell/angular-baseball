@@ -1,41 +1,74 @@
 <div class="app">
   <!--<app-players></app-players>-->
   <div class="text-center">
-    <h1 *ngIf="titleHTML" [innerHtml]="titleHTML"></h1>
+    @if (titleHTML) {
+    <h1 [innerHtml]="titleHTML"></h1>
+    }
 
     <div class="container">
       <div class="row">
-
         <app-lineup [team]="gameService.game.getTeamAway()"></app-lineup>
 
         <div class="col plate">
-          <div class="text-center" *ngIf="showbuttons">
+          @if (showbuttons) {
+          <div class="text-center">
             <button
               type="button"
               class="btn btn-dark mr-2"
               (click)="pitch()"
-              [disabled]="gameService.game.final">Pitch</button>
+              [disabled]="gameService.game.final"
+            >
+              Pitch
+            </button>
             <button
               type="button"
               class="btn btn-dark mr-2"
               (click)="pitch(100)"
-              [disabled]="gameService.game.final">100 Pitches</button>
+              [disabled]="gameService.game.final"
+            >
+              100 Pitches
+            </button>
           </div>
+          }
 
-          <svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            width="400"
+            height="400"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <!-- plate -->
-            <svg:polygon points="5,5 395,5 395,200 200,395 5,200" stroke="black" fill="white" stroke-width="5" />
+            <svg:polygon
+              points="5,5 395,5 395,200 200,395 5,200"
+              stroke="black"
+              fill="white"
+              stroke-width="5"
+            />
 
             <!-- infield diamond -->
-            <svg:polygon points="200,385 180,365 200,345 220,365" stroke="brown" fill="green" stroke-width="3" />
+            <svg:polygon
+              points="200,385 180,365 200,345 220,365"
+              stroke="brown"
+              fill="green"
+              stroke-width="3"
+            />
 
             <!-- 1B -->
             <svg:polygon
               points="215,370 210,365 215,360 220,365"
               stroke="black"
               stroke-width="1"
-              [attr.fill]="gameService.game.situation.bases.getBase(1) ? 'yellow' : 'white'">
-              <title>{{ gameService.game.situation.bases.getBase(1) ? gameService.game.situation.bases.getBase(1).name : '(empty)' }}</title>
+              [attr.fill]="
+                gameService.game.situation.bases.getBase(1) ? 'yellow' : 'white'
+              "
+            >
+              <title>
+                {{
+                  gameService.game.situation.bases.getBase(1)
+                    ? gameService.game.situation.bases.getBase(1).name
+                    : "(empty)"
+                }}
+              </title>
             </svg:polygon>
 
             <!-- 2B -->
@@ -43,8 +76,17 @@
               points="200,355 195,350 200,345 205,350"
               stroke="black"
               stroke-width="1"
-              [attr.fill]="gameService.game.situation.bases.getBase(2) ? 'yellow' : 'white'">
-              <title>{{ gameService.game.situation.bases.getBase(2) ? gameService.game.situation.bases.getBase(2).name : '(empty)' }}</title>
+              [attr.fill]="
+                gameService.game.situation.bases.getBase(2) ? 'yellow' : 'white'
+              "
+            >
+              <title>
+                {{
+                  gameService.game.situation.bases.getBase(2)
+                    ? gameService.game.situation.bases.getBase(2).name
+                    : "(empty)"
+                }}
+              </title>
             </svg:polygon>
 
             <!-- 3B -->
@@ -52,15 +94,27 @@
               points="185,370 180,365 185,360 190,365"
               stroke="black"
               stroke-width="1"
-              [attr.fill]="gameService.game.situation.bases.getBase(3) ? 'yellow' : 'white'">
-              <title>{{ gameService.game.situation.bases.getBase(3) ? gameService.game.situation.bases.getBase(3).name : '(empty)' }}</title>
+              [attr.fill]="
+                gameService.game.situation.bases.getBase(3) ? 'yellow' : 'white'
+              "
+            >
+              <title>
+                {{
+                  gameService.game.situation.bases.getBase(3)
+                    ? gameService.game.situation.bases.getBase(3).name
+                    : "(empty)"
+                }}
+              </title>
             </svg:polygon>
 
             <svg:foreignObject x="8" y="8" width="385" height="190">
-              <xhtml:p *ngIf="gameService.game.pitches"
+              @if (gameService.game.pitches) {
+              <xhtml:p
                 xmlns="http://www.w3.org/1999/xhtml"
                 class="result"
-                [innerHTML]="pitchOutput"></xhtml:p>
+                [innerHTML]="pitchOutput"
+              ></xhtml:p>
+              }
             </svg:foreignObject>
 
             <svg:foreignObject x="167" y="260" width="60" height="80">
@@ -77,14 +131,12 @@
         </div>
 
         <app-lineup [team]="gameService.game.getTeamHome()"></app-lineup>
-
       </div>
     </div>
 
     <app-scoreboard></app-scoreboard>
 
     <app-scene></app-scene>
-
   </div>
 
   <!--
@@ -107,7 +159,6 @@
 
   </div>
   -->
-
 </div>
 
 <router-outlet></router-outlet>

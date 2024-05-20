@@ -1,15 +1,20 @@
 <table class="table scoreboard">
   <colgroup>
-    <col>
-    <col span="{{ gameInnings.length }}">
-    <col span="3">
+    <col />
+    <col span="{{ gameInnings.length }}" />
+    <col span="3" />
   </colgroup>
   <thead>
     <tr>
       <th></th>
-      <th scope="col" *ngFor="let inning of gameInnings" [ngClass]="{ 'currentInning': isCurrentInning(inning.num) }">
+      @for (inning of gameInnings; track inning) {
+      <th
+        scope="col"
+        [ngClass]="{ currentInning: isCurrentInning(inning.num) }"
+      >
         <span>{{ inning.num }}</span>
       </th>
+      }
       <th id="scoreboard-runs">R</th>
       <th id="scoreboard-hits">H</th>
       <th id="scoreboard-errors">E</th>
@@ -17,18 +22,30 @@
   </thead>
   <tbody>
     <tr>
-      <th col="row" [ngClass]="{ 'currentTeam': toporbot === 'top' }">{{ teamAway.name }}</th>
-      <td *ngFor="let inning of gameInnings" [innerHTML]="inning.top.halfInningRunsForScoreboard"></td>
+      <th col="row" [ngClass]="{ currentTeam: toporbot === 'top' }">
+        {{ teamAway.name }}
+      </th>
+      @for (inning of gameInnings; track inning) {
+      <td [innerHTML]="inning.top.halfInningRunsForScoreboard"></td>
+      }
       <th scope="row" class="font-weight-bold">{{ teamAway.getTeamRuns() }}</th>
       <th scope="row" class="font-weight-bold">{{ teamAway.getTeamHits() }}</th>
-      <th scope="row" class="font-weight-bold">{{ teamAway.getTeamErrors() }}</th>
+      <th scope="row" class="font-weight-bold">
+        {{ teamAway.getTeamErrors() }}
+      </th>
     </tr>
     <tr>
-      <th col="row" [ngClass]="{ 'currentTeam': toporbot === 'bot' }">{{ teamHome.name }}</th>
-      <td *ngFor="let inning of gameInnings" [innerHTML]="inning.bot.halfInningRunsForScoreboard"></td>
+      <th col="row" [ngClass]="{ currentTeam: toporbot === 'bot' }">
+        {{ teamHome.name }}
+      </th>
+      @for (inning of gameInnings; track inning) {
+      <td [innerHTML]="inning.bot.halfInningRunsForScoreboard"></td>
+      }
       <th scope="row" class="font-weight-bold">{{ teamHome.getTeamRuns() }}</th>
       <th scope="row" class="font-weight-bold">{{ teamHome.getTeamHits() }}</th>
-      <th scope="row" class="font-weight-bold">{{ teamHome.getTeamErrors() }}</th>
+      <th scope="row" class="font-weight-bold">
+        {{ teamHome.getTeamErrors() }}
+      </th>
     </tr>
   </tbody>
 </table>

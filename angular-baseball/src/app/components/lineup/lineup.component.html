@@ -1,4 +1,7 @@
-<div class="col lineup-card lineup-card-{{ homeAwayText }} justify-content-center" id="lineup-{{ homeAwayText }}">
+<div
+  class="col lineup-card lineup-card-{{ homeAwayText }} justify-content-center"
+  id="lineup-{{ homeAwayText }}"
+>
   <table>
     <thead>
       <tr>
@@ -6,7 +9,12 @@
       </tr>
     </thead>
     <tbody>
-      <app-lineup-player *ngFor="let player of teamPlayers" [player]="player" class="lineup-player"></app-lineup-player>
+      @for (player of teamPlayers; track player) {
+      <app-lineup-player
+        [player]="player"
+        class="lineup-player"
+      ></app-lineup-player>
+      }
     </tbody>
   </table>
 </div>

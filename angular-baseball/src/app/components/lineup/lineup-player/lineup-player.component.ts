@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Player } from 'src/app/services/player.service';
 import { PositionAbbreviationPipe } from '../../../pipes/position-abbreviation.pipe';
@@ -9,7 +9,7 @@ import { GameService } from '../../../services/game.service';
   templateUrl: './lineup-player.component.html',
   styleUrl: './lineup-player.component.scss',
   standalone: true,
-  imports: [NgIf, NgClass, PositionAbbreviationPipe]
+  imports: [NgClass, PositionAbbreviationPipe]
 })
 export class LineupPlayerComponent {
 
